@@ -1,0 +1,83 @@
+// 全局按钮样式
+
+.btn {
+    height: 40px;
+    padding: 0 15px;
+    font-size: 15px;
+    line-height: 40px;
+    text-align: center;
+    border-radius: 4px;
+
+    & + .btn {
+        margin-left: 5px;
+    }
+
+    &.block {
+        width: 100%;
+        margin-left: 0;
+    }
+
+    &.disabled {
+        color: #818c8c;
+        background: #e2e9e9;
+
+        &:hover {
+            color: #818c8c;
+            background: #e2e9e9;
+        }
+    }
+
+    .icon {
+        margin-right: 10px;
+        vertical-align: -2px;
+    }
+}
+
+.btn-yellow {
+    display: inline-block;
+    color: #7e7e10;
+    background: #eded63;
+
+    &:hover {
+        background: #f1f188;
+    }
+}
+
+.btn-white {
+    color: #3e4545;
+    background: white;
+
+    &:hover {
+        opacity: 0.8;
+    }
+}
+
+.btn-white-border {
+    height: 38px;
+    color: white;
+    border: 1px solid white;
+
+    &:hover {
+        opacity: 0.8;
+    }
+}
+
+.btn-black {
+    display: inline-block;
+    color: white;
+    background: #3e4545;
+
+    &:hover {
+        background: #515a5a;
+    }
+}
+
+.btn-blue {
+    display: inline-block;
+    color: white;
+    background: #54d9e0;
+
+    &:hover {
+        background: #77e1e6;
+    }
+}

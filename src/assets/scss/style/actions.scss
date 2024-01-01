@@ -1,0 +1,101 @@
+// item-actions.vue
+
+.actions-wrap {
+    border-top: 1px solid #eef2f2;
+    height: 48px;
+    font-size: 0;
+
+    .action-item {
+        position: relative;
+        display: inline-block;
+        width: 25%;
+        font-size: 14px;
+        line-height: 48px;
+        color: #777;
+        text-align: center;
+        transition: all 0.2s ease;
+
+        &.active {
+            color: #3aced5;
+        }
+
+        &:first-child {
+            border-radius: 0 0 0 4px;
+        }
+
+        &:last-child {
+            border-radius: 0 0 4px;
+        }
+
+        & + .action-item {
+            &::before {
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 1px;
+                height: 48px;
+                background: linear-gradient(rgba(238, 242, 242, 0.4), rgba(238, 242, 242, 0.8)) top;
+                content: "";
+            }
+        }
+
+        &:hover {
+            background: #fafbfb;
+            opacity: 0.8;
+        }
+
+        .icon {
+            margin-right: 10px;
+            vertical-align: -2px;
+        }
+
+        .icon-action-follow,
+        .icon-action-follow-active,
+        .icon-action-follow-blue {
+            margin-right: 9px;
+            vertical-align: -3px;
+        }
+
+        .icon-action-fav,
+        .icon-action-fav-active {
+            margin-right: 9px;
+        }
+
+        .icon-action-share,
+        .icon-action-share-blue {
+            vertical-align: -3px;
+        }
+    }
+
+    .action-item-voteup {
+        .icon-action-voteup-active {
+            display: none;
+        }
+
+        &.active {
+            .icon-action-voteup-active {
+                display: inline-block;
+            }
+
+            .icon-action-voteup {
+                display: none;
+            }
+        }
+    }
+
+    .action-item-fav {
+        .icon-action-fav-active {
+            display: none;
+        }
+
+        &.active {
+            .icon-action-fav-active {
+                display: inline-block;
+            }
+
+            .icon-action-fav {
+                display: none;
+            }
+        }
+    }
+}

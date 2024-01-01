@@ -1,0 +1,105 @@
+// frontend-comment.vue && backend-article-comment.vue
+
+.comments {
+    padding-top: 20px;
+    padding-right: 25px;
+    margin-left: 25px;
+    border-top: 1px solid #f2f3f4;
+
+    .comment-back {
+        text-align: right;
+    }
+
+    .comment-item {
+        display: flex;
+        padding: 18px 0;
+
+        &:hover .comment-actions-hidden {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .comment-content-wrap {
+            flex: 1 1 auto;
+            margin-left: 15px;
+
+            .comment-author-wrap {
+                display: block;
+                margin-top: 1px;
+                line-height: 1;
+                color: #888;
+            }
+
+            .comment-content {
+                margin-top: 5px;
+            }
+
+            .comment-footer {
+                margin-top: 6px;
+                font-size: 14px;
+                line-height: 1;
+                color: #888;
+
+                .comment-time {
+                    padding-right: 5px;
+                }
+
+                .comment-action-item {
+                    color: #888;
+
+                    &:hover {
+                        color: #444;
+                    }
+                }
+            }
+        }
+    }
+
+    // 发布框
+    .comment-post-wrap {
+        display: flex;
+        flex-wrap: wrap;
+        padding-bottom: 20px;
+
+        .comment-post-input-wrap {
+            flex: 1 1 auto;
+            margin-left: 15px;
+
+            textarea {
+                display: block;
+                width: 100%;
+                height: 88px;
+                padding: 10px 14px;
+                resize: none;
+            }
+        }
+
+        .comment-post-actions {
+            flex: none;
+            width: 100%;
+            padding-top: 10px;
+            text-align: right;
+        }
+    }
+
+    .avatar-img {
+        flex: none;
+        width: 40px;
+        height: 40px;
+        border-radius: 20px;
+    }
+
+    .load-more-wrap {
+        padding: 0 0 10px;
+        margin-top: 10px;
+
+        .comments-load-more {
+            display: block;
+            line-height: 40px;
+            color: #444;
+            text-align: center;
+            background: #f3f6f6;
+            border-radius: 4px;
+        }
+    }
+}
