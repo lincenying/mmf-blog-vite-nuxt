@@ -62,7 +62,7 @@ defineOptions({
 // pinia 状态管理 ===>
 const frontendArticleStore = useFrontendArticleStore()
 
-await useAsyncData('frontend-article', () => frontendArticleStore.getTrending())
+await useAsyncData('frontend-article-trending', () => frontendArticleStore.getTrending())
 
 const { trending } = $(storeToRefs(frontendArticleStore))
 
@@ -76,5 +76,11 @@ useHead({
             content: headTitle,
         },
     ],
+})
+
+definePageMeta({
+    key: 'frontend-about',
+    layout: 'default',
+    keepalive: true,
 })
 </script>

@@ -3,9 +3,7 @@ import { pwa } from './src/config/pwa'
 import { appDescription } from './src/constants/index'
 
 // 这些事需要移除的nuxt自动生成的路由
-const REMOVE_NUXT_ROUTES: string[] = [
-
-]
+// const REMOVE_NUXT_ROUTES: string[] = [ ]
 
 export default defineNuxtConfig({
     srcDir: 'src',
@@ -79,24 +77,24 @@ export default defineNuxtConfig({
         port: 7223,
     },
 
-    hooks: {
-        'pages:extend': (pages) => {
-            // 过滤出你要删除掉路由（根据自己的需求写这里的过滤逻辑，可以把不想要的路由都去掉）
-            const pagesToRemove = pages.filter(page => REMOVE_NUXT_ROUTES.includes(page.path))
-            for (const page of pagesToRemove)
-                pages.splice(pages.indexOf(page), 1)
+    // hooks: {
+    //     'pages:extend': (pages) => {
+    //         // 过滤出你要删除掉路由（根据自己的需求写这里的过滤逻辑，可以把不想要的路由都去掉）
+    //         const pagesToRemove = pages.filter(page => REMOVE_NUXT_ROUTES.includes(page.path))
+    //         for (const page of pagesToRemove)
+    //             pages.splice(pages.indexOf(page), 1)
 
-            // 追加你自定义的路由
-            pages.push({
-                path: '/trending/:by',
-                file: resolve(__dirname, 'src/pages/index.vue'),
-            }, {
-                path: '/category/:id',
-                file: resolve(__dirname, 'src/pages/index.vue'),
-            }, {
-                path: '/search/:key',
-                file: resolve(__dirname, 'src/pages/index.vue'),
-            })
-        },
-    },
+    //         // 追加你自定义的路由
+    //         pages.push({
+    //             path: '/trending/:by',
+    //             file: resolve(__dirname, 'src/pages/index.vue'),
+    //         }, {
+    //             path: '/category/:id',
+    //             file: resolve(__dirname, 'src/pages/index.vue'),
+    //         }, {
+    //             path: '/search/:key',
+    //             file: resolve(__dirname, 'src/pages/index.vue'),
+    //         })
+    //     },
+    // },
 })

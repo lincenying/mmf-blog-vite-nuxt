@@ -1,10 +1,10 @@
 <template>
-    <topics-list :topics="topics" :loading="loading" page-type="lists" @load-more="loadMore"></topics-list>
+    <topics-list :topics="topics" :loading="loading" page-type="visit" @load-more="loadMore"></topics-list>
 </template>
 
 <script setup lang="ts">
 defineOptions({
-    name: 'FrontendIndex',
+    name: 'FrontendIndexVisit',
 })
 
 const route = useRoute()
@@ -12,22 +12,22 @@ const route = useRoute()
 // pinia 状态管理 ===>
 const frontendArticleStore = useFrontendArticleStore()
 
-const { lists: topics } = $(storeToRefs(frontendArticleStore))
+const { visit: topics } = $(storeToRefs(frontendArticleStore))
 
 function getConfig(page = 1) {
     const path = route.path
+    const by = useRouteParam('by').value
     return {
-        page, limit: 10, path,
+        page, limit: 10, path, by,
     }
 }
 
-await useAsyncData('frontend-index', () => frontendArticleStore.getArticleList(getConfig(), 'lists'))
+await useAsyncData('frontend-index', () => frontendArticleStore.getArticleList(getConfig(), 'visit'))
 
-useAutoScroll('frontend-index')
+useAutoScroll('frontend-index-visit')
 
 const [loading, toggleLoading] = useToggle(false)
-async function loadMore(page: number) {
-    console.log(page)
+async function loadMore(page = topics.page) {
     if (loading.value)
         return
     toggleLoading(true)
@@ -36,7 +36,7 @@ async function loadMore(page: number) {
 }
 
 definePageMeta({
-    key: 'frontend-index',
+    key: 'frontend-index-visit',
     layout: 'default',
     keepalive: true,
 })

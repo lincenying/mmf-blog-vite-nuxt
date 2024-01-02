@@ -2,15 +2,26 @@ import { acceptHMRUpdate, defineStore } from 'pinia'
 
 import type { ApiConfig, Article, FArticleStore } from '@/types'
 
+function getInitList() {
+    return {
+        data: [],
+        path: '',
+        hasNext: 0,
+        hasPrev: 0,
+        page: 1,
+    }
+}
+
+export type PageType = 'lists' | 'visit' | 'category' | 'search'
+
+const pageTypeArr: PageType[] = ['lists', 'visit', 'category', 'search']
+
 const usePiniaStore = defineStore('frontendArticleStore', () => {
     const state: FArticleStore = reactive({
-        lists: {
-            data: [],
-            path: '',
-            hasNext: 0,
-            hasPrev: 0,
-            page: 1,
-        },
+        lists: getInitList(),
+        visit: getInitList(),
+        category: getInitList(),
+        search: getInitList(),
         item: {
             data: null,
             path: '',
@@ -22,7 +33,7 @@ const usePiniaStore = defineStore('frontendArticleStore', () => {
      * 读取文章列表
      * @param config 请求参数
      */
-    const getArticleList = async (config: ApiConfig) => {
+    const getArticleList = async (config: ApiConfig, pageType: PageType = 'lists') => {
         if (state.lists.data.length > 0 && config.path === state.lists.path && config.page === 1)
             return
         const { code, data } = await $fetch<ResData<ResDataLists<Article>>>('/api/frontend/article/list', {
@@ -42,7 +53,7 @@ const usePiniaStore = defineStore('frontendArticleStore', () => {
                 page: config.page,
             }
 
-            state.lists = {
+            state[pageType] = {
                 data: page === 1 ? list : state.lists.data.concat(list),
                 hasNext,
                 hasPrev,
@@ -94,15 +105,17 @@ const usePiniaStore = defineStore('frontendArticleStore', () => {
             else state.item.data.like--
             state.item.data.like_status = status
         }
-        const index = state.lists.data.findIndex((item: Article) => item._id === id)
-        if (index > -1) {
-            const obj: Article = Object.assign({}, state.lists.data[index])
-            if (status)
-                obj.like++
-            else obj.like--
-            obj.like_status = status
-            state.lists.data.splice(index, 1, obj)
-        }
+        pageTypeArr.forEach((page) => {
+            const index = state[page].data.findIndex((item: Article) => item._id === id)
+            if (index > -1) {
+                const obj: Article = Object.assign({}, state.lists.data[index])
+                if (status)
+                    obj.like++
+                else obj.like--
+                obj.like_status = status
+                state[page].data.splice(index, 1, obj)
+            }
+        })
     }
 
     return {

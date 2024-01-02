@@ -230,6 +230,9 @@ export interface ArticleStore {
  */
 export interface FArticleStore {
     lists: ArticleStoreList
+    visit: ArticleStoreList
+    category: ArticleStoreList
+    search: ArticleStoreList
     item: {
         data: Nullable<Article>
         path?: string
