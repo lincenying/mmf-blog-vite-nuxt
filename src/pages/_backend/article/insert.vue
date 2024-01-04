@@ -35,26 +35,27 @@
 <script setup lang="ts">
 import type { AnyFn } from '@vueuse/core'
 import type { Article, Upload } from '@/types'
-import api from '@/api/index-client'
-import { uploadApi } from '@/api/upload-api'
+import { uploadApi } from '~/config'
 
 defineOptions({
     name: 'BackendArticleInsert',
-    asyncData(ctx) {
-        const { store, route, api } = ctx
-        const globalCategoryStore = useGlobalCategoryStore(store)
-        return globalCategoryStore.getCategoryList({ limit: 99, path: route.fullPath }, api)
-    },
 })
 
-const { ctx } = useGlobal()
+const $loading = useLoading()
+const route = useRoute()
 const router = useRouter()
 
 // pinia 状态管理 ===>
 const globalCategoryStore = useGlobalCategoryStore()
+
+await useAsyncData('frontend-insert', () => globalCategoryStore.getCategoryList({
+    limit: 99,
+    path: route.fullPath,
+}))
+
 const { lists } = $(storeToRefs(globalCategoryStore))
 
-const backendArticleStore = useBackendArticleStore()
+const { data: posts } = useNuxtData<ResData<ResDataLists<Article>>>('backend-article-list')
 
 let isClient = $ref(false)
 
@@ -80,22 +81,28 @@ async function handleInsert() {
         return
     toggleLoading(true)
     // form.html = this.$refs.md.d_render
-    const { code, data, message } = await api.post<Article>('backend/article/insert', form)
+    const { code, data, message } = await $fetch<ResData<Article>>('backend/article/insert', {
+        method: 'post',
+        body: form,
+    })
     toggleLoading(false)
     if (code === 200) {
         showMsg({ type: 'success', content: message })
-        backendArticleStore.insertArticleItem(data)
-        router.push('/backend/article/list')
+        posts.value?.data.list.push(data)
+        router.push('/_backend/article/list')
     }
 }
 
 async function handleUploadImage(event: EventTarget, insertImage: AnyFn, files: FileList) {
-    const loader = ctx.$loading.show()
+    const loader = $loading.show()
 
     const formData = new FormData()
     formData.append('file', files[0])
     try {
-        const { data } = await api.file<Upload>(`${uploadApi}/ajax.php?action=upload`, formData)
+        const { data } = await $fetch<ResData<Upload>>(`${uploadApi}/ajax.php?action=upload`, {
+            method: 'post',
+            body: formData,
+        })
         if (data && data.filepath) {
             insertImage({
                 url: `${uploadApi}/${data.filepath}`,

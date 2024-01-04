@@ -12,7 +12,7 @@
                 <div class="list-email">{{ item.email }}</div>
                 <div class="list-date">{{ UTC2Date(item.update_date) }}</div>
                 <div class="list-action">
-                    <router-link :to="`/backend/user/modify/${item._id}`" class="badge badge-success">编辑</router-link>
+                    <router-link :to="`/_backend/user/modify/${item._id}`" class="badge badge-success">编辑</router-link>
                     <a v-if="item.is_delete" href="javascript:;" @click="handleRecover(item._id)">恢复</a>
                     <a v-else href="javascript:;" @click="handleDelete(item._id)">删除</a>
                 </div>

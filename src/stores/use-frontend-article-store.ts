@@ -1,10 +1,10 @@
 import { acceptHMRUpdate, defineStore } from 'pinia'
 
-import type { ApiConfig, Article, FArticleStore } from '@/types'
+import type { ApiConfig, Article, FArticleStore, ListStore } from '@/types'
 
-function getInitList() {
+function getInitList<T>(): ListStore<T> {
     return {
-        data: [],
+        data: [] as T,
         path: '',
         hasNext: 0,
         hasPrev: 0,
@@ -18,10 +18,10 @@ const pageTypeArr: PageType[] = ['lists', 'visit', 'category', 'search']
 
 const usePiniaStore = defineStore('frontendArticleStore', () => {
     const state: FArticleStore = reactive({
-        lists: getInitList(),
-        visit: getInitList(),
-        category: getInitList(),
-        search: getInitList(),
+        lists: getInitList<Article[]>(),
+        visit: getInitList<Article[]>(),
+        category: getInitList<Article[]>(),
+        search: getInitList<Article[]>(),
         item: {
             data: null,
             path: '',

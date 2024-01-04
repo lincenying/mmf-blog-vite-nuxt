@@ -20,14 +20,12 @@
 <script setup lang="ts">
 import cookies from 'js-cookie'
 
-import api from '@/api/index-client'
-
 defineOptions({
     name: 'BackendLogin',
 })
 
-const { ctx } = useGlobal()
 const router = useRouter()
+const $loading = useLoading()
 
 const form = reactive({
     username: '',
@@ -38,16 +36,21 @@ const handleLogin = useLockFn(async () => {
     if (!form.username || !form.password)
         return showMsg('请输入用户名和密码!')
 
-    const loader = ctx.$loading.show()
-    const { code, data } = await api.post<UnfAble<string>>('backend/admin/login', form)
+    const loader = $loading.show()
+    const { code, data } = await $fetch<ResData<Nullable<string>>>('/api/backend/admin/login', {
+        method: 'POST',
+        body: form,
+        headers: {
+        },
+    })
     loader.hide()
     if (code === 200 && data)
-        router.push('/backend/article/list')
+        router.push('/_backend/article/list')
 })
 
 onMounted(() => {
     if (cookies.get('b_user'))
-        router.push('/backend/article/list')
+        router.push('/_backend/article/list')
 })
 
 const headTitle = ref('管理员登录 - M.M.F 小屋')

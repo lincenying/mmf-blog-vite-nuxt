@@ -18,45 +18,38 @@
         </div>
         <div class="settings-footer">
             <a href="javascript:;" class="btn btn-yellow" @click="handleModify">编辑管理员</a>
-            <router-link to="/backend/admin/list" class="btn btn-blue">返回</router-link>
+            <router-link to="/_backend/admin/list" class="btn btn-blue">返回</router-link>
         </div>
     </div>
 </template>
 
 <script setup lang="ts">
 import type { User } from '@/types'
-import api from '@/api/index-client'
 
 defineOptions({
     name: 'BackendAdminModify',
-    asyncData(ctx) {
-        const { store, route, api } = ctx
-        const backendAdminStore = useBackendAdminStore(store)
-        return backendAdminStore.getAdminItem({ id: route.params.id, path: route.fullPath }, api)
-    },
 })
 
 const route = useRoute()
 const router = useRouter()
+const id = useRouteQuery('id')
 
-// pinia 状态管理 ===>
-const backendAdminStore = useBackendAdminStore()
-const { item } = $(storeToRefs(backendAdminStore))
+const { data } = await useFetch<ResData<User>>('/api/backend/admin/item', {
+    key: `backend-admin-item`,
+    params: {
+        id,
+        path: route.fullPath,
+    },
+    headers: useRequestHeaders(['cookie']),
+})
 
 const [loading, toggleLoading] = useToggle(false)
 
 const form = reactive({
-    id: route.params.id,
-    username: '',
-    email: '',
+    id: data.value?.data._id || '',
+    username: data.value?.data.username || '',
+    email: data.value?.data.email || '',
     password: '',
-})
-
-watch(item, (val) => {
-    if (val.data) {
-        form.username = val.data.username
-        form.email = val.data.email
-    }
 })
 
 async function handleModify() {
@@ -67,12 +60,14 @@ async function handleModify() {
     if (loading.value)
         return
     toggleLoading(true)
-    const { code, data, message } = await api.post<User>('backend/admin/modify', form)
+    const { code, message } = await $fetch<ResData<User>>('/api/backend/admin/modify', {
+        method: 'post',
+        body: form,
+    })
     toggleLoading(false)
     if (code === 200) {
         showMsg({ type: 'success', content: message })
-        backendAdminStore.updateAdminItem(data)
-        router.push('/backend/admin/list')
+        router.push('/_backend/admin/list')
     }
 }
 

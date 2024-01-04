@@ -52,6 +52,9 @@ devDependencies:
   '@pinia/nuxt':
     specifier: ^0.5.1
     version: 0.5.1(rollup@2.79.1)(typescript@5.3.3)(vue@3.4.3)
+  '@types/js-cookie':
+    specifier: ^3.0.6
+    version: 3.0.6
   '@types/md5':
     specifier: ^2.3.5
     version: 2.3.5
@@ -85,6 +88,9 @@ devDependencies:
   eslint-ts-patch:
     specifier: 8.56.0-0
     version: 8.56.0-0
+  js-cookie:
+    specifier: ^3.0.5
+    version: 3.0.5
   nuxt:
     specifier: ^3.9.0
     version: 3.9.0(eslint-ts-patch@8.56.0-0)(rollup@2.79.1)(sass@1.69.6)(stylelint@16.1.0)(typescript@5.3.3)(vite@5.0.10)(vue-tsc@1.8.27)
@@ -3084,6 +3090,10 @@ packages:
     resolution: {integrity: sha512-SSrD0c1OQzlFX7pGu1eXxSEjemej64aaNPRhhVYUGqXh0BtldAAx37MG8btcumvpgKyZp1F5Gn3JkktdxiFv6w==}
     dependencies:
       '@types/node': 20.10.6
+    dev: true
+
+  /@types/js-cookie@3.0.6:
+    resolution: {integrity: sha512-wkw9yd1kEXOPnvEeEV1Go1MmxtBJL0RR79aOTAApecWFVu7w0NNXNqhcWgvw2YgZDYadliXkl14pa3WXw5jlCQ==}
     dev: true
 
   /@types/json-schema@7.0.15:
@@ -8384,6 +8394,11 @@ packages:
   /jiti@1.21.0:
     resolution: {integrity: sha512-gFqAIbuKyyso/3G2qhiO2OM6shY6EPP/R0+mkDbyspxKazh8BXDC5FiFsUjlczgdNz/vfra0da2y+aHrusLG/Q==}
     hasBin: true
+    dev: true
+
+  /js-cookie@3.0.5:
+    resolution: {integrity: sha512-cEiJEAEoIbWfCZYKWhVwFuvPX1gETRYPw6LlaTKoxD3s2AkXzkCjnp6h0V77ozyqj0jakteJ4YqDJT830+lVGw==}
+    engines: {node: '>=14'}
     dev: true
 
   /js-tokens@4.0.0:

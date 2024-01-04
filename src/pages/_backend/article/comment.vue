@@ -2,7 +2,7 @@
     <div class="card">
         <div class="comments">
             <div class="comment-back">
-                <router-link to="/backend/article/list" class="btn btn-blue">返回</router-link>
+                <router-link to="/_backend/article/list" class="btn btn-blue">返回</router-link>
             </div>
             <div class="comment-items-wrap">
                 <div v-for="item in lists.data" :key="item._id" class="comment-item">
@@ -32,21 +32,23 @@
 
 <script setup lang="ts">
 import { getDateDiff } from '@lincy/utils'
-import api from '@/api/index-client'
 
 defineOptions({
     name: 'BackendArticleComment',
-    asyncData(ctx) {
-        const { store, route, api } = ctx
-        const globalCommentStore = useGlobalCommentStore(store)
-        return globalCommentStore.getCommentList({ page: 1, path: route.fullPath, all: 1, id: route.params.id }, api)
-    },
 })
 
 const route = useRoute()
 
 // pinia 状态管理 ===>
 const globalCommentStore = useGlobalCommentStore()
+
+await useAsyncData('backend-article-comment', () => globalCommentStore.getCommentList({
+    page: 1,
+    path: route.fullPath,
+    all: 1,
+    id: route.query.id as string,
+}))
+
 const { lists } = $(storeToRefs(globalCommentStore))
 
 const [loading, toggleLoading] = useToggle(false)
@@ -55,18 +57,24 @@ async function loadMore(page = lists.page + 1) {
     if (loading.value)
         return
     toggleLoading(true)
-    await globalCommentStore.getCommentList({ page, path: route.path, all: 1, id: route.params.id }, api)
+    await globalCommentStore.getCommentList({ page, path: route.path, all: 1, id: route.query.id as string })
     toggleLoading(false)
 }
 async function handleRecover(id: string) {
-    const { code, message } = await api.get<'success' | 'error'>('frontend/comment/recover', { id })
+    const { code, message } = await $fetch<ResData<'success' | 'error'>>('/api/frontend/comment/recover', {
+        method: 'get',
+        query: { id },
+    })
     if (code === 200) {
         showMsg({ type: 'success', content: message })
         globalCommentStore.recoverComment(id)
     }
 }
 async function handleDelete(id: string) {
-    const { code, message } = await api.get<'success' | 'error'>('frontend/comment/delete', { id })
+    const { code, message } = await $fetch<ResData<'success' | 'error'>>('/api/frontend/comment/delete', {
+        method: 'get',
+        query: { id },
+    })
     if (code === 200) {
         showMsg({ type: 'success', content: message })
         globalCommentStore.deleteComment(id)

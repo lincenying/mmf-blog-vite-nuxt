@@ -12,7 +12,7 @@
                 <div class="list-email">{{ item.email }}</div>
                 <div class="list-date">{{ UTC2Date(item.update_date) }}</div>
                 <div class="list-action">
-                    <router-link :to="`/backend/admin/modify/${item._id}`" class="badge badge-success">编辑</router-link>
+                    <router-link :to="`/_backend/admin/modify/${item._id}`" class="badge badge-success">编辑</router-link>
                     <a v-if="item.is_delete" href="javascript:;" @click="handleRecover(item._id)">恢复</a>
                     <a v-else href="javascript:;" @click="handleDelete(item._id)">删除</a>
                 </div>
@@ -27,15 +27,9 @@
 
 <script setup lang="ts">
 import { UTC2Date } from '@lincy/utils'
-import api from '@/api/index-client'
 
 defineOptions({
     name: 'BackendAdminList',
-    asyncData(ctx) {
-        const { store, route, api } = ctx
-        const backendAdminStore = useBackendAdminStore(store)
-        return backendAdminStore.getAdminList({ page: 1, path: route.fullPath }, api)
-    },
 })
 
 const route = useRoute()
@@ -44,6 +38,7 @@ const appShellStore = useAppShellStore()
 
 // pinia 状态管理 ===>
 const backendAdminStore = useBackendAdminStore()
+await useAsyncData('backend-admin-list', () => backendAdminStore.getAdminList({ page: 1, path: route.fullPath }))
 const { lists } = $(storeToRefs(backendAdminStore))
 
 const { historyPageScrollTop } = $(storeToRefs(appShellStore))
@@ -60,14 +55,20 @@ async function loadMore(page = lists.page + 1) {
     toggleLoading(false)
 }
 async function handleRecover(id: string) {
-    const { code, message } = await api.get<'success' | 'error'>('backend/admin/recover', { id })
+    const { code, message } = await $fetch<ResData<'success' | 'error'>>('backend/admin/recover', {
+        method: 'get',
+        query: { id },
+    })
     if (code === 200) {
         showMsg({ type: 'success', content: message })
         backendAdminStore.recoverAdmin(id)
     }
 }
 async function handleDelete(id: string) {
-    const { code, message } = await api.get<'success' | 'error'>('backend/admin/delete', { id })
+    const { code, message } = await $fetch<ResData<'success' | 'error'>>('backend/admin/delete', {
+        method: 'get',
+        query: { id },
+    })
     if (code === 200) {
         showMsg({ type: 'success', content: message })
         backendAdminStore.deleteAdmin(id)

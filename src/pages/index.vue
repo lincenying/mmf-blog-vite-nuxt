@@ -12,6 +12,8 @@ const route = useRoute()
 // pinia 状态管理 ===>
 const frontendArticleStore = useFrontendArticleStore()
 
+await useAsyncData('frontend-index', () => frontendArticleStore.getArticleList(getConfig(), 'lists'))
+
 const { lists: topics } = $(storeToRefs(frontendArticleStore))
 
 function getConfig(page = 1) {
@@ -20,8 +22,6 @@ function getConfig(page = 1) {
         page, limit: 10, path,
     }
 }
-
-await useAsyncData('frontend-index', () => frontendArticleStore.getArticleList(getConfig(), 'lists'))
 
 useAutoScroll('frontend-index')
 

@@ -65,7 +65,7 @@ async function handleInsert() {
             ...form,
             ...data,
         })
-        router.push('/backend/category/list')
+        router.push('/_backend/category/list')
     }
 }
 

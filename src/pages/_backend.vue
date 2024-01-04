@@ -2,7 +2,7 @@
     <div class="wrap main">
         <div class="main-left">
             <div class="cards-wrap home-feeds">
-                <NuxtChild class="app-view"></NuxtChild>
+                <NuxtPage class="app-view"></NuxtPage>
             </div>
         </div>
         <backend-menu v-if="!isLogin" />
@@ -16,7 +16,12 @@ defineOptions({
 
 const route = useRoute()
 
-const key = computed(() => route.path.replace(/\//g, '_'))
+// const key = computed(() => route.path.replace(/\//g, '_'))
 
-const isLogin = computed(() => ['/backend/login', '/backend/login/'].includes(route.path))
+const isLogin = computed(() => ['/_backend/login', '/_backend/login/'].includes(route.path))
+
+definePageMeta({
+    key: 'backend-index',
+    layout: 'backend',
+})
 </script>

@@ -77,6 +77,15 @@ export default defineNuxtConfig({
         port: 7223,
     },
 
+    imports: {
+        presets: [
+            {
+                from: 'vue-loading-overlay',
+                imports: ['useLoading'],
+            },
+        ],
+    },
+
     // hooks: {
     //     'pages:extend': (pages) => {
     //         // 过滤出你要删除掉路由（根据自己的需求写这里的过滤逻辑，可以把不想要的路由都去掉）

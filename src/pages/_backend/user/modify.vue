@@ -18,7 +18,7 @@
         </div>
         <div class="settings-footer">
             <a href="javascript:;" class="btn btn-yellow" @click="handleModify">编辑用户</a>
-            <router-link to="/backend/user/list" class="btn btn-blue">返回</router-link>
+            <router-link to="/_backend/user/list" class="btn btn-blue">返回</router-link>
         </div>
     </div>
 </template>
@@ -79,7 +79,7 @@ async function handleModify() {
     if (code === 200) {
         showMsg({ type: 'success', content: message })
         backendUserStore.updateUserItem(data)
-        router.push('/backend/user/list')
+        router.push('/_backend/user/list')
     }
 }
 
