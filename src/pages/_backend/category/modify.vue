@@ -19,28 +19,27 @@
 
 <script setup lang="ts">
 import type { Category } from '@/types'
-import api from '@/api/index-client'
 
 defineOptions({
     name: 'BackendCategoryModify',
-    asyncData(ctx) {
-        const { store, route, api } = ctx
-        const globalCategoryStore = useGlobalCategoryStore(store)
-        return globalCategoryStore.getCategoryItem({ path: route.fullPath, id: route.params.id }, api)
-    },
 })
 
 const route = useRoute()
 const router = useRouter()
+const id = $(useRouteQuery('id'))
 
 // pinia 状态管理 ===>
 const globalCategoryStore = useGlobalCategoryStore()
+await useAsyncData('backend-category-list', () => globalCategoryStore.getCategoryItem({
+    path: route.fullPath,
+    id,
+}))
 const { item } = $(storeToRefs(globalCategoryStore))
 
 const [loading, toggleLoading] = useToggle(false)
 
 const form = reactive({
-    id: route.params.id,
+    id,
     cate_name: '',
     cate_order: '',
 })
@@ -50,9 +49,9 @@ watch(item, (val) => {
         form.cate_name = val.data.cate_name
         form.cate_order = val.data.cate_order
     }
+}, {
+    immediate: true,
 })
-
-onMounted(async () => {})
 
 async function handleModify() {
     if (!form.cate_name || !form.cate_order) {
@@ -62,7 +61,10 @@ async function handleModify() {
     if (loading.value)
         return
     toggleLoading(true)
-    const { code, data, message } = await api.post<Category>('backend/category/modify', form)
+    const { code, data, message } = await $fetch<ResData<Category>>('backend/category/modify', {
+        method: 'post',
+        body: form,
+    })
     toggleLoading(false)
     if (code === 200) {
         showMsg({ type: 'success', content: message })

@@ -32,12 +32,12 @@ defineOptions({
 
 const route = useRoute()
 const router = useRouter()
-const id = useRouteQuery('id')
+const id = $(useRouteQuery('id'))
 
 const { data } = await useFetch<ResData<User>>('/api/backend/admin/item', {
     key: `backend-admin-item`,
     params: {
-        id,
+        id: $$(id),
         path: route.fullPath,
     },
     headers: useRequestHeaders(['cookie']),

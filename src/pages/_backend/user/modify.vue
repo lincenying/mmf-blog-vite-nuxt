@@ -25,28 +25,28 @@
 
 <script setup lang="ts">
 import type { User } from '@/types'
-import api from '@/api/index-client'
 
 defineOptions({
     name: 'BackendUserModify',
-    asyncData(ctx) {
-        const { store, route, api } = ctx
-        const backendUserStore = useBackendUserStore(store)
-        return backendUserStore.getUserItem({ id: route.params.id, path: route.fullPath, from: 'backend' }, api)
-    },
 })
 
 const route = useRoute()
 const router = useRouter()
+const id = $(useRouteQuery('id'))
 
 // pinia 状态管理 ===>
 const backendUserStore = useBackendUserStore()
+await useAsyncData('backend-user-modify', () => backendUserStore.getUserItem({
+    id,
+    path: route.fullPath,
+    from: 'backend',
+}))
 const { item } = $(storeToRefs(backendUserStore))
 
 const [loading, toggleLoading] = useToggle(false)
 
 const form = reactive({
-    id: route.params.id,
+    id,
     username: '',
     email: '',
     password: '',
@@ -57,13 +57,8 @@ watch(item, (val) => {
         form.username = val.data.username
         form.email = val.data.email
     }
-})
-
-onMounted(async () => {
-    if (item && item.data) {
-        form.username = item.data.username
-        form.email = item.data.email
-    }
+}, {
+    immediate: true,
 })
 
 async function handleModify() {
@@ -74,7 +69,10 @@ async function handleModify() {
     if (loading.value)
         return
     toggleLoading(true)
-    const { code, data, message } = await api.post<User>('backend/user/modify', form)
+    const { code, data, message } = await $fetch<ResData<User>>('/api/backend/user/modify', {
+        method: 'post',
+        body: form,
+    })
     toggleLoading(false)
     if (code === 200) {
         showMsg({ type: 'success', content: message })

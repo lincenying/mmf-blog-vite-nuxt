@@ -15,7 +15,6 @@
 </template>
 
 <script setup lang="ts">
-import api from '@/api/index-client'
 import type { Category } from '@/types'
 
 defineOptions({
@@ -40,13 +39,8 @@ watch(item, (val) => {
         form.cate_name = val.data.cate_name
         form.cate_order = val.data.cate_order
     }
-})
-
-onMounted(() => {
-    if (item && item.data) {
-        form.cate_name = item.data.cate_name
-        form.cate_order = item.data.cate_order
-    }
+}, {
+    immediate: true,
 })
 
 async function handleInsert() {
@@ -57,7 +51,10 @@ async function handleInsert() {
     if (loading.value)
         return
     toggleLoading(true)
-    const { code, data, message } = await api.post<Category>('backend/category/insert', form)
+    const { code, data, message } = await $fetch<ResData<Category>>('backend/category/insert', {
+        method: 'post',
+        body: form,
+    })
     toggleLoading(false)
     if (code === 200) {
         showMsg({ type: 'success', content: message })

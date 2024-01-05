@@ -38,6 +38,7 @@ defineOptions({
 })
 
 const route = useRoute()
+const id = $(useRouteQuery('id'))
 
 // pinia 状态管理 ===>
 const globalCommentStore = useGlobalCommentStore()
@@ -46,7 +47,7 @@ await useAsyncData('backend-article-comment', () => globalCommentStore.getCommen
     page: 1,
     path: route.fullPath,
     all: 1,
-    id: route.query.id as string,
+    id,
 }))
 
 const { lists } = $(storeToRefs(globalCommentStore))
@@ -57,7 +58,7 @@ async function loadMore(page = lists.page + 1) {
     if (loading.value)
         return
     toggleLoading(true)
-    await globalCommentStore.getCommentList({ page, path: route.path, all: 1, id: route.query.id as string })
+    await globalCommentStore.getCommentList({ page, path: route.path, all: 1, id })
     toggleLoading(false)
 }
 async function handleRecover(id: string) {
@@ -80,11 +81,6 @@ async function handleDelete(id: string) {
         globalCommentStore.deleteComment(id)
     }
 }
-
-onMounted(() => {
-    if (lists.path === '')
-        loadMore(1)
-})
 
 const headTitle = ref('评论列表 - M.M.F 小屋')
 useHead({

@@ -36,7 +36,7 @@ let username = $ref('')
 let email = $ref('')
 
 async function getUser() {
-    const { code, data } = await $fetch<ResData<User>>('frontend/user/account')
+    const { code, data } = await $fetch<ResData<User>>('/api/frontend/user/account')
     if (code === 200) {
         username = data.username
         email = data.email
@@ -57,7 +57,7 @@ const handleSubmit = useLockFn(async () => {
         showMsg('邮箱格式错误!')
         return
     }
-    const { code, message } = await $fetch<ResData<any>>('frontend/user/account', {
+    const { code, message } = await $fetch<ResData<any>>('/api/frontend/user/account', {
         method: 'POST',
         body: {
             email,

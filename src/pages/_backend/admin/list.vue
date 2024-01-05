@@ -34,16 +34,12 @@ defineOptions({
 
 const route = useRoute()
 
-const appShellStore = useAppShellStore()
-
 // pinia 状态管理 ===>
 const backendAdminStore = useBackendAdminStore()
 await useAsyncData('backend-admin-list', () => backendAdminStore.getAdminList({ page: 1, path: route.fullPath }))
 const { lists } = $(storeToRefs(backendAdminStore))
 
-const { historyPageScrollTop } = $(storeToRefs(appShellStore))
-
-useSaveScroll()
+useAutoScroll('backend-admin-list')
 
 const [loading, toggleLoading] = useToggle(false)
 
@@ -74,16 +70,6 @@ async function handleDelete(id: string) {
         backendAdminStore.deleteAdmin(id)
     }
 }
-
-onMounted(() => {
-    if (lists.path === '') {
-        loadMore(1)
-    }
-    else {
-        const scrollTop = historyPageScrollTop[route.path] || 0
-        window.scrollTo(0, scrollTop)
-    }
-})
 
 const headTitle = ref('管理员列表 - M.M.F 小屋')
 useHead({

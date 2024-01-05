@@ -22,50 +22,23 @@
 </template>
 
 <script setup lang="ts">
-import api from '@/api/index-client'
-
 defineOptions({
     name: 'BackendCategoryList',
-    asyncData(ctx) {
-        const { store, route, api } = ctx
-        const globalCategoryStore = useGlobalCategoryStore(store)
-        return globalCategoryStore.getCategoryList({ limit: 99, path: route.fullPath }, api)
-    },
 })
 
 const route = useRoute()
-const appShellStore = useAppShellStore()
 
 // pinia 状态管理 ===>
 const globalCategoryStore = useGlobalCategoryStore()
+await useAsyncData('backend-category-list', () => globalCategoryStore.getCategoryList({ limit: 99, path: route.fullPath }))
 const { lists: category } = $(storeToRefs(globalCategoryStore))
 
-const { historyPageScrollTop } = $(storeToRefs(appShellStore))
-
-useSaveScroll()
-
-const [loading, toggleLoading] = useToggle(false)
-
-async function loadMore(page: number) {
-    if (loading.value)
-        return
-    toggleLoading(true)
-    await globalCategoryStore.getCategoryList({ page, limit: 99, path: route.path }, api)
-    toggleLoading(false)
-}
-
-onMounted(() => {
-    if (category.length === 0) {
-        loadMore(1)
-    }
-    else {
-        const scrollTop = historyPageScrollTop[route.path] || 0
-        window.scrollTo(0, scrollTop)
-    }
-})
+useAutoScroll('backend-category-list')
 
 async function handleRecover(id: string) {
-    const { code, message } = await api.get<'success' | 'error'>('backend/category/recover', { id })
+    const { code, message } = await $fetch<ResData<'success' | 'error'>>('backend/category/recover', {
+        query: { id },
+    })
     if (code === 200) {
         showMsg({ type: 'success', content: message })
         globalCategoryStore.recoverCategory(id)
@@ -73,7 +46,9 @@ async function handleRecover(id: string) {
 }
 
 async function handleDelete(id: string) {
-    const { code, message } = await api.get<'success' | 'error'>('backend/category/delete', { id })
+    const { code, message } = await $fetch<ResData<'success' | 'error'>>('backend/category/delete', {
+        query: { id },
+    })
     if (code === 200) {
         showMsg({ type: 'success', content: message })
         globalCategoryStore.deleteCategory(id)

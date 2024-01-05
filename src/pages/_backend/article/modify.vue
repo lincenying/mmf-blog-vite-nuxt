@@ -47,17 +47,18 @@ const { ctx } = useGlobal()
 const route = useRoute()
 const router = useRouter()
 
-const id = useRouteQuery('id')
+const id = $(useRouteQuery('id'))
 
 // pinia 状态管理 ===>
 const globalCategoryStore = useGlobalCategoryStore()
-await useAsyncData('frontend-insert', () => globalCategoryStore.getCategoryList({
-    limit: 99,
+await useAsyncData('backend-category-list', () => globalCategoryStore.getCategoryItem({
     path: route.fullPath,
+    id,
 }))
 const { lists } = $(storeToRefs(globalCategoryStore))
 
 const backendArticleStore = useBackendArticleStore()
+await useAsyncData('backend-article-modify', () => backendArticleStore.getArticleItem({ id }))
 const { item } = $(storeToRefs(backendArticleStore))
 
 const [loading, toggleLoading] = useToggle(false)
@@ -95,10 +96,6 @@ watch(
         deep: true,
     },
 )
-
-onMounted(async () => {
-    backendArticleStore.getArticleItem({ id: id.value })
-})
 
 async function handleModify() {
     if (!form.title || !form.category || !form.content) {

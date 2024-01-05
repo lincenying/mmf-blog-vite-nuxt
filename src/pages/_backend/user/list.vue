@@ -27,27 +27,19 @@
 
 <script setup lang="ts">
 import { UTC2Date } from '@lincy/utils'
-import api from '@/api/index-client'
 
 defineOptions({
     name: 'BackendUserList',
-    asyncData(ctx) {
-        const { store, route, api } = ctx
-        const backendUserStore = useBackendUserStore(store)
-        return backendUserStore.getUserList({ page: 1, path: route.fullPath }, api)
-    },
 })
 
 const route = useRoute()
-const appShellStore = useAppShellStore()
 
 // pinia 状态管理 ===>
 const backendUserStore = useBackendUserStore()
+await useAsyncData('backend-user-list', () => backendUserStore.getUserList({ page: 1, path: route.fullPath }))
 const { lists } = $(storeToRefs(backendUserStore))
 
-const { historyPageScrollTop } = $(storeToRefs(appShellStore))
-
-useSaveScroll()
+useAutoScroll('backend-user-list')
 
 const [loading, toggleLoading] = useToggle(false)
 
@@ -59,29 +51,23 @@ async function loadMore(page = lists.page + 1) {
     toggleLoading(false)
 }
 async function handleRecover(id: string) {
-    const { code, message } = await api.get<'success' | 'error'>('backend/user/recover', { id })
+    const { code, message } = await $fetch<ResData<'success' | 'error'>>('backend/user/recover', {
+        query: { id },
+    })
     if (code === 200) {
         showMsg({ type: 'success', content: message })
         backendUserStore.recoverUser(id)
     }
 }
 async function handleDelete(id: string) {
-    const { code, message } = await api.get<'success' | 'error'>('backend/user/delete', { id })
+    const { code, message } = await $fetch<ResData<'success' | 'error'>>('backend/user/delete', {
+        query: { id },
+    })
     if (code === 200) {
         showMsg({ type: 'success', content: message })
         backendUserStore.deleteUser(id)
     }
 }
-
-onMounted(() => {
-    if (lists.path === '') {
-        loadMore(1)
-    }
-    else {
-        const scrollTop = historyPageScrollTop[route.path] || 0
-        window.scrollTo(0, scrollTop)
-    }
-})
 
 const headTitle = ref('用户列表 - M.M.F 小屋')
 useHead({
