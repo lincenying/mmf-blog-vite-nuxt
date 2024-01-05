@@ -5,7 +5,7 @@
                 <NuxtPage class="app-view"></NuxtPage>
             </div>
         </div>
-        <backend-menu v-if="!isLogin" />
+        <backend-menu v-if="!isLoginPage" />
     </div>
 </template>
 
@@ -16,12 +16,11 @@ defineOptions({
 
 const route = useRoute()
 
-// const key = computed(() => route.path.replace(/\//g, '_'))
-
-const isLogin = computed(() => ['/_backend/login', '/_backend/login/'].includes(route.path))
+const isLoginPage = computed(() => ['/_backend/login', '/_backend/login/'].includes(route.path))
 
 definePageMeta({
     key: 'backend-index',
     layout: 'backend',
+    redirect: '/_backend/login',
 })
 </script>

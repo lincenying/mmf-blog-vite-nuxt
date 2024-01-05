@@ -51,17 +51,12 @@ const id = $(useRouteQuery('id'))
 
 // pinia 状态管理 ===>
 const globalCategoryStore = useGlobalCategoryStore()
-await useAsyncData('backend-category-list', () => globalCategoryStore.getCategoryItem({
-    path: route.fullPath,
-    id,
-}))
+await useAsyncData('backend-category-list', () => globalCategoryStore.getCategoryItem({ path: route.fullPath, id }))
 const { lists } = $(storeToRefs(globalCategoryStore))
 
 const backendArticleStore = useBackendArticleStore()
 await useAsyncData('backend-article-modify', () => backendArticleStore.getArticleItem({ id }))
 const { item } = $(storeToRefs(backendArticleStore))
-
-const [loading, toggleLoading] = useToggle(false)
 
 const form = reactive({
     id,
@@ -93,9 +88,14 @@ watch(
         }
     },
     {
+        immediate: true,
         deep: true,
     },
 )
+
+const [loading, toggleLoading] = useToggle(false)
+
+const { data: posts } = useNuxtData<ResData<ResDataLists<Article>>>('backend-article-list')
 
 async function handleModify() {
     if (!form.title || !form.category || !form.content) {
@@ -105,16 +105,19 @@ async function handleModify() {
     if (loading.value)
         return
     toggleLoading(true)
-    // form.html = this.$refs.md.d_render
-    const { code, data, message } = await $fetch<ResData<Article>>('backend/article/modify', {
+    const { code, message, data } = await $fetch<ResData<Article>>('/api/backend/article/modify', {
         method: 'post',
         body: form,
     })
     toggleLoading(false)
     if (code === 200) {
         showMsg({ type: 'success', content: message })
-        backendArticleStore.updateArticleItem(data)
-        router.push('/backend/article/list')
+
+        const index = posts.value?.data.list.findIndex(ii => ii._id === form.id) || -1
+        if (index > -1)
+            posts.value?.data.list.splice(index, 1, data)
+
+        router.push('/_backend/article/list')
     }
 }
 
@@ -149,5 +152,9 @@ useHead({
             content: headTitle,
         },
     ],
+})
+
+definePageMeta({
+    middleware: ['backend-auth'],
 })
 </script>

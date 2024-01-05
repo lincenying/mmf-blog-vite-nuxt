@@ -55,16 +55,13 @@ const { topics, pageType, categoryId, searchKey } = $(toRefs(props))
 const globalCategoryStore = useGlobalCategoryStore()
 const frontendArticleStore = useFrontendArticleStore()
 
-await useAsyncData('frontend-index', () => Promise.all([
-    globalCategoryStore.getCategoryList({}),
-    frontendArticleStore.getTrending(),
-]))
+await useAsyncData('frontend-article-category', () => globalCategoryStore.getCategoryList({}))
+await useAsyncData('frontend-article-trending', () => frontendArticleStore.getTrending())
 
 const { lists: category } = $(storeToRefs(globalCategoryStore))
 const { trending } = $(storeToRefs(frontendArticleStore))
 
 async function handleLoadMore(page = topics.page) {
-    console.log(222223)
     emits('loadMore', page)
 }
 

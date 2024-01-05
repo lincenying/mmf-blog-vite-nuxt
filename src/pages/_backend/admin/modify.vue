@@ -30,27 +30,35 @@ defineOptions({
     name: 'BackendAdminModify',
 })
 
-const route = useRoute()
 const router = useRouter()
 const id = $(useRouteQuery('id'))
 
-const { data } = await useFetch<ResData<User>>('/api/backend/admin/item', {
-    key: `backend-admin-item`,
-    params: {
-        id: $$(id),
-        path: route.fullPath,
-    },
-    headers: useRequestHeaders(['cookie']),
-})
-
-const [loading, toggleLoading] = useToggle(false)
+const backendAdminStore = useBackendAdminStore()
+await useAsyncData('backend-article-modify', () => backendAdminStore.getAdminItem({ id }))
+const { item } = $(storeToRefs(backendAdminStore))
 
 const form = reactive({
-    id: data.value?.data._id || '',
-    username: data.value?.data.username || '',
-    email: data.value?.data.email || '',
+    id,
+    username: '',
+    email: '',
     password: '',
 })
+
+watch(
+    () => item,
+    (val) => {
+        if (val.data) {
+            form.username = val.data.username
+            form.email = val.data.email
+        }
+    },
+    {
+        deep: true,
+        immediate: true,
+    },
+)
+
+const [loading, toggleLoading] = useToggle(false)
 
 async function handleModify() {
     if (!form.username || !form.email) {
@@ -60,13 +68,14 @@ async function handleModify() {
     if (loading.value)
         return
     toggleLoading(true)
-    const { code, message } = await $fetch<ResData<User>>('/api/backend/admin/modify', {
+    const { code, message, data } = await $fetch<ResData<User>>('/api/backend/admin/modify', {
         method: 'post',
         body: form,
     })
     toggleLoading(false)
     if (code === 200) {
         showMsg({ type: 'success', content: message })
+        backendAdminStore.updateAdminItem(data)
         router.push('/_backend/admin/list')
     }
 }
@@ -81,5 +90,9 @@ useHead({
             content: headTitle,
         },
     ],
+})
+
+definePageMeta({
+    middleware: ['backend-auth'],
 })
 </script>

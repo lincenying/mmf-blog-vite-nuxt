@@ -34,6 +34,7 @@
     "@pinia/nuxt": "^0.5.1",
     "@types/js-cookie": "^3.0.6",
     "@types/md5": "^2.3.5",
+    "@types/prismjs": "^1.26.3",
     "@unocss/eslint-config": "^0.58.2",
     "@unocss/nuxt": "^0.58.2",
     "@vite-pwa/nuxt": "^0.4.0",

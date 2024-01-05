@@ -18,7 +18,7 @@ defineOptions({
 })
 
 async function handleLogout() {
-    await $fetch('frontend/user/logout', {
+    await $fetch('/api/frontend/user/logout', {
         method: 'POST',
     })
     window.location.href = '/'

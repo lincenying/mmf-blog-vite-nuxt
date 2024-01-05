@@ -74,4 +74,8 @@ useHead({
         },
     ],
 })
+
+definePageMeta({
+    middleware: ['frontend-auth'],
+})
 </script>

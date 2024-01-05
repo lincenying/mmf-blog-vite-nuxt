@@ -30,10 +30,7 @@ const id = $(useRouteQuery('id'))
 
 // pinia 状态管理 ===>
 const globalCategoryStore = useGlobalCategoryStore()
-await useAsyncData('backend-category-list', () => globalCategoryStore.getCategoryItem({
-    path: route.fullPath,
-    id,
-}))
+await useAsyncData('backend-category-list', () => globalCategoryStore.getCategoryItem({ path: route.fullPath, id }))
 const { item } = $(storeToRefs(globalCategoryStore))
 
 const [loading, toggleLoading] = useToggle(false)
@@ -51,6 +48,7 @@ watch(item, (val) => {
     }
 }, {
     immediate: true,
+    deep: true,
 })
 
 async function handleModify() {
@@ -61,7 +59,7 @@ async function handleModify() {
     if (loading.value)
         return
     toggleLoading(true)
-    const { code, data, message } = await $fetch<ResData<Category>>('backend/category/modify', {
+    const { code, data, message } = await $fetch<ResData<Category>>('/api/backend/category/modify', {
         method: 'post',
         body: form,
     })
@@ -69,7 +67,7 @@ async function handleModify() {
     if (code === 200) {
         showMsg({ type: 'success', content: message })
         globalCategoryStore.updateCategoryItem(data)
-        router.push('/backend/category/list')
+        router.push('/_backend/category/list')
     }
 }
 
@@ -83,5 +81,9 @@ useHead({
             content: headTitle,
         },
     ],
+})
+
+definePageMeta({
+    middleware: ['backend-auth'],
 })
 </script>

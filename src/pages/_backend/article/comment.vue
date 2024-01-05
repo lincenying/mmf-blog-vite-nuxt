@@ -54,11 +54,11 @@ const { lists } = $(storeToRefs(globalCommentStore))
 
 const [loading, toggleLoading] = useToggle(false)
 
-async function loadMore(page = lists.page + 1) {
+async function loadMore(page = lists.page) {
     if (loading.value)
         return
     toggleLoading(true)
-    await globalCommentStore.getCommentList({ page, path: route.path, all: 1, id })
+    await globalCommentStore.getCommentList({ page, path: route.fullPath, all: 1, id })
     toggleLoading(false)
 }
 async function handleRecover(id: string) {
@@ -92,5 +92,9 @@ useHead({
             content: headTitle,
         },
     ],
+})
+
+definePageMeta({
+    middleware: ['backend-auth'],
 })
 </script>

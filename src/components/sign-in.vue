@@ -53,8 +53,9 @@ const handleLogin = useLockFn(async () => {
     if (!form.username || !form.password)
         return showMsg('请将表单填写完整!')
 
-    const { code, message } = await $fetch<ResData<UserCookies>>('frontend/user/login', {
-        query: form,
+    const { code, message } = await $fetch<ResData<UserCookies>>('/api/frontend/user/login', {
+        method: 'post',
+        body: form,
     })
     if (code === 200) {
         showMsg({ type: 'success', content: message })

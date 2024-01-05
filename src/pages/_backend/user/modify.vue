@@ -59,6 +59,7 @@ watch(item, (val) => {
     }
 }, {
     immediate: true,
+    deep: true,
 })
 
 async function handleModify() {
@@ -91,5 +92,9 @@ useHead({
             content: headTitle,
         },
     ],
+})
+
+definePageMeta({
+    middleware: ['backend-auth'],
 })
 </script>

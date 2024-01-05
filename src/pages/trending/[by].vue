@@ -16,13 +16,13 @@ const { visit: topics } = $(storeToRefs(frontendArticleStore))
 
 function getConfig(page = 1) {
     const path = route.path
-    const by = useRouteParam('by').value
+    const by = $(useRouteParam('by'))
     return {
         page, limit: 10, path, by,
     }
 }
 
-await useAsyncData('frontend-index', () => frontendArticleStore.getArticleList(getConfig(), 'visit'))
+await useAsyncData('frontend-index-visit', () => frontendArticleStore.getArticleList(getConfig(), 'visit'))
 
 useAutoScroll('frontend-index-visit')
 

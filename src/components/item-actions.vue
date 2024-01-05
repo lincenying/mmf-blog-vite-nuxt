@@ -44,9 +44,9 @@ const handleLike = useLockFn(async () => {
         globalStore.setLoginModal(true)
         return
     }
-    let url = 'frontend/like'
+    let url = '/api/frontend/like'
     if (item.like_status)
-        url = 'frontend/unlike'
+        url = '/api/frontend/unlike'
     const { code, message } = await $fetch<ResData<any>>(url, {
         query: { id: item._id },
         headers: useRequestHeaders(['cookie']),

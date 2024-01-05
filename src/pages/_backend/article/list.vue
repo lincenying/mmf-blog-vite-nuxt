@@ -7,12 +7,12 @@
                 <div class="list-date">最后更新</div>
                 <div class="list-action">操作</div>
             </div>
-            <div v-for="item in lists" :key="item._id" class="list-section">
+            <div v-for="item in lists.data" :key="item._id" class="list-section">
                 <div class="list-title" :class="item.is_delete ? 'text-red-500 line-through' : ''">{{ item.title }}</div>
                 <div class="list-category">{{ item.category_name }}</div>
                 <div class="list-date">{{ getDateDiff(item.update_date) }}</div>
                 <div class="list-action">
-                    <router-link :to="`/_backend/article/modify/${item._id}`" class="badge badge-success">编辑</router-link>
+                    <router-link :to="`/_backend/article/modify?id=${item._id}`" class="badge badge-success">编辑</router-link>
                     <a v-if="item.is_delete" href="javascript:;" @click="handleRecover(item._id)">恢复</a>
                     <a v-else href="javascript:;" @click="handleDelete(item._id)">删除</a>
                     <router-link v-if="item.comment_count > 0" :to="`/_backend/article/comment/${item._id}`" class="badge badge-success">
@@ -21,9 +21,9 @@
                 </div>
             </div>
         </div>
-        <div v-if="hasNext" class="settings-footer" flex-cc gap-30px>
-            <a v-if="hasPrev" class="admin-load-more" href="javascript:;" @click="handlePrev">上一页</a>
-            <a v-if="hasNext" class="admin-load-more" href="javascript:;" @click="handleNext">下一页</a>
+        <div v-if="lists.hasNext" class="settings-footer" flex-cc gap-30px>
+            <a v-if="!loading" class="admin-load-more" href="javascript:;" @click="loadMore()">加载更多</a>
+            <a v-else class="admin-load-more" href="javascript:;">加载中...</a>
         </div>
     </div>
 </template>
@@ -36,42 +36,22 @@ defineOptions({
     name: 'BackendArticleList',
 })
 
-const lists = ref<Article[]>([])
-const page = ref(1)
-let hasPrev = $ref(false)
-let hasNext = $ref(false)
+const route = useRoute()
 
-const { data, pending, refresh } = await useFetch<ResData<ResDataLists<Article>>>('/api/backend/article/list', {
-    key: `backend-article-list`,
-    params: {
-        page,
-        limit: 15,
-    },
-    headers: useRequestHeaders(['cookie']),
-})
+const backendArticleStore = useBackendArticleStore()
+await useAsyncData('backend-article-list', () => backendArticleStore.getArticleList({ page: 1, path: route.fullPath }))
+const { lists } = $(storeToRefs(backendArticleStore))
 
-watch(() => data.value, async (newData) => {
-    if (newData?.code === 200) {
-        lists.value = newData.data.list || []
-        hasPrev = !!newData.data.hasPrev
-        hasNext = !!newData.data.hasNext
-    }
-    else {
-        await navigateTo('/_backend/login')
-    }
-}, {
-    immediate: true,
-})
+useAutoScroll('backend-article-list')
 
-function handlePrev() {
-    if (pending.value)
+const [loading, toggleLoading] = useToggle(false)
+
+async function loadMore(page = lists.page) {
+    if (loading.value)
         return
-    page.value = page.value - 1
-}
-function handleNext() {
-    if (pending.value)
-        return
-    page.value = page.value + 1
+    toggleLoading(true)
+    await backendArticleStore.getArticleList({ page, path: route.fullPath })
+    toggleLoading(false)
 }
 
 async function handleRecover(id: string) {
@@ -80,7 +60,7 @@ async function handleRecover(id: string) {
     })
     if (code === 200) {
         showMsg({ type: 'success', content: message })
-        refresh()
+        backendArticleStore.recoverArticle(id)
     }
 }
 async function handleDelete(id: string) {
@@ -89,7 +69,7 @@ async function handleDelete(id: string) {
     })
     if (code === 200) {
         showMsg({ type: 'success', content: message })
-        refresh()
+        backendArticleStore.deleteArticle(id)
     }
 }
 
@@ -103,5 +83,9 @@ useHead({
             content: headTitle,
         },
     ],
+})
+
+definePageMeta({
+    middleware: ['backend-auth'],
 })
 </script>

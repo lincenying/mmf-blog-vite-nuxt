@@ -8,7 +8,7 @@ defineOptions({
 })
 
 const route = useRoute()
-const id = useRouteParam('id')
+const id = $(useRouteParam('id'))
 
 // pinia 状态管理 ===>
 const frontendArticleStore = useFrontendArticleStore()
@@ -17,7 +17,7 @@ const { category: topics } = $(storeToRefs(frontendArticleStore))
 
 function getConfig(page = 1) {
     const path = route.path
-    const id = useRouteParam('id').value
+    const id = $(useRouteParam('id'))
     return {
         page, limit: 10, path, id,
     }
@@ -27,7 +27,7 @@ watch(() => route.path, () => {
     frontendArticleStore.getArticleList(getConfig(), 'category')
 })
 
-await useAsyncData('frontend-index', () => frontendArticleStore.getArticleList(getConfig(), 'category'))
+await useAsyncData('frontend-index-category', () => frontendArticleStore.getArticleList(getConfig(), 'category'))
 
 useAutoScroll('frontend-index-category')
 

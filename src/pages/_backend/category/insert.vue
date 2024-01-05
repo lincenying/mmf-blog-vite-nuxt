@@ -51,7 +51,7 @@ async function handleInsert() {
     if (loading.value)
         return
     toggleLoading(true)
-    const { code, data, message } = await $fetch<ResData<Category>>('backend/category/insert', {
+    const { code, data, message } = await $fetch<ResData<Category>>('/api/backend/category/insert', {
         method: 'post',
         body: form,
     })
@@ -76,5 +76,9 @@ useHead({
             content: headTitle,
         },
     ],
+})
+
+definePageMeta({
+    middleware: ['backend-auth'],
 })
 </script>

@@ -47,7 +47,7 @@ defineOptions({
 })
 
 const route = useRoute()
-const id = useRouteParam('id').value
+const id = $(useRouteParam('id'))
 const path = route.fullPath
 
 // pinia 状态管理 ===>
@@ -55,12 +55,12 @@ const globalCategoryStore = useGlobalCategoryStore()
 const frontendArticleStore = useFrontendArticleStore()
 const globalCommentStore = useGlobalCommentStore()
 
-await useAsyncData('frontend-article', () => Promise.all([
-    globalCategoryStore.getCategoryList({}),
-    frontendArticleStore.getTrending(),
+await useAsyncData(`frontend-article-detail-${id}`, () => Promise.all([
     globalCommentStore.getCommentList({ id, path, page: 1, limit: 10 }),
     frontendArticleStore.getArticleItem({ id, path }),
 ]))
+await useAsyncData('frontend-article-category', () => globalCategoryStore.getCategoryList({}))
+await useAsyncData('frontend-article-trending', () => frontendArticleStore.getTrending())
 
 const { lists: category } = $(storeToRefs(globalCategoryStore))
 const { item, trending } = $(storeToRefs(frontendArticleStore))
@@ -69,7 +69,7 @@ const { lists: comments } = $(storeToRefs(globalCommentStore))
 const isLoad = $computed(() => item.isLoad)
 const articleData = $computed(() => item.data)
 
-useSaveScroll()
+useAutoScroll(`frontend-article-detail-${id}`)
 
 function addTarget(content: string) {
     if (!content)

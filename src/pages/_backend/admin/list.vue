@@ -12,7 +12,7 @@
                 <div class="list-email">{{ item.email }}</div>
                 <div class="list-date">{{ UTC2Date(item.update_date) }}</div>
                 <div class="list-action">
-                    <router-link :to="`/_backend/admin/modify/${item._id}`" class="badge badge-success">编辑</router-link>
+                    <router-link :to="`/_backend/admin/modify?id=${item._id}`" class="badge badge-success">编辑</router-link>
                     <a v-if="item.is_delete" href="javascript:;" @click="handleRecover(item._id)">恢复</a>
                     <a v-else href="javascript:;" @click="handleDelete(item._id)">删除</a>
                 </div>
@@ -43,15 +43,15 @@ useAutoScroll('backend-admin-list')
 
 const [loading, toggleLoading] = useToggle(false)
 
-async function loadMore(page = lists.page + 1) {
+async function loadMore(page = lists.page) {
     if (loading.value)
         return
     toggleLoading(true)
-    await backendAdminStore.getAdminList({ page, path: route.path })
+    await backendAdminStore.getAdminList({ page, path: route.fullPath })
     toggleLoading(false)
 }
 async function handleRecover(id: string) {
-    const { code, message } = await $fetch<ResData<'success' | 'error'>>('backend/admin/recover', {
+    const { code, message } = await $fetch<ResData<'success' | 'error'>>('/api/backend/admin/recover', {
         method: 'get',
         query: { id },
     })
@@ -61,7 +61,7 @@ async function handleRecover(id: string) {
     }
 }
 async function handleDelete(id: string) {
-    const { code, message } = await $fetch<ResData<'success' | 'error'>>('backend/admin/delete', {
+    const { code, message } = await $fetch<ResData<'success' | 'error'>>('/api/backend/admin/delete', {
         method: 'get',
         query: { id },
     })
@@ -81,5 +81,9 @@ useHead({
             content: headTitle,
         },
     ],
+})
+
+definePageMeta({
+    middleware: ['backend-auth'],
 })
 </script>

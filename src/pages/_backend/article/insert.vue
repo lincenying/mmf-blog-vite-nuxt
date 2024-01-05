@@ -81,7 +81,7 @@ async function handleInsert() {
         return
     toggleLoading(true)
     // form.html = this.$refs.md.d_render
-    const { code, data, message } = await $fetch<ResData<Article>>('backend/article/insert', {
+    const { code, data, message } = await $fetch<ResData<Article>>('/api/backend/article/insert', {
         method: 'post',
         body: form,
     })
@@ -129,5 +129,9 @@ useHead({
             content: headTitle,
         },
     ],
+})
+
+definePageMeta({
+    middleware: ['backend-auth'],
 })
 </script>

@@ -80,7 +80,7 @@ const handlePostComment = useLockFn(async () => {
         showMsg('请输入评论内容!')
     }
     else {
-        const { code, data } = await $fetch<ResData<Comment>>('frontend/comment/insert', {
+        const { code, data } = await $fetch<ResData<Comment>>('/api/frontend/comment/insert', {
             method: 'POST',
             body: form,
         })
