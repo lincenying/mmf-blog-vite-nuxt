@@ -27,7 +27,6 @@ useAutoScroll('frontend-index')
 
 const [loading, toggleLoading] = useToggle(false)
 async function loadMore(page: number) {
-    console.log(page)
     if (loading.value)
         return
     toggleLoading(true)

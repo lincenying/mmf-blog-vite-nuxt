@@ -52,7 +52,6 @@ export function useSaveScroll() {
     const { historyPageScrollTop } = storeToRefs(appShellStore)
 
     onActivated(() => {
-        console.log(11111)
         const currPath = route.fullPath
         const scrollTop = historyPageScrollTop.value[currPath] || 0
         setTimeout(() => {
