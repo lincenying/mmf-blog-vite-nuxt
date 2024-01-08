@@ -55,8 +55,8 @@ async function loadMore(page = lists.page) {
 }
 
 async function handleRecover(id: string) {
-    const { code, message } = await $fetch<ResData<Nullable<Article>>>('/api/backend/article/recover', {
-        query: { id },
+    const { code, message } = await useHttp().get<ResData<Nullable<Article>>>('/api/backend/article/recover', {
+        id,
     })
     if (code === 200) {
         showMsg({ type: 'success', content: message })
@@ -64,8 +64,8 @@ async function handleRecover(id: string) {
     }
 }
 async function handleDelete(id: string) {
-    const { code, message } = await $fetch<ResData<Nullable<Article>>>('/api/backend/article/delete', {
-        query: { id },
+    const { code, message } = await useHttp().get<ResData<Nullable<Article>>>('/api/backend/article/delete', {
+        id,
     })
     if (code === 200) {
         showMsg({ type: 'success', content: message })

@@ -36,10 +36,7 @@ const usePiniaStore = defineStore('frontendArticleStore', () => {
     const getArticleList = async (config: ApiConfig, pageType: PageType = 'lists') => {
         if (state.lists.data.length > 0 && config.path === state.lists.path && config.page === 1)
             return
-        const { code, data } = await $fetch<ResData<ResDataLists<Article>>>('/api/frontend/article/list', {
-            query: { ...config, path: undefined, cache: true },
-            headers: useRequestHeaders(['cookie']),
-        })
+        const { code, data } = await useHttp().get<ResData<ResDataLists<Article>>>('/api/frontend/article/list', { ...config, path: undefined, cache: true })
         if (code === 200 && data) {
             const {
                 list = [],
@@ -67,10 +64,7 @@ const usePiniaStore = defineStore('frontendArticleStore', () => {
      * @param config 请求参数
      */
     const getArticleItem = async (config: ApiConfig) => {
-        const { code, data } = await $fetch<ResData<Article>>('/api/frontend/article/item', {
-            query: { ...config, path: undefined, markdown: 1, cache: true },
-            headers: useRequestHeaders(['cookie']),
-        })
+        const { code, data } = await useHttp().get<ResData<Article>>('/api/frontend/article/item', { ...config, path: undefined, markdown: 1, cache: true })
         if (code === 200 && data) {
             state.item = {
                 data,
@@ -85,9 +79,7 @@ const usePiniaStore = defineStore('frontendArticleStore', () => {
     const getTrending = async () => {
         if (state.trending.length)
             return
-        const { code, data } = await $fetch<ResData<ResDataList<Article>>>('/api/frontend/trending', {
-            query: { cache: true },
-        })
+        const { code, data } = await useHttp().get<ResData<ResDataList<Article>>>('/api/frontend/trending', { cache: true })
         if (code === 200 && data)
             state.trending = data.list
     }

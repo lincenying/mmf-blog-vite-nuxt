@@ -81,10 +81,7 @@ async function handleInsert() {
         return
     toggleLoading(true)
     // form.html = this.$refs.md.d_render
-    const { code, data, message } = await $fetch<ResData<Article>>('/api/backend/article/insert', {
-        method: 'post',
-        body: form,
-    })
+    const { code, data, message } = await useHttp().post<ResData<Article>>('/api/backend/article/insert', form)
     toggleLoading(false)
     if (code === 200) {
         showMsg({ type: 'success', content: message })
@@ -99,10 +96,7 @@ async function handleUploadImage(event: EventTarget, insertImage: AnyFn, files: 
     const formData = new FormData()
     formData.append('file', files[0])
     try {
-        const { data } = await $fetch<ResData<Upload>>(`${uploadApi}/ajax.php?action=upload`, {
-            method: 'post',
-            body: formData,
-        })
+        const { data } = await useHttp().post<ResData<Upload>>(`${uploadApi}/ajax.php?action=upload`, formData)
         if (data && data.filepath) {
             insertImage({
                 url: `${uploadApi}/${data.filepath}`,

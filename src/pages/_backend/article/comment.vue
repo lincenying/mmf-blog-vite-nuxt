@@ -62,9 +62,8 @@ async function loadMore(page = lists.page) {
     toggleLoading(false)
 }
 async function handleRecover(id: string) {
-    const { code, message } = await $fetch<ResData<'success' | 'error'>>('/api/frontend/comment/recover', {
-        method: 'get',
-        query: { id },
+    const { code, message } = await useHttp().get<ResData<'success' | 'error'>>('/api/frontend/comment/recover', {
+        id,
     })
     if (code === 200) {
         showMsg({ type: 'success', content: message })
@@ -72,13 +71,15 @@ async function handleRecover(id: string) {
     }
 }
 async function handleDelete(id: string) {
-    const { code, message } = await $fetch<ResData<'success' | 'error'>>('/api/frontend/comment/delete', {
-        method: 'get',
-        query: { id },
+    const { code, message } = await useHttp().get<ResData<'success' | 'error'>>('/api/frontend/comment/delete', {
+        id,
     })
     if (code === 200) {
         showMsg({ type: 'success', content: message })
         globalCommentStore.deleteComment(id)
+    }
+    else {
+        showMsg(message)
     }
 }
 

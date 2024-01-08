@@ -14,7 +14,7 @@
 
 <script setup lang="ts">
 defineOptions({
-    name: 'AppRoot',
+    name: 'AppRootDefault',
 })
 
 // pinia 状态管理 ===>

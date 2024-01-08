@@ -70,10 +70,7 @@ async function handleModify() {
     if (loading.value)
         return
     toggleLoading(true)
-    const { code, data, message } = await $fetch<ResData<User>>('/api/backend/user/modify', {
-        method: 'post',
-        body: form,
-    })
+    const { code, data, message } = await useHttp().post<ResData<User>>('/api/backend/user/modify', form)
     toggleLoading(false)
     if (code === 200) {
         showMsg({ type: 'success', content: message })

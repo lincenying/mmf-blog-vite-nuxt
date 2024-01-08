@@ -20,10 +20,7 @@ const usePiniaStore = defineStore('globalCommentStore', () => {
     const getCommentList = async (config: ApiConfig) => {
         if (config.path === state.lists.path && config.page === 1)
             return
-        const { code, data } = await $fetch<ResData<ResDataLists<Comment>>>('/api/frontend/comment/list', {
-            query: { ...config, path: undefined, cache: true },
-            headers: useRequestHeaders(['cookie']),
-        })
+        const { code, data } = await useHttp().get<ResData<ResDataLists<Comment>>>('/api/frontend/comment/list', { ...config, path: undefined, cache: true })
         if (code === 200 && data) {
             const {
                 list = [],

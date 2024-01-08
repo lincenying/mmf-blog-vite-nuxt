@@ -105,10 +105,7 @@ async function handleModify() {
     if (loading.value)
         return
     toggleLoading(true)
-    const { code, message, data } = await $fetch<ResData<Article>>('/api/backend/article/modify', {
-        method: 'post',
-        body: form,
-    })
+    const { code, message, data } = await useHttp().post<ResData<Article>>('/api/backend/article/modify', form)
     toggleLoading(false)
     if (code === 200) {
         showMsg({ type: 'success', content: message })
@@ -126,10 +123,7 @@ async function handleUploadImage(event: EventTarget, insertImage: AnyFn, files: 
 
     const formData = new FormData()
     formData.append('file', files[0])
-    const { data } = await $fetch<ResData<Upload>>(`${uploadApi}/ajax.php?action=upload`, {
-        method: 'post',
-        body: formData,
-    })
+    const { data } = await useHttp().post<ResData<Upload>>(`${uploadApi}/ajax.php?action=upload`, formData)
     if (data && data.filepath) {
         insertImage({
             url: `${uploadApi}/${data.filepath}`,

@@ -23,10 +23,7 @@ const usePiniaStore = defineStore('backendAdminStore', () => {
     const getAdminList = async (config: Pick<ApiConfig, 'page' | 'path'>) => {
         if (state.lists.data.length > 0 && config.path === state.lists.path && config.page === 1)
             return
-        const { code, data } = await $fetch<ResData<ResDataLists<User>>>('/api/backend/admin/list', {
-            query: { ...config, path: undefined, cache: true },
-            headers: useRequestHeaders(['cookie']),
-        })
+        const { code, data } = await useHttp().get<ResData<ResDataLists<User>>>('/api/backend/admin/list', { ...config, path: undefined, cache: true })
         if (code === 200 && data) {
             const {
                 list = [],
@@ -54,10 +51,7 @@ const usePiniaStore = defineStore('backendAdminStore', () => {
      * @param config 请求参数
      */
     const getAdminItem = async (config: Pick<ApiConfig, 'id' | 'path'>) => {
-        const { code, data } = await $fetch<ResData<User>>('/api/backend/admin/item', {
-            query: { ...config, path: undefined },
-            headers: useRequestHeaders(['cookie']),
-        })
+        const { code, data } = await useHttp().get<ResData<User>>('/api/backend/admin/item', { ...config, path: undefined })
         if (code === 200 && data) {
             state.item = {
                 data,

@@ -72,10 +72,7 @@ const handleRegister = useLockFn(async () => {
     else if (form.password !== form.re_password)
         return showMsg('两次输入的密码不一致!')
 
-    const { code, message } = await $fetch<ResData<any>>('/api/frontend/user/insert', {
-        method: 'post',
-        body: form,
-    })
+    const { code, message } = await useHttp().post<ResData<any>>('/api/frontend/user/insert', form)
     if (code === 200) {
         showMsg({ type: 'success', content: message })
         handleLogin()

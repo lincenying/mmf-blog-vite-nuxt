@@ -13,7 +13,6 @@
             </form>
         </div>
         <div class="settings-footer"><a href="javascript:;" class="btn btn-yellow" @click="handleLogin">登录</a></div>
-        <client-only />
     </div>
 </template>
 
@@ -37,12 +36,7 @@ const handleLogin = useLockFn(async () => {
         return showMsg('请输入用户名和密码!')
 
     const loader = $loading.show()
-    const { code, data } = await $fetch<ResData<Nullable<string>>>('/api/backend/admin/login', {
-        method: 'POST',
-        body: form,
-        headers: {
-        },
-    })
+    const { code, data } = await useHttp().post<ResData<Nullable<string>>>('/api/backend/admin/login', form)
     loader.hide()
     if (code === 200 && data)
         router.push('/_backend/article/list')

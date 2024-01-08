@@ -51,10 +51,7 @@ async function handleInsert() {
     if (loading.value)
         return
     toggleLoading(true)
-    const { code, data, message } = await $fetch<ResData<Category>>('/api/backend/category/insert', {
-        method: 'post',
-        body: form,
-    })
+    const { code, data, message } = await useHttp().post<ResData<Category>>('/api/backend/category/insert', form)
     toggleLoading(false)
     if (code === 200) {
         showMsg({ type: 'success', content: message })
