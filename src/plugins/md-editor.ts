@@ -1,15 +1,11 @@
 import VueMarkdownEditor from '@kangc/v-md-editor'
-import vuePressTheme from '@kangc/v-md-editor/lib/theme/vuepress.js'
+import vuePressTheme from '@kangc/v-md-editor/lib/theme/github'
 
-// Prism
-import Prism from 'prismjs'
-
-// highlight code
-import 'prismjs/components/prism-json'
+import hljs from 'highlight.js'
 
 export default defineNuxtPlugin((nuxtApp) => {
     VueMarkdownEditor.use(vuePressTheme, {
-        Prism,
+        Hljs: hljs,
     })
 
     nuxtApp.vueApp.use(VueMarkdownEditor)

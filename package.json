@@ -45,6 +45,7 @@
     "eslint": "npm:eslint-ts-patch@8.56.0-0",
     "eslint-plugin-format": "^0.1.0",
     "eslint-ts-patch": "8.56.0-0",
+    "highlight.js": "^11.9.0",
     "js-cookie": "^3.0.5",
     "nuxt": "^3.9.1",
     "pinia": "^2.1.7",
