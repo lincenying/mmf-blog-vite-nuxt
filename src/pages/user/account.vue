@@ -36,7 +36,7 @@ let username = $ref('')
 let email = $ref('')
 
 async function getUser() {
-    const { code, data } = await useHttp().get<ResData<User>>('/api/frontend/user/account')
+    const { code, data } = await useHttp().$get<ResData<User>>('/api/frontend/user/account')
     if (code === 200) {
         username = data.username
         email = data.email
@@ -57,11 +57,13 @@ const handleSubmit = useLockFn(async () => {
         showMsg('邮箱格式错误!')
         return
     }
-    const { code, message } = await useHttp().post<ResData<any>>('/api/frontend/user/account', {
+
+    const body = reactive({
         email,
         username,
         id: cookies.userid,
     })
+    const { code, message } = await useHttp().$post<ResData<any>>('/api/frontend/user/account', {}, { body })
     if (code === 200) {
         globalStore.setCookies({
             ...cookies,

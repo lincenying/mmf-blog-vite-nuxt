@@ -2,12 +2,12 @@
     <div class="settings-main card">
         <div class="settings-main-content">
             <a-input title="标题">
-                <input v-model="form.title" type="text" placeholder="标题" class="base-input" name="title">
+                <input v-model="body.title" type="text" placeholder="标题" class="base-input" name="title">
                 <span class="input-info error">请输入标题</span>
             </a-input>
             <a-input title="分类" classes="select-item-wrap">
                 <i class="icon icon-arrow-down" />
-                <select v-model="form.category" class="select-item" name="category">
+                <select v-model="body.category" class="select-item" name="category">
                     <option value="">请选择分类</option>
                     <option v-for="val in lists" :key="val._id" :value="val._id">{{ val.cate_name }}</option>
                 </select>
@@ -17,7 +17,7 @@
                 <div id="modify-content" class="settings-item-content">
                     <client-only>
                         <v-md-editor
-                            v-model="form.content"
+                            v-model="body.content"
                             :disabled-menus="[]"
                             mode="edit"
                             height="500px"
@@ -58,7 +58,7 @@ const backendArticleStore = useBackendArticleStore()
 await useAsyncData('backend-article-modify', () => backendArticleStore.getArticleItem({ id }))
 const { item } = $(storeToRefs(backendArticleStore))
 
-const form = reactive({
+const body = reactive({
     id,
     title: '',
     category: '',
@@ -69,11 +69,11 @@ const form = reactive({
 })
 
 watch(
-    () => form.category,
+    () => body.category,
     (val) => {
         const obj = lists.find(item => item._id === val)
         if (obj)
-            form.category_name = obj.cate_name
+            body.category_name = obj.cate_name
     },
 )
 
@@ -81,10 +81,10 @@ watch(
     () => item,
     (val) => {
         if (val.data) {
-            form.title = val.data.title
-            form.category_old = val.data.category
-            form.category = val.data.category
-            form.content = val.data.content
+            body.title = val.data.title
+            body.category_old = val.data.category
+            body.category = val.data.category
+            body.content = val.data.content
         }
     },
     {
@@ -98,19 +98,19 @@ const [loading, toggleLoading] = useToggle(false)
 const { data: posts } = useNuxtData<ResData<ResDataLists<Article>>>('backend-article-list')
 
 async function handleModify() {
-    if (!form.title || !form.category || !form.content) {
+    if (!body.title || !body.category || !body.content) {
         showMsg('请将表单填写完整!')
         return
     }
     if (loading.value)
         return
     toggleLoading(true)
-    const { code, message, data } = await useHttp().post<ResData<Article>>('/api/backend/article/modify', form)
+    const { code, message, data } = await useHttp().$post<ResData<Article>>('/api/backend/article/modify', {}, { body })
     toggleLoading(false)
     if (code === 200) {
         showMsg({ type: 'success', content: message })
 
-        const index = posts.value?.data.list.findIndex(ii => ii._id === form.id) || -1
+        const index = posts.value?.data.list.findIndex(ii => ii._id === body.id) || -1
         if (index > -1)
             posts.value?.data.list.splice(index, 1, data)
 
@@ -123,7 +123,7 @@ async function handleUploadImage(event: EventTarget, insertImage: AnyFn, files: 
 
     const formData = new FormData()
     formData.append('file', files[0])
-    const { data } = await useHttp().post<ResData<Upload>>(`${uploadApi}/ajax.php?action=upload`, formData)
+    const { data } = await useHttp().$post<ResData<Upload>>(`${uploadApi}/ajax.php?action=upload`, {}, { body: formData })
     if (data && data.filepath) {
         insertImage({
             url: `${uploadApi}/${data.filepath}`,

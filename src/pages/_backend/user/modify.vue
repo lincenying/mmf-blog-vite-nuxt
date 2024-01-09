@@ -3,15 +3,15 @@
         <div class="settings-main-content">
             <form>
                 <a-input title="昵称">
-                    <input v-model="form.username" type="text" placeholder="昵称" class="base-input" name="username">
+                    <input v-model="body.username" type="text" placeholder="昵称" class="base-input" name="username">
                     <span class="input-info error">请输入昵称</span>
                 </a-input>
                 <a-input title="邮箱">
-                    <input v-model="form.email" type="text" placeholder="邮箱" class="base-input" name="email">
+                    <input v-model="body.email" type="text" placeholder="邮箱" class="base-input" name="email">
                     <span class="input-info error">请输入邮箱</span>
                 </a-input>
                 <a-input title="密码">
-                    <input v-model="form.password" type="password" placeholder="密码" class="base-input" name="password">
+                    <input v-model="body.password" type="password" placeholder="密码" class="base-input" name="password">
                     <span class="input-info error">请输入密码</span>
                 </a-input>
             </form>
@@ -45,7 +45,7 @@ const { item } = $(storeToRefs(backendUserStore))
 
 const [loading, toggleLoading] = useToggle(false)
 
-const form = reactive({
+const body = reactive({
     id,
     username: '',
     email: '',
@@ -54,8 +54,8 @@ const form = reactive({
 
 watch(item, (val) => {
     if (val.data) {
-        form.username = val.data.username
-        form.email = val.data.email
+        body.username = val.data.username
+        body.email = val.data.email
     }
 }, {
     immediate: true,
@@ -63,14 +63,14 @@ watch(item, (val) => {
 })
 
 async function handleModify() {
-    if (!form.username || !form.email) {
+    if (!body.username || !body.email) {
         showMsg('请将表单填写完整!')
         return
     }
     if (loading.value)
         return
     toggleLoading(true)
-    const { code, data, message } = await useHttp().post<ResData<User>>('/api/backend/user/modify', form)
+    const { code, data, message } = await useHttp().$post<ResData<User>>('/api/backend/user/modify', {}, { body })
     toggleLoading(false)
     if (code === 200) {
         showMsg({ type: 'success', content: message })

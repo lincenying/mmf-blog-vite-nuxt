@@ -18,7 +18,7 @@ defineOptions({
 })
 
 async function handleLogout() {
-    await useHttp().post('/api/frontend/user/logout')
+    await useHttp().$post('/api/frontend/user/logout')
     window.location.href = '/'
 }
 </script>

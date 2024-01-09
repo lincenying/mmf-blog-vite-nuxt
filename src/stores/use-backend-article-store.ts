@@ -24,7 +24,7 @@ const usePiniaStore = defineStore('backendArticleStore', () => {
     const getArticleList = async (config: ApiConfig) => {
         if (state.lists.data.length > 0 && config.path === state.lists.path && config.page === 1)
             return
-        const { code, data } = await useHttp().get<ResData<ResDataLists<Article>>>('/api/backend/article/list', { ...config, path: undefined, cache: true })
+        const { code, data } = await useHttp().$get<ResData<ResDataLists<Article>>>('/api/backend/article/list', { ...config, path: undefined, cache: true })
         if (code === 200 && data) {
             const {
                 list = [],
@@ -52,7 +52,7 @@ const usePiniaStore = defineStore('backendArticleStore', () => {
      * @param config 请求参数
      */
     const getArticleItem = async (config: ApiConfig) => {
-        const { code, data } = await useHttp().get<ResData<Article>>('/api/backend/article/item', { ...config, path: undefined })
+        const { code, data } = await useHttp().$get<ResData<Article>>('/api/backend/article/item', { ...config, path: undefined })
         if (code === 200 && data) {
             state.item = {
                 data,

@@ -2,11 +2,11 @@
     <div class="settings-main card">
         <div class="settings-main-content">
             <a-input title="分类名称">
-                <input v-model="form.cate_name" type="text" placeholder="分类名称" class="base-input" name="cate_name">
+                <input v-model="body.cate_name" type="text" placeholder="分类名称" class="base-input" name="cate_name">
                 <span class="input-info error">请输入分类名称</span>
             </a-input>
             <a-input title="分类排序">
-                <input v-model="form.cate_order" type="text" placeholder="分类排序" class="base-input" name="cate_order">
+                <input v-model="body.cate_order" type="text" placeholder="分类排序" class="base-input" name="cate_order">
                 <span class="input-info error">请输入分类排序</span>
             </a-input>
         </div>
@@ -35,7 +35,7 @@ const { item } = $(storeToRefs(globalCategoryStore))
 
 const [loading, toggleLoading] = useToggle(false)
 
-const form = reactive({
+const body = reactive({
     id,
     cate_name: '',
     cate_order: '',
@@ -43,8 +43,8 @@ const form = reactive({
 
 watch(item, (val) => {
     if (val.data) {
-        form.cate_name = val.data.cate_name
-        form.cate_order = val.data.cate_order
+        body.cate_name = val.data.cate_name
+        body.cate_order = val.data.cate_order
     }
 }, {
     immediate: true,
@@ -52,14 +52,14 @@ watch(item, (val) => {
 })
 
 async function handleModify() {
-    if (!form.cate_name || !form.cate_order) {
+    if (!body.cate_name || !body.cate_order) {
         showMsg('请将表单填写完整!')
         return
     }
     if (loading.value)
         return
     toggleLoading(true)
-    const { code, data, message } = await useHttp().post<ResData<Category>>('/api/backend/category/modify', form)
+    const { code, data, message } = await useHttp().$post<ResData<Category>>('/api/backend/category/modify', {}, { body })
     toggleLoading(false)
     if (code === 200) {
         showMsg({ type: 'success', content: message })

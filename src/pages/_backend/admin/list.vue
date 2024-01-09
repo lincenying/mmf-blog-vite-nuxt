@@ -51,7 +51,7 @@ async function loadMore(page = lists.page) {
     toggleLoading(false)
 }
 async function handleRecover(id: string) {
-    const { code, message } = await useHttp().get<ResData<'success' | 'error'>>('/api/backend/admin/recover', {
+    const { code, message } = await useHttp().$get<ResData<'success' | 'error'>>('/api/backend/admin/recover', {
         id,
     })
     if (code === 200) {
@@ -60,7 +60,7 @@ async function handleRecover(id: string) {
     }
 }
 async function handleDelete(id: string) {
-    const { code, message } = await useHttp().get<ResData<'success' | 'error'>>('/api/backend/admin/delete', {
+    const { code, message } = await useHttp().$get<ResData<'success' | 'error'>>('/api/backend/admin/delete', {
         id,
     })
     if (code === 200) {

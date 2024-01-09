@@ -7,19 +7,19 @@
             <div class="modal-content">
                 <form class="sign-up-form">
                     <div class="input-wrap">
-                        <input v-model="form.username" type="text" placeholder="昵称" class="base-input" name="username">
+                        <input v-model="body.username" type="text" placeholder="昵称" class="base-input" name="username">
                         <p class="error-info input-info hidden">长度至少 6 位</p>
                     </div>
                     <div class="input-wrap">
-                        <input v-model="form.email" type="text" placeholder="邮箱" class="base-input" name="email">
+                        <input v-model="body.email" type="text" placeholder="邮箱" class="base-input" name="email">
                         <p class="error-info input-info hidden">长度至少 6 位</p>
                     </div>
                     <div class="input-wrap">
-                        <input v-model="form.password" type="password" placeholder="密码" class="base-input" autocomplete="off" name="password">
+                        <input v-model="body.password" type="password" placeholder="密码" class="base-input" autocomplete="off" name="password">
                         <p class="error-info input-info hidden">长度至少 6 位</p>
                     </div>
                     <div class="input-wrap">
-                        <input v-model="form.re_password" type="password" placeholder="重复密码" class="base-input" autocomplete="off" name="re_password">
+                        <input v-model="body.re_password" type="password" placeholder="重复密码" class="base-input" autocomplete="off" name="re_password">
                         <p class="error-info input-info hidden">长度至少 6 位</p>
                     </div>
                     <a href="javascript:;" class="btn sign-up-btn btn-yellow" @click="handleRegister">确认注册</a>
@@ -45,7 +45,7 @@ const { show } = $(toRefs(props))
 
 const globalStore = useGlobalStore()
 
-const form = reactive({
+const body = reactive({
     username: '',
     email: '',
     password: '',
@@ -61,18 +61,18 @@ function handleLogin() {
 }
 const handleRegister = useLockFn(async () => {
     const reg = /^([a-zA-Z0-9_\-.]+)@([a-zA-Z0-9_-]+)(\.[a-zA-Z0-9_-]+)$/i
-    if (!form.username || !form.password || !form.email)
+    if (!body.username || !body.password || !body.email)
         return showMsg('请将表单填写完整!')
-    else if (strLen(form.username) < 4)
+    else if (strLen(body.username) < 4)
         return showMsg('用户长度至少 2 个中文或 4 个英文!')
-    else if (!reg.test(form.email))
+    else if (!reg.test(body.email))
         return showMsg('邮箱格式错误!')
-    else if (strLen(form.password) < 8)
+    else if (strLen(body.password) < 8)
         return showMsg('密码长度至少 8 位!')
-    else if (form.password !== form.re_password)
+    else if (body.password !== body.re_password)
         return showMsg('两次输入的密码不一致!')
 
-    const { code, message } = await useHttp().post<ResData<any>>('/api/frontend/user/insert', form)
+    const { code, message } = await useHttp().$post<ResData<any>>('/api/frontend/user/insert', {}, { body })
     if (code === 200) {
         showMsg({ type: 'success', content: message })
         handleLogin()

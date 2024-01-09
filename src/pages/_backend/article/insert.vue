@@ -2,12 +2,12 @@
     <div class="settings-main card">
         <div class="settings-main-content">
             <a-input title="标题">
-                <input v-model="form.title" type="text" placeholder="标题" class="base-input" name="title">
+                <input v-model="body.title" type="text" placeholder="标题" class="base-input" name="title">
                 <span class="input-info error">请输入标题</span>
             </a-input>
             <a-input title="分类" classes="select-item-wrap">
                 <i class="icon icon-arrow-down" />
-                <select v-model="form.category" class="select-item" name="category">
+                <select v-model="body.category" class="select-item" name="category">
                     <option value="">请选择分类</option>
                     <option v-for="item in lists" :key="item._id" :value="`${item._id}|${item.cate_name}`">{{ item.cate_name }}</option>
                 </select>
@@ -18,7 +18,7 @@
                     <client-only>
                         <v-md-editor
                             v-if="isClient"
-                            v-model="form.content"
+                            v-model="body.content"
                             :disabled-menus="[]"
                             mode="edit"
                             height="500px"
@@ -61,7 +61,7 @@ let isClient = $ref(false)
 
 const [loading, toggleLoading] = useToggle(false)
 
-const form = reactive({
+const body = reactive({
     title: '',
     category: '',
     content: '',
@@ -73,15 +73,15 @@ onMounted(async () => {
 })
 
 async function handleInsert() {
-    if (!form.title || !form.category || !form.content) {
+    if (!body.title || !body.category || !body.content) {
         showMsg('请将表单填写完整!')
         return
     }
     if (loading.value)
         return
     toggleLoading(true)
-    // form.html = this.$refs.md.d_render
-    const { code, data, message } = await useHttp().post<ResData<Article>>('/api/backend/article/insert', form)
+    // body.html = this.$refs.md.d_render
+    const { code, data, message } = await useHttp().$post<ResData<Article>>('/api/backend/article/insert', {}, { body })
     toggleLoading(false)
     if (code === 200) {
         showMsg({ type: 'success', content: message })
@@ -96,7 +96,7 @@ async function handleUploadImage(event: EventTarget, insertImage: AnyFn, files: 
     const formData = new FormData()
     formData.append('file', files[0])
     try {
-        const { data } = await useHttp().post<ResData<Upload>>(`${uploadApi}/ajax.php?action=upload`, formData)
+        const { data } = await useHttp().$post<ResData<Upload>>(`${uploadApi}/ajax.php?action=upload`, {}, { body: formData })
         if (data && data.filepath) {
             insertImage({
                 url: `${uploadApi}/${data.filepath}`,

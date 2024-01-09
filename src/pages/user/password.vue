@@ -5,7 +5,7 @@
                 <form>
                     <a-input title="当前密码">
                         <input
-                            v-model="form.old_password"
+                            v-model="body.old_password"
                             type="password"
                             placeholder="当前密码"
                             class="base-input"
@@ -14,11 +14,11 @@
                         >
                     </a-input>
                     <a-input title="新的密码">
-                        <input v-model="form.password" type="password" placeholder="新的密码" class="base-input" name="password" autocomplete="off">
+                        <input v-model="body.password" type="password" placeholder="新的密码" class="base-input" name="password" autocomplete="off">
                     </a-input>
                     <a-input title="确认密码">
                         <input
-                            v-model="form.re_password"
+                            v-model="body.re_password"
                             type="password"
                             placeholder="确认密码"
                             class="base-input"
@@ -38,24 +38,24 @@ defineOptions({
     name: 'FrontendUserPassword',
 })
 
-const form = reactive({
+const body = reactive({
     old_password: '',
     password: '',
     re_password: '',
 })
 
 const handleSubmit = useLockFn(async () => {
-    if (!form.password || !form.old_password || !form.re_password)
+    if (!body.password || !body.old_password || !body.re_password)
         return showMsg('请将表单填写完整!')
-    else if (form.password !== form.re_password)
+    else if (body.password !== body.re_password)
         return showMsg('两次密码输入不一致!')
 
-    const { code, message } = await useHttp().post<ResData<'success' | 'error'>>('/api/frontend/user/password', form)
+    const { code, message } = await useHttp().$post<ResData<'success' | 'error'>>('/api/frontend/user/password', {}, { body })
     if (code === 200) {
         showMsg({ type: 'success', content: message })
-        form.old_password = ''
-        form.password = ''
-        form.re_password = ''
+        body.old_password = ''
+        body.password = ''
+        body.re_password = ''
     }
 })
 

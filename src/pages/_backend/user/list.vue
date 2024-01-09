@@ -51,14 +51,14 @@ async function loadMore(page = lists.page) {
     toggleLoading(false)
 }
 async function handleRecover(id: string) {
-    const { code, message } = await useHttp().get<ResData<'success' | 'error'>>('/api/backend/user/recover', { id })
+    const { code, message } = await useHttp().$get<ResData<'success' | 'error'>>('/api/backend/user/recover', { id })
     if (code === 200) {
         showMsg({ type: 'success', content: message })
         backendUserStore.recoverUser(id)
     }
 }
 async function handleDelete(id: string) {
-    const { code, message } = await useHttp().get<ResData<'success' | 'error'>>('/api/backend/user/delete', { id })
+    const { code, message } = await useHttp().$get<ResData<'success' | 'error'>>('/api/backend/user/delete', { id })
     if (code === 200) {
         showMsg({ type: 'success', content: message })
         backendUserStore.deleteUser(id)

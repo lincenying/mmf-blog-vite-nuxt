@@ -62,7 +62,7 @@ async function loadMore(page = lists.page) {
     toggleLoading(false)
 }
 async function handleRecover(id: string) {
-    const { code, message } = await useHttp().get<ResData<'success' | 'error'>>('/api/frontend/comment/recover', {
+    const { code, message } = await useHttp().$get<ResData<'success' | 'error'>>('/api/frontend/comment/recover', {
         id,
     })
     if (code === 200) {
@@ -71,7 +71,7 @@ async function handleRecover(id: string) {
     }
 }
 async function handleDelete(id: string) {
-    const { code, message } = await useHttp().get<ResData<'success' | 'error'>>('/api/frontend/comment/delete', {
+    const { code, message } = await useHttp().$get<ResData<'success' | 'error'>>('/api/frontend/comment/delete', {
         id,
     })
     if (code === 200) {

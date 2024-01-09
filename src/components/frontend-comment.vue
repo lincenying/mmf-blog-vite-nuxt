@@ -4,7 +4,7 @@
             <div class="comment-post-wrap">
                 <img :src="useAvatar(userEmail)" alt="" class="avatar-img">
                 <div class="comment-post-input-wrap base-textarea-wrap">
-                    <textarea id="content" v-model="form.content" class="base-input textarea-input" cols="30" rows="4" />
+                    <textarea id="content" v-model="body.content" class="base-input textarea-input" cols="30" rows="4" />
                 </div>
                 <div class="comment-post-actions"><a href="javascript:;" class="btn btn-blue" @click="handlePostComment">发表评论</a></div>
             </div>
@@ -54,7 +54,7 @@ const globalCommentStore = useGlobalCommentStore()
 const [loading, toggleLoading] = useToggle(false)
 
 const route = useRoute()
-const form = reactive({
+const body = reactive({
     id: route.query.id,
     content: '',
 })
@@ -76,20 +76,20 @@ const handlePostComment = useLockFn(async () => {
         showMsg('请先登录!')
         globalStore.setLoginModal(true)
     }
-    else if (form.content === '') {
+    else if (body.content === '') {
         showMsg('请输入评论内容!')
     }
     else {
-        const { code, data } = await useHttp().post<ResData<Comment>>('/api/frontend/comment/insert', form)
+        const { code, data } = await useHttp().$post<ResData<Comment>>('/api/frontend/comment/insert', {}, { body })
         if (code === 200) {
-            form.content = ''
+            body.content = ''
             showMsg({ type: 'success', content: '评论发布成功!' })
             globalCommentStore.insertCommentItem(data)
         }
     }
 })
 function handleReply(item: Comment) {
-    form.content = `回复 @${item.userid?.username}: `
+    body.content = `回复 @${item.userid?.username}: `
     const content: HTMLTextAreaElement = document.querySelector('#content')!
     content.focus()
 }
