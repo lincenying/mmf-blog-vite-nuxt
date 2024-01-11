@@ -17,8 +17,6 @@
 </template>
 
 <script setup lang="ts">
-import cookies from 'js-cookie'
-
 defineOptions({
     name: 'BackendLogin',
 })
@@ -43,7 +41,8 @@ const handleLogin = useLockFn(async () => {
 })
 
 onMounted(() => {
-    if (cookies.get('b_user'))
+    const backendUser = useCookie<string>('b_user')
+    if (backendUser.value)
         router.push('/_backend/article/list')
 })
 

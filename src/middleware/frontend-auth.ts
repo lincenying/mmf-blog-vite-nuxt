@@ -1,5 +1,4 @@
 /* eslint-disable node/prefer-global/process */
-import cookies from 'js-cookie'
 
 export default defineNuxtRouteMiddleware(() => {
     if (process.server) {
@@ -9,7 +8,8 @@ export default defineNuxtRouteMiddleware(() => {
             return navigateTo('/')
     }
     if (process.client) {
-        if (!cookies.get('user'))
+        const fronendUser = useCookie<string>('user')
+        if (!fronendUser.value)
             return navigateTo('/')
     }
 })
