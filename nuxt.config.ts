@@ -25,6 +25,9 @@ export default defineNuxtConfig({
         payloadExtraction: false,
         renderJsonPayloads: true,
         typedPages: true,
+
+        // @ts-expect-error 缺失类型
+        inlineSSRStyles: false,
     },
 
     css: [
