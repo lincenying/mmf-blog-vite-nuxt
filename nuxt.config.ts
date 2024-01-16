@@ -20,8 +20,8 @@ export default defineNuxtConfig({
     elementPlus: { /** Options */ },
 
     experimental: {
-    // when using generate, payload js assets included in sw precache manifest
-    // but missing on offline, disabling extraction it until fixed
+        // when using generate, payload js assets included in sw precache manifest
+        // but missing on offline, disabling extraction it until fixed
         payloadExtraction: false,
         renderJsonPayloads: true,
         typedPages: true,
@@ -56,8 +56,7 @@ export default defineNuxtConfig({
             viewport: 'width=device-width,initial-scale=1',
             link: [
                 { rel: 'icon', href: '/favicon.ico', sizes: 'any' },
-                { rel: 'icon', type: 'image/svg+xml', href: '/svg/nuxt.svg' },
-                { rel: 'apple-touch-icon', href: '/images/apple-touch-icon.png' },
+                { rel: 'apple-touch-icon', href: '/static/img/icons/apple-touch-icon-180x180.png' },
             ],
             meta: [
                 { name: 'viewport', content: 'width=device-width, initial-scale=1' },
