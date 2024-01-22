@@ -28,11 +28,19 @@
                 </div>
             </div>
         </div>
-        <div class="settings-footer"><a href="javascript:;" class="btn btn-yellow" @click="handleInsert">添加文章</a></div>
+        <div class="settings-footer">
+            <label mr-10px inline-flex items-center>
+                <input v-model="frontHtml" type="checkbox" value="1">
+                <span ml-5px>使用前端生成Html?</span>
+            </label>
+            <a href="javascript:;" class="btn btn-yellow" @click="handleInsert">添加文章</a>
+        </div>
     </div>
 </template>
 
 <script setup lang="ts">
+import VueMarkdownEditor from '@kangc/v-md-editor'
+
 import type { AnyFn } from '@vueuse/core'
 import type { Article, Upload } from '@/types'
 import { uploadApi } from '~/config'
@@ -58,6 +66,7 @@ const { lists } = $(storeToRefs(globalCategoryStore))
 const { data: posts } = useNuxtData<ResData<ResDataLists<Article>>>('backend-article-list')
 
 let isClient = $ref(false)
+const frontHtml = ref(true)
 
 const [loading, toggleLoading] = useToggle(false)
 
@@ -81,6 +90,10 @@ async function handleInsert() {
         return
     toggleLoading(true)
     // body.html = this.$refs.md.d_render
+    if (frontHtml.value) {
+        const html = VueMarkdownEditor.vMdParser.themeConfig.markdownParser.render(body.content)
+        body.html = html
+    }
     const { code, data, message } = await useHttp().$post<ResData<Article>>('/api/backend/article/insert', {}, { body })
     toggleLoading(false)
     if (code === 200) {

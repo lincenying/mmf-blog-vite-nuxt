@@ -132,9 +132,12 @@
 .markdown-body h4,
 .markdown-body h5,
 .markdown-body h6 {
+    position: relative;
     margin-top: 15px;
-    margin-bottom: 15px;
-    line-height: 1.1;
+    margin-bottom: 16px;
+    font-weight: bold;
+    line-height: 1.4;
+    pointer-events: none;
 }
 
 .markdown-body h1 {
@@ -177,8 +180,10 @@
 .markdown-body ul,
 .markdown-body ol {
     padding: 0;
+    padding-left: 2em;
     margin-top: 0;
     margin-bottom: 0;
+    list-style-type: decimal;
 }
 
 .markdown-body ol ol,
@@ -203,6 +208,7 @@
     padding-bottom: 0.2em;
     margin: 0;
     font-family: Consolas, 'Liberation Mono', Menlo, Courier, monospace;
+    font-size: 12px;
     font-size: 85%;
     background-color: rgba(0, 0, 0, 0.04);
     border-radius: 3px;
@@ -210,8 +216,7 @@
 
 .markdown-body .octicon {
     display: inline-block;
-    font-family: octicons-anchor, sans-serif;
-    font-size: 16px;
+    font: normal normal 16px octicons-anchor, sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     line-height: 1;
@@ -243,20 +248,6 @@
 
 .markdown-body .anchor:focus {
     outline: none;
-}
-
-/* stylelint-disable-next-line no-duplicate-selectors */
-.markdown-body h1,
-.markdown-body h2,
-.markdown-body h3,
-.markdown-body h4,
-.markdown-body h5,
-.markdown-body h6 {
-    position: relative;
-    margin-bottom: 16px;
-    font-weight: bold;
-    line-height: 1.4;
-    pointer-events: none;
 }
 
 .markdown-body h1 .octicon-link,
@@ -333,11 +324,6 @@
     background-color: #e7e7e7;
     border: 0 none;
   } */
-/* stylelint-disable-next-line no-duplicate-selectors */
-.markdown-body ul,
-.markdown-body ol {
-    padding-left: 2em;
-}
 
 .markdown-body ul ul,
 .markdown-body ul ol,
