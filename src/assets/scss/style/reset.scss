@@ -1,6 +1,5 @@
 html {
-    overflow-x: hidden;
-    overflow-y: scroll;
+    overflow: hidden scroll;
 
     // overflow-anchor: none;
     background: #ebf0f0;
@@ -41,7 +40,27 @@ td {
     font-family: Play;
     font-style: normal;
     font-weight: 400;
-    src: url("../fonts/Play.woff2") format("woff2");
+    src: url('../fonts/Play.woff2') format('woff2');
+    unicode-range:
+        U+0000-00FF,
+        U+0131,
+        U+0152-0153,
+        U+02C6,
+        U+02DA,
+        U+02DC,
+        U+2000-206F,
+        U+2074,
+        U+20AC,
+        U+2212,
+        U+2215;
+    font-display: fallback;
+}
+
+@font-face {
+    font-family: consola;
+    font-style: normal;
+    font-weight: 400;
+    src: url('../fonts/consola.ttf') format('ttf');
     unicode-range:
         U+0000-00FF,
         U+0131,
@@ -64,11 +83,11 @@ select,
 textarea {
     font-family:
         -apple-system-font,
-        "Helvetica Neue",
+        'Helvetica Neue',
         Tahoma,
-        "PingFang SC",
-        "lantinghei sc",
-        "Microsoft Yahei",
+        'PingFang SC',
+        'lantinghei sc',
+        'Microsoft Yahei',
         sans-serif;
     font-size: 16px;
     -webkit-font-smoothing: antialiased;
@@ -138,7 +157,7 @@ acronym[title] {
 
 q::before,
 q::after {
-    content: "";
+    content: '';
 }
 
 /* 重置表单元素 */
