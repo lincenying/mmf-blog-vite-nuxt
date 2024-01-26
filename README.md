@@ -1,6 +1,6 @@
 # mmf-blog nuxt 3.0 v3
 
-demo: [http://www.mmxiaowu.com](http://www.mmxiaowu.com)
+demo: [http://nuxt.mmxiaowu.com](http://nuxt.mmxiaowu.com)
 
 The main technical stack: nuxt3, pinia, unocss, eslint, ssr
 
@@ -59,10 +59,10 @@ $ pnpm lint
 ```
 
 Home Site
-http://localhost:7223
+http://localhost:3000
 
 Login
-[http://localhost:7223/_backend/login] (`http://localhost:7223/_backend/login`)
+[http://localhost:3000/_backend/login] (`http://localhost:3000/_backend/login`)
 
 # LICENSE
 

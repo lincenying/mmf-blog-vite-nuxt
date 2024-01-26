@@ -1,6 +1,5 @@
 import VueMarkdownEditor from '@kangc/v-md-editor'
 import vuePressTheme from '@kangc/v-md-editor/lib/theme/vuepress'
-import createLineNumbertPlugin from '@kangc/v-md-editor/lib/plugins/line-number/index'
 
 // Prism
 import Prism from 'prismjs'
@@ -25,7 +24,6 @@ export default defineNuxtPlugin((nuxtApp) => {
                 vue: 'html',
             },
         })
-        .use(createLineNumbertPlugin())
 
     nuxtApp.vueApp.use(VueMarkdownEditor)
 })
