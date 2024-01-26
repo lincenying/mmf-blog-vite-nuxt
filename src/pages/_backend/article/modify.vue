@@ -135,7 +135,7 @@ async function handleUploadImage(event: EventTarget, insertImage: AnyFn, files: 
 
     const formData = new FormData()
     formData.append('file', files[0])
-    const { data } = await useHttp().$post<ResData<Upload>>(`${uploadApi}/ajax.php?action=upload`, {}, { body: formData })
+    const { data } = await useHttp().$post<ResData<Upload>>(`${uploadApi}/api/fetch/upload`, {}, { body: formData })
     if (data && data.filepath) {
         insertImage({
             url: `${uploadApi}/${data.filepath}`,
