@@ -40,9 +40,9 @@
 </template>
 
 <script setup lang="ts">
-import VueMarkdownEditor from '@kangc/v-md-editor'
-
 import type { AnyFn } from '@vueuse/core'
+import { MarkdownEditor } from '~/plugins/md-editor'
+
 import type { Article, Upload } from '@/types'
 import { uploadApi } from '~/config'
 
@@ -114,7 +114,7 @@ async function handleModify() {
         return
     toggleLoading(true)
     if (frontHtml.value) {
-        const html = VueMarkdownEditor.vMdParser.themeConfig.markdownParser.render(body.content)
+        const html = MarkdownEditor.vMdParser.themeConfig.markdownParser.render(body.content)
         body.html = html
     }
     const { code, message, data } = await useHttp().$post<ResData<Article>>('/api/backend/article/modify', {}, { body })

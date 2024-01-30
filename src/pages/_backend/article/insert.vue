@@ -40,11 +40,10 @@
 </template>
 
 <script setup lang="ts">
-import VueMarkdownEditor from '@kangc/v-md-editor'
-
 import type { AnyFn } from '@vueuse/core'
 import type { Article, Upload } from '@/types'
 import { uploadApi } from '~/config'
+import { MarkdownEditor } from '~/plugins/md-editor'
 
 defineOptions({
     name: 'BackendArticleInsert',
@@ -92,7 +91,7 @@ async function handleInsert() {
     toggleLoading(true)
     // body.html = this.$refs.md.d_render
     if (frontHtml.value) {
-        const html = VueMarkdownEditor.vMdParser.themeConfig.markdownParser.render(body.content)
+        const html = MarkdownEditor.vMdParser.themeConfig.markdownParser.render(body.content)
         body.html = html
     }
     const { code, data, message } = await useHttp().$post<ResData<Article>>('/api/backend/article/insert', {}, { body })

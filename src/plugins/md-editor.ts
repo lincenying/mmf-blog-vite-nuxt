@@ -16,14 +16,16 @@ import 'prismjs/components/prism-sass'
 import 'prismjs/components/prism-less'
 import 'prismjs/components/prism-bash'
 
-export default defineNuxtPlugin((nuxtApp) => {
-    VueMarkdownEditor
-        .use(vuePressTheme, {
-            Prism,
-            codeHighlightExtensionMap: {
-                vue: 'html',
-            },
-        })
+VueMarkdownEditor
+    .use(vuePressTheme, {
+        Prism,
+        codeHighlightExtensionMap: {
+            vue: 'html',
+        },
+    })
 
+export default defineNuxtPlugin((nuxtApp) => {
     nuxtApp.vueApp.use(VueMarkdownEditor)
 })
+
+export const MarkdownEditor = VueMarkdownEditor
