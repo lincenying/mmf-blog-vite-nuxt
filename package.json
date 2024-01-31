@@ -46,7 +46,7 @@
     "eslint-plugin-format": "^0.1.0",
     "eslint-ts-patch": "8.56.0-0",
     "highlight.js": "^11.9.0",
-    "nuxt": "^3.9.3",
+    "nuxt": "^3.10.0",
     "pinia": "^2.1.7",
     "sass": "^1.70.0",
     "typescript": "^5.3.3",
