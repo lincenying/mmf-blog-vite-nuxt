@@ -50,7 +50,9 @@ export default defineNuxtConfig({
             ignore: ['/article'],
         },
         routeRules: {
-            '/api/**': { proxy: 'https://api.mmxiaowu.com/api/**' },
+            '/api/**': {
+                proxy: 'https://api.mmxiaowu.com/api/**',
+            },
         },
     },
 
