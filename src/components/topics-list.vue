@@ -33,7 +33,7 @@
 <script setup lang="ts">
 import { ContentLoader } from 'vue-content-loader'
 import type { PageType } from '~/stores/use-frontend-article-store'
-import type { ApiConfig, Article, FArticleStore } from '~/types'
+import type { FArticleStore } from '~/types'
 
 defineOptions({
     name: 'FrontendTopicList',
@@ -69,8 +69,9 @@ const headTitle = computed(() => {
     let title = 'M.M.F 小屋'
     if (pageType === 'category') {
         const obj = category.find(item => item._id === categoryId)
-        if (obj)
+        if (obj) {
             title = `${obj.cate_name} - ${title}`
+        }
     }
     else if (pageType === 'search') {
         title = `搜索: ${searchKey} - ${title}`

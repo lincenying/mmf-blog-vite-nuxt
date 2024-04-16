@@ -29,8 +29,9 @@ useAutoScroll('frontend-index-search')
 
 const [loading, toggleLoading] = useToggle(false)
 async function loadMore(page = topics.page) {
-    if (loading.value)
+    if (loading.value) {
         return
+    }
     toggleLoading(true)
     await frontendArticleStore.getArticleList(getConfig(page))
     toggleLoading(false)

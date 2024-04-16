@@ -30,20 +30,23 @@ const body = reactive({
 })
 
 const handleLogin = useLockFn(async () => {
-    if (!body.username || !body.password)
+    if (!body.username || !body.password) {
         return showMsg('请输入用户名和密码!')
+    }
 
     const loader = $loading.show()
     const { code, data } = await useHttp().$post<ResData<Nullable<string>>>('/api/backend/admin/login', {}, { body })
     loader.hide()
-    if (code === 200 && data)
+    if (code === 200 && data) {
         router.push('/_backend/article/list')
+    }
 })
 
 onMounted(() => {
     const backendUser = useCookie<string>('b_user')
-    if (backendUser.value)
+    if (backendUser.value) {
         router.push('/_backend/article/list')
+    }
 })
 
 const headTitle = ref('管理员登录 - M.M.F 小屋')

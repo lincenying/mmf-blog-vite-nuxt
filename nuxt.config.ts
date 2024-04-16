@@ -1,4 +1,3 @@
-import { resolve } from 'node:path'
 import { pwa } from './src/config/pwa'
 import { appDescription } from './src/constants/index'
 

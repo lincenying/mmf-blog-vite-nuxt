@@ -22,8 +22,9 @@ const usePiniaStore = defineStore('backendArticleStore', () => {
      * @param config 请求参数
      */
     const getArticleList = async (config: ApiConfig) => {
-        if (state.lists.data.length > 0 && config.path === state.lists.path && config.page === 1)
+        if (state.lists.data.length > 0 && config.path === state.lists.path && config.page === 1) {
             return
+        }
         const { code, data } = await useHttp().$get<ResData<ResDataLists<Article>>>('/api/backend/article/list', { ...config, path: undefined, cache: true })
         if (code === 200 && data) {
             const {
@@ -91,8 +92,9 @@ const usePiniaStore = defineStore('backendArticleStore', () => {
      * @param payload 文章详情
      */
     const insertArticleItem = (payload: Article) => {
-        if (state.lists.path)
+        if (state.lists.path) {
             state.lists.data = [payload].concat(state.lists.data)
+        }
     }
     /**
      * 编辑成功后更新文章
@@ -100,8 +102,9 @@ const usePiniaStore = defineStore('backendArticleStore', () => {
      */
     const updateArticleItem = (payload: Article) => {
         const index = state.lists.data.findIndex(ii => ii._id === payload._id)
-        if (index > -1)
+        if (index > -1) {
             state.lists.data.splice(index, 1, payload)
+        }
     }
 
     return {
@@ -117,5 +120,6 @@ const usePiniaStore = defineStore('backendArticleStore', () => {
 
 export default usePiniaStore
 
-if (import.meta.hot)
+if (import.meta.hot) {
     import.meta.hot.accept(acceptHMRUpdate(usePiniaStore, import.meta.hot))
+}

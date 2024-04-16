@@ -50,8 +50,9 @@ function handleRegister() {
     globalStore.setRegisterModal(true)
 }
 const handleLogin = useLockFn(async () => {
-    if (!body.username || !body.password)
+    if (!body.username || !body.password) {
         return showMsg('请将表单填写完整!')
+    }
 
     const { code, message } = await useHttp().$post<ResData<UserCookies>>('/api/frontend/user/login', {}, { body })
     if (code === 200) {

@@ -21,8 +21,9 @@ const usePiniaStore = defineStore('backendUserStore', () => {
      * @param config 请求参数
      */
     const getUserList = async (config: ApiConfig) => {
-        if (state.lists.data.length > 0 && config.path === state.lists.path && config.page === 1)
+        if (state.lists.data.length > 0 && config.path === state.lists.path && config.page === 1) {
             return
+        }
         const { code, data } = await useHttp().$get<ResData<ResDataLists<User>>>('/api/backend/user/list', { ...config, path: undefined, cache: true })
         if (code === 200 && data) {
             const {
@@ -66,8 +67,9 @@ const usePiniaStore = defineStore('backendUserStore', () => {
     const updateUserItem = (payload: User) => {
         state.item.data = payload
         const index = state.lists.data.findIndex(ii => ii._id === payload._id)
-        if (index > -1)
+        if (index > -1) {
             state.lists.data.splice(index, 1, payload)
+        }
     }
     /**
      * 删除用户成功, 更新用户数据
@@ -108,5 +110,6 @@ const usePiniaStore = defineStore('backendUserStore', () => {
 
 export default usePiniaStore
 
-if (import.meta.hot)
+if (import.meta.hot) {
     import.meta.hot.accept(acceptHMRUpdate(usePiniaStore, import.meta.hot))
+}

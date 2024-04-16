@@ -34,8 +34,9 @@ const usePiniaStore = defineStore('frontendArticleStore', () => {
      * @param config 请求参数
      */
     const getArticleList = async (config: ApiConfig, pageType: PageType = 'lists') => {
-        if (state.lists.data.length > 0 && config.path === state.lists.path && config.page === 1)
+        if (state.lists.data.length > 0 && config.path === state.lists.path && config.page === 1) {
             return
+        }
         const { code, data } = await useHttp().$get<ResData<ResDataLists<Article>>>('/api/frontend/article/list', { ...config, path: undefined, cache: true })
         if (code === 200 && data) {
             const {
@@ -77,11 +78,13 @@ const usePiniaStore = defineStore('frontendArticleStore', () => {
      * 读取热门列表
      */
     const getTrending = async () => {
-        if (state.trending.length)
+        if (state.trending.length) {
             return
+        }
         const { code, data } = await useHttp().$get<ResData<ResDataList<Article>>>('/api/frontend/trending', { cache: true })
-        if (code === 200 && data)
+        if (code === 200 && data) {
             state.trending = data.list
+        }
     }
     /**
      * 编辑点赞状态
@@ -92,18 +95,20 @@ const usePiniaStore = defineStore('frontendArticleStore', () => {
     const modifyLikeStatus = (payload: { id: string; status: boolean }) => {
         const { id, status } = payload
         if (state.item.data && state.item.data._id === id) {
-            if (status)
+            if (status) {
                 state.item.data.like++
-            else state.item.data.like--
+            }
+            else { state.item.data.like-- }
             state.item.data.like_status = status
         }
         pageTypeArr.forEach((page) => {
             const index = state[page].data.findIndex((item: Article) => item._id === id)
             if (index > -1) {
                 const obj: Article = Object.assign({}, state.lists.data[index])
-                if (status)
+                if (status) {
                     obj.like++
-                else obj.like--
+                }
+                else { obj.like-- }
                 obj.like_status = status
                 state[page].data.splice(index, 1, obj)
             }
@@ -121,5 +126,6 @@ const usePiniaStore = defineStore('frontendArticleStore', () => {
 
 export default usePiniaStore
 
-if (import.meta.hot)
+if (import.meta.hot) {
     import.meta.hot.accept(acceptHMRUpdate(usePiniaStore, import.meta.hot))
+}

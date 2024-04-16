@@ -44,8 +44,9 @@ useAutoScroll('backend-user-list')
 const [loading, toggleLoading] = useToggle(false)
 
 async function loadMore(page = lists.page) {
-    if (loading.value)
+    if (loading.value) {
         return
+    }
     toggleLoading(true)
     await backendUserStore.getUserList({ page, path: route.fullPath })
     toggleLoading(false)

@@ -27,13 +27,15 @@ export function useGlobal() {
 export function useLockFn(fn: AnyFn, autoUnlock: boolean | string = 'auto') {
     const [lock, toggleLock] = useToggle(false)
     return async (...args: any[]) => {
-        if (lock.value)
+        if (lock.value) {
             return
+        }
         toggleLock(true)
         try {
             const $return: any = await fn(...args)
-            if (autoUnlock === true || (autoUnlock === 'auto' && $return !== false))
+            if (autoUnlock === true || (autoUnlock === 'auto' && $return !== false)) {
                 toggleLock(false)
+            }
         }
         catch (e) {
             toggleLock(false)

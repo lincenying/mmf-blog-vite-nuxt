@@ -15,11 +15,13 @@ const usePiniaStore = defineStore('globalCategoryStore', () => {
      * @param config 请求参数
      */
     const getCategoryList = async (config: ApiConfig) => {
-        if (state.lists.length)
+        if (state.lists.length) {
             return
+        }
         const { code, data } = await useHttp().$get<ResData<ResDataList<Category>>>('/api/backend/category/list', { ...config, path: undefined, cache: true })
-        if (code === 200 && data)
+        if (code === 200 && data) {
             state.lists = data.list
+        }
     }
     /**
      * 读取分类详情
@@ -48,8 +50,9 @@ const usePiniaStore = defineStore('globalCategoryStore', () => {
     const updateCategoryItem = (payload: Category) => {
         state.item.data = payload
         const index = state.lists.findIndex(ii => ii._id === payload._id)
-        if (index > -1)
+        if (index > -1) {
             state.lists.splice(index, 1, payload)
+        }
     }
     /**
      * 删除分类成功后, 更新分类数据
@@ -91,5 +94,6 @@ const usePiniaStore = defineStore('globalCategoryStore', () => {
 
 export default usePiniaStore
 
-if (import.meta.hot)
+if (import.meta.hot) {
     import.meta.hot.accept(acceptHMRUpdate(usePiniaStore, import.meta.hot))
+}

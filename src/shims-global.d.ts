@@ -63,9 +63,9 @@ declare interface ResDataList<T> {
  * Api 浏览器端封装类型
  */
 declare interface ApiClientReturn {
-    get<T>(url: string, params?: Obj, headers?: Obj): Promise<ResData<T>>
-    post<T>(url: string, data?: Obj, headers?: Obj): Promise<ResData<T>>
-    file<T>(url: string, data?: Obj, headers?: Obj): Promise<ResData<T>>
+    get: <T>(url: string, params?: Obj, headers?: Obj) => Promise<ResData<T>>
+    post: <T>(url: string, data?: Obj, headers?: Obj) => Promise<ResData<T>>
+    file: <T>(url: string, data?: Obj, headers?: Obj) => Promise<ResData<T>>
 }
 
 declare interface Window {

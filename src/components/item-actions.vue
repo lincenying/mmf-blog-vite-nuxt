@@ -45,8 +45,9 @@ const handleLike = useLockFn(async () => {
         return
     }
     let url = '/api/frontend/like'
-    if (item.like_status)
+    if (item.like_status) {
         url = '/api/frontend/unlike'
+    }
     const { code, message } = await useHttp().$get<ResData<any>>(url, { id: item._id })
     if (code === 200) {
         showMsg({ type: 'success', content: message })

@@ -45,10 +45,12 @@ const body = reactive({
 })
 
 const handleSubmit = useLockFn(async () => {
-    if (!body.password || !body.old_password || !body.re_password)
+    if (!body.password || !body.old_password || !body.re_password) {
         return showMsg('请将表单填写完整!')
-    else if (body.password !== body.re_password)
+    }
+    else if (body.password !== body.re_password) {
         return showMsg('两次密码输入不一致!')
+    }
 
     const { code, message } = await useHttp().$post<ResData<'success' | 'error'>>('/api/frontend/user/password', {}, { body })
     if (code === 200) {

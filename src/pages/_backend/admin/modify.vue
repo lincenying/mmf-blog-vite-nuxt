@@ -65,8 +65,9 @@ async function handleModify() {
         showMsg('请将表单填写完整!')
         return
     }
-    if (loading.value)
+    if (loading.value) {
         return
+    }
     toggleLoading(true)
     const { code, message, data } = await useHttp().$post<ResData<User>>('/api/backend/admin/modify', {}, { body })
     toggleLoading(false)

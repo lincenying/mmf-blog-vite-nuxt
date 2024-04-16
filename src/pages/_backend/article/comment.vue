@@ -55,8 +55,9 @@ const { lists } = $(storeToRefs(globalCommentStore))
 const [loading, toggleLoading] = useToggle(false)
 
 async function loadMore(page = lists.page) {
-    if (loading.value)
+    if (loading.value) {
         return
+    }
     toggleLoading(true)
     await globalCommentStore.getCommentList({ page, path: route.fullPath, all: 1, id })
     toggleLoading(false)

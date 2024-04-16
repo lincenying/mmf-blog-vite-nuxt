@@ -72,8 +72,9 @@ const articleData = $computed(() => item.data)
 useAutoScroll(`frontend-article-detail-${id}`)
 
 function addTarget(content: string) {
-    if (!content)
+    if (!content) {
         return ''
+    }
     return content.replace(/<a(.*?)href="http/g, '<a$1target="_blank" href="http')
 }
 

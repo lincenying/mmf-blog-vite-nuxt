@@ -79,8 +79,9 @@ watch(
     () => body.category,
     (val) => {
         const obj = lists.find(item => item._id === val)
-        if (obj)
+        if (obj) {
             body.category_name = obj.cate_name
+        }
     },
 )
 
@@ -110,8 +111,9 @@ async function handleModify() {
         showMsg('请将表单填写完整!')
         return
     }
-    if (loading.value)
+    if (loading.value) {
         return
+    }
     toggleLoading(true)
     if (frontHtml.value) {
         const html = MarkdownEditor.vMdParser.themeConfig.markdownParser.render(body.content)
@@ -123,8 +125,9 @@ async function handleModify() {
         showMsg({ type: 'success', content: message })
 
         const index = posts.value?.data.list.findIndex(ii => ii._id === body.id) || -1
-        if (index > -1)
+        if (index > -1) {
             posts.value?.data.list.splice(index, 1, data)
+        }
 
         router.push('/_backend/article/list')
     }

@@ -6,4 +6,5 @@ src/assets/icon-font/*
 z-components.d.ts
 z-auto-imports.d.ts
 src/polyfill/index.js
+src/public/**/*.js
 *.code-snippets

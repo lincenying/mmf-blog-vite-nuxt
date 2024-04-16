@@ -86,8 +86,9 @@ async function handleInsert() {
         showMsg('请将表单填写完整!')
         return
     }
-    if (loading.value)
+    if (loading.value) {
         return
+    }
     toggleLoading(true)
     // body.html = this.$refs.md.d_render
     if (frontHtml.value) {

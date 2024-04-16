@@ -35,8 +35,9 @@ async function _useFetch<T>(url: UrlType, params?: SearchParameters, options?: R
         },
         onResponse({ response }) {
             // Process the response data
-            if (response._data.code !== 200)
+            if (response._data.code !== 200) {
                 ElMessage.error(response._data.message)
+            }
 
             return response._data
         },
@@ -71,8 +72,9 @@ async function _fetch<T>(url: UrlType, params?: SearchParameters, options?: Requ
         },
         onResponse({ response }) {
             // Process the response data
-            if (response._data.code !== 200)
+            if (response._data.code !== 200) {
                 ElMessage.error(response._data.message)
+            }
 
             return response._data
         },
