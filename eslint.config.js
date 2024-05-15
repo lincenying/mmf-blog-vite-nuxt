@@ -6,6 +6,7 @@ export default lincy(
         formatters: true,
         ignores: [
             'src/public',
+            'src/polyfill',
         ],
     },
 )
