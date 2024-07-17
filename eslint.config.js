@@ -7,6 +7,7 @@ export default lincy(
         ignores: [
             'src/public',
             'src/polyfill',
+            '.output/**',
         ],
     },
 )
