@@ -9,14 +9,17 @@ RUN npm config set registry https://registry.npmmirror.com
 
 RUN npm install -g pnpm
 
+# Set the working directory
+WORKDIR /app
+
 # Copy the package files
-COPY package.json pnpm-lock.yaml /app/
+COPY package.json pnpm-lock.yaml ./
 
 # Install dependencies using pnpm
 RUN pnpm install --frozen-lockfile
 
 # Copy built assets from previous stage
-COPY ./.output /app/.output
+COPY ./.output ./
 
 # Define environment variables
 ENV NUXT_HOST=0.0.0.0 \
@@ -24,8 +27,6 @@ ENV NUXT_HOST=0.0.0.0 \
     NODE_ENV=production \
     HOST_API_URL=http://host.docker.internal:4000
 
-# Set the working directory
-WORKDIR /app
 
 EXPOSE 3000
 
