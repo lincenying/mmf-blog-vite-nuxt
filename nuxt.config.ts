@@ -1,3 +1,4 @@
+import process from 'node:process'
 import { pwa } from './src/config/pwa'
 import { appDescription } from './src/constants/index'
 
@@ -50,7 +51,7 @@ export default defineNuxtConfig({
         },
         routeRules: {
             '/api/**': {
-                proxy: 'https://api.mmxiaowu.com/api/**',
+                proxy: `${process.env.HOST_API_URL || 'https://api.mmxiaowu.com'}/api/**`,
             },
         },
     },
