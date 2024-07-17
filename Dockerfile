@@ -31,7 +31,7 @@ ENV NUXT_HOST=0.0.0.0 \
 EXPOSE 3000
 
 # Start the app
-CMD ["node", "/app/.output/server/index.mjs"]
+CMD ["node", "./.output/server/index.mjs"]
 
 # 构建镜像
 # docker build -t mmf-blog-vite-nuxt -f ./Dockerfile .
