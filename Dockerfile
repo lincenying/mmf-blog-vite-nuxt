@@ -13,13 +13,10 @@ RUN npm install -g pnpm
 WORKDIR /app
 
 # Copy the package files
-COPY package.json pnpm-lock.yaml ./
+COPY . .
 
 # Install dependencies using pnpm
 RUN pnpm install --frozen-lockfile
-
-# Copy built assets from previous stage
-COPY ./.output /app/.output
 
 # Define environment variables
 ENV NUXT_HOST=0.0.0.0 \
@@ -38,7 +35,7 @@ CMD ["node", "./.output/server/index.mjs"]
 # 运行镜像
 # docker run -d -p 3008:3000 --name container-nuxt mmf-blog-vite-nuxt
 # 进入镜像
-# docker exec -it container-nuxt bash
+# docker exec -it container-nuxt /bin/sh
 # 停止容器
 # docker stop container-nuxt
 # 删除容器
