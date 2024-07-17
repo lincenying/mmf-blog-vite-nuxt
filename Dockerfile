@@ -38,3 +38,9 @@ CMD ["node", "/app/.output/server/index.mjs"]
 # docker run -d -p 3008:3000 --name container-nuxt mmf-blog-vite-nuxt
 # 进入镜像
 # docker exec -it container-nuxt bash
+# 停止容器
+# docker stop container-nuxt
+# 删除容器
+# docker rm container-nuxt
+# 删除镜像
+# docker rmi mmf-blog-vite-nuxt
