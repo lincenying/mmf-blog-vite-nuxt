@@ -8,6 +8,8 @@ FROM $NODE_VERSION AS dependency-base
 WORKDIR /app
 
 # Install pnpm
+Run npm config set registry https://registry.npmmirror.com
+
 RUN npm install -g pnpm
 
 # Copy the package files
