@@ -1,0 +1,1 @@
+import{a6 as e,m as a}from"./DPxB2w_0.js";import"./CcbZIe53.js";import{u as o}from"./B9DE6HdW.js";import"./B8H6CRKA.js";const u=e(()=>{if(!o("b_user").value)return a("/_backend/login")});export{u as default};
