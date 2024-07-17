@@ -4,6 +4,17 @@ ARG NODE_VERSION=node:18-alpine
 # Production image
 FROM $NODE_VERSION AS production
 
+# Install pnpm
+RUN npm config set registry https://registry.npmmirror.com
+
+RUN npm install -g pnpm
+
+# Copy the package files
+COPY package.json pnpm-lock.yaml ./
+
+# Install dependencies using pnpm
+RUN pnpm install --frozen-lockfile
+
 # Copy built assets from previous stage
 COPY ./.output /app/.output
 
@@ -24,6 +35,6 @@ CMD ["node", "/app/.output/server/index.mjs"]
 # 构建镜像
 # docker build -t mmf-blog-vite-nuxt -f ./Dockerfile .
 # 运行镜像
-# docker run -d -p 7222:3000 --name container-nuxt mmf-blog-vite-nuxt
+# docker run -d -p 3008:3000 --name container-nuxt mmf-blog-vite-nuxt
 # 进入镜像
 # docker exec -it container-nuxt bash
