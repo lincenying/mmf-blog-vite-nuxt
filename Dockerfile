@@ -19,7 +19,7 @@ COPY package.json pnpm-lock.yaml ./
 RUN pnpm install --frozen-lockfile
 
 # Copy built assets from previous stage
-COPY ./.output ./
+COPY ./.output /app/.output
 
 # Define environment variables
 ENV NUXT_HOST=0.0.0.0 \
