@@ -5,7 +5,7 @@ ARG NODE_VERSION=node:18-alpine
 FROM $NODE_VERSION AS production
 
 # Copy built assets from previous stage
-COPY --from=production-base ./.output /app/.output
+COPY ./.output /app/.output
 
 # Define environment variables
 ENV NUXT_HOST=0.0.0.0 \
