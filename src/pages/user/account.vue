@@ -21,6 +21,7 @@
 </template>
 
 <script setup lang="ts">
+import { isEmail } from '@lincy/utils'
 import type { User } from '@/types'
 
 defineOptions({
@@ -48,12 +49,11 @@ onMounted(() => {
 })
 
 const handleSubmit = useLockFn(async () => {
-    const reg = /^([a-zA-Z0-9_\-.]+)@([a-zA-Z0-9_-]+)(\.[a-zA-Z0-9_-]+)$/i
     if (!email) {
         showMsg('请填写邮箱地址!')
         return
     }
-    else if (!reg.test(email)) {
+    else if (!isEmail(email)) {
         showMsg('邮箱格式错误!')
         return
     }

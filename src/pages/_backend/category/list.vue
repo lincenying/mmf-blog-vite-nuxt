@@ -30,7 +30,7 @@ const route = useRoute()
 
 // pinia 状态管理 ===>
 const globalCategoryStore = useGlobalCategoryStore()
-await useAsyncData('backend-category-list', () => globalCategoryStore.getCategoryList({ limit: 99, path: route.fullPath }))
+await useAsyncData('backend-category-list', () => globalCategoryStore.getCategoryList({ limit: 99, path: route.fullPath }).then(() => true))
 const { lists: category } = $(storeToRefs(globalCategoryStore))
 
 useAutoScroll('backend-category-list')

@@ -58,11 +58,11 @@ const id = $(useRouteQuery('id'))
 
 // pinia 状态管理 ===>
 const globalCategoryStore = useGlobalCategoryStore()
-await useAsyncData('backend-category-list', () => globalCategoryStore.getCategoryItem({ path: route.fullPath, id }))
+await useAsyncData('backend-category-list', () => globalCategoryStore.getCategoryItem({ path: route.fullPath, id }).then(() => true))
 const { lists } = $(storeToRefs(globalCategoryStore))
 
 const backendArticleStore = useBackendArticleStore()
-await useAsyncData('backend-article-modify', () => backendArticleStore.getArticleItem({ id }))
+await useAsyncData('backend-article-modify', () => backendArticleStore.getArticleItem({ id }).then(() => true))
 const { item } = $(storeToRefs(backendArticleStore))
 
 const body = reactive({

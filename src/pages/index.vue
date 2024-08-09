@@ -12,7 +12,7 @@ const route = useRoute()
 // pinia 状态管理 ===>
 const frontendArticleStore = useFrontendArticleStore()
 
-await useAsyncData('frontend-index', () => frontendArticleStore.getArticleList(getConfig(), 'lists'))
+await useAsyncData('frontend-index', () => frontendArticleStore.getArticleList(getConfig(), 'lists').then(() => true))
 
 const { lists: topics } = $(storeToRefs(frontendArticleStore))
 

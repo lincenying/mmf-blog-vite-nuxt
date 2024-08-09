@@ -27,7 +27,7 @@ watch(() => route.path, () => {
     frontendArticleStore.getArticleList(getConfig(), 'category')
 })
 
-await useAsyncData('frontend-index-category', () => frontendArticleStore.getArticleList(getConfig(), 'category'))
+await useAsyncData('frontend-index-category', () => frontendArticleStore.getArticleList(getConfig(), 'category').then(() => true))
 
 useAutoScroll('frontend-index-category')
 

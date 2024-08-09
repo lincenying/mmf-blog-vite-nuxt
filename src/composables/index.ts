@@ -1,5 +1,6 @@
 import md5 from 'md5'
 import type { AnyFn } from '@vueuse/core'
+import type { NavigationGuardNext, RouteLocationNormalized } from 'vue-router'
 
 export function useGlobal() {
     const ins = getCurrentInstance()!
@@ -61,7 +62,7 @@ export function useSaveScroll() {
         }, 350)
     })
 
-    onBeforeRouteLeave((to, from, next) => {
+    onBeforeRouteLeave((to: RouteLocationNormalized, from: RouteLocationNormalized, next: NavigationGuardNext) => {
         appShellStore.saveScrollTop({
             path: from.fullPath,
             scrollTop: Math.max(window.scrollY, document.documentElement.scrollTop, document.body.scrollTop),

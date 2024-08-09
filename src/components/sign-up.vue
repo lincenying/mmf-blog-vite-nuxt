@@ -31,7 +31,7 @@
 </template>
 
 <script setup lang="ts">
-import { strLen } from '@lincy/utils'
+import { isEmail, strLen } from '@lincy/utils'
 
 defineOptions({
     name: 'SignUp',
@@ -60,14 +60,13 @@ function handleLogin() {
     globalStore.setRegisterModal(false)
 }
 const handleRegister = useLockFn(async () => {
-    const reg = /^([a-zA-Z0-9_\-.]+)@([a-zA-Z0-9_-]+)(\.[a-zA-Z0-9_-]+)$/i
     if (!body.username || !body.password || !body.email) {
         return showMsg('请将表单填写完整!')
     }
     else if (strLen(body.username) < 4) {
         return showMsg('用户长度至少 2 个中文或 4 个英文!')
     }
-    else if (!reg.test(body.email)) {
+    else if (!isEmail(body.email)) {
         return showMsg('邮箱格式错误!')
     }
     else if (strLen(body.password) < 8) {

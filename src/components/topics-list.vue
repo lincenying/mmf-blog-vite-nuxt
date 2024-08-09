@@ -55,8 +55,8 @@ const { topics, pageType, categoryId, searchKey } = $(toRefs(props))
 const globalCategoryStore = useGlobalCategoryStore()
 const frontendArticleStore = useFrontendArticleStore()
 
-await useAsyncData('frontend-article-category', () => globalCategoryStore.getCategoryList({}))
-await useAsyncData('frontend-article-trending', () => frontendArticleStore.getTrending())
+await useAsyncData('frontend-article-category', () => globalCategoryStore.getCategoryList({}).then(() => true))
+await useAsyncData('frontend-article-trending', () => frontendArticleStore.getTrending().then(() => true))
 
 const { lists: category } = $(storeToRefs(globalCategoryStore))
 const { trending } = $(storeToRefs(frontendArticleStore))

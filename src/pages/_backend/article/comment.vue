@@ -48,7 +48,7 @@ await useAsyncData('backend-article-comment', () => globalCommentStore.getCommen
     path: route.fullPath,
     all: 1,
     id,
-}))
+}).then(() => true))
 
 const { lists } = $(storeToRefs(globalCommentStore))
 

@@ -40,7 +40,7 @@ await useAsyncData('backend-user-modify', () => backendUserStore.getUserItem({
     id,
     path: route.fullPath,
     from: 'backend',
-}))
+}).then(() => true))
 const { item } = $(storeToRefs(backendUserStore))
 
 const [loading, toggleLoading] = useToggle(false)

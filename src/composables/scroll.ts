@@ -1,3 +1,5 @@
+import type { NavigationGuardNext, RouteLocationNormalized } from 'vue-router'
+
 export function useAutoScroll(key: string) {
     const scrollTop = useState<number>(key)
 
@@ -5,7 +7,7 @@ export function useAutoScroll(key: string) {
         scrollTop.value = event.scrollTop
     }
 
-    onBeforeRouteLeave((to, from, next) => {
+    onBeforeRouteLeave((to: RouteLocationNormalized, from: RouteLocationNormalized, next: NavigationGuardNext) => {
         scrollTop.value = Math.max(window.scrollY, document.documentElement.scrollTop, document.body.scrollTop)
         next()
     })

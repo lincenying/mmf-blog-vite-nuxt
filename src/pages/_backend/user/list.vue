@@ -36,7 +36,7 @@ const route = useRoute()
 
 // pinia 状态管理 ===>
 const backendUserStore = useBackendUserStore()
-await useAsyncData('backend-user-list', () => backendUserStore.getUserList({ page: 1, path: route.fullPath }))
+await useAsyncData('backend-user-list', () => backendUserStore.getUserList({ page: 1, path: route.fullPath }).then(() => true))
 const { lists } = $(storeToRefs(backendUserStore))
 
 useAutoScroll('backend-user-list')

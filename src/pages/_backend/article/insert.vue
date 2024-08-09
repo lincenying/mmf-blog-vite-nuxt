@@ -59,7 +59,7 @@ const globalCategoryStore = useGlobalCategoryStore()
 await useAsyncData('frontend-insert', () => globalCategoryStore.getCategoryList({
     limit: 99,
     path: route.fullPath,
-}))
+}).then(() => true))
 
 const { lists } = $(storeToRefs(globalCategoryStore))
 

@@ -39,7 +39,7 @@ defineOptions({
 const route = useRoute()
 
 const backendArticleStore = useBackendArticleStore()
-await useAsyncData('backend-article-list', () => backendArticleStore.getArticleList({ page: 1, path: route.fullPath }))
+await useAsyncData('backend-article-list', () => backendArticleStore.getArticleList({ page: 1, path: route.fullPath }).then(() => true))
 const { lists } = $(storeToRefs(backendArticleStore))
 
 useAutoScroll('backend-article-list')

@@ -98,7 +98,9 @@ const usePiniaStore = defineStore('frontendArticleStore', () => {
             if (status) {
                 state.item.data.like++
             }
-            else { state.item.data.like-- }
+            else {
+                state.item.data.like--
+            }
             state.item.data.like_status = status
         }
         pageTypeArr.forEach((page) => {
@@ -108,7 +110,9 @@ const usePiniaStore = defineStore('frontendArticleStore', () => {
                 if (status) {
                     obj.like++
                 }
-                else { obj.like-- }
+                else {
+                    obj.like--
+                }
                 obj.like_status = status
                 state[page].data.splice(index, 1, obj)
             }
