@@ -18,14 +18,17 @@ COPY . .
 # Install dependencies using pnpm
 RUN pnpm install --frozen-lockfile
 
+RUN pnpm run build
+
 # Define environment variables
-ENV NUXT_HOST=0.0.0.0 \
-    NUXT_APP_VERSION=latest \
-    NODE_ENV=production \
-    HOST_API_URL=http://host.docker.internal:4000
+ENV NUXT_HOST=0.0.0.0
+ENV NUXT_APP_VERSION=latest
+ENV NODE_ENV=production
+ENV PORT=7200
+ENV NUXT_ENV_HOST_API_URL=http://host.docker.internal:4008
 
 
-EXPOSE 3000
+EXPOSE 7200
 
 # Start the app
 CMD ["node", "./.output/server/index.mjs"]
@@ -33,7 +36,7 @@ CMD ["node", "./.output/server/index.mjs"]
 # 构建镜像
 # docker build -t mmf-blog-vite-nuxt -f ./Dockerfile .
 # 运行镜像
-# docker run -d -p 3008:3000 --name container-nuxt mmf-blog-vite-nuxt
+# docker run -d -p 7200:7200 --name container-nuxt mmf-blog-vite-nuxt
 # 进入镜像
 # docker exec -it container-nuxt /bin/sh
 # 停止容器
