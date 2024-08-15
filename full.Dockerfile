@@ -7,22 +7,15 @@ FROM $NODE_VERSION AS dependency-base
 # Create app directory
 WORKDIR /app
 
+COPY . .
+
 # Install pnpm
 RUN npm config set registry https://registry.npmmirror.com
 
 RUN npm install -g pnpm
 
-# Copy the package files
-COPY package.json pnpm-lock.yaml ./
-
 # Install dependencies using pnpm
 RUN pnpm install --frozen-lockfile
-
-# Stage 2: Build the application
-FROM dependency-base AS production-base
-
-# Copy the source code
-COPY . .
 
 # Build the application
 RUN pnpm run build
@@ -30,19 +23,20 @@ RUN pnpm run build
 # Stage 3: Production image
 FROM $NODE_VERSION AS production
 
-# Copy built assets from previous stage
-COPY --from=production-base /app/.output /app/.output
-
-# Define environment variables
-ENV NUXT_HOST=0.0.0.0 \
-    NUXT_APP_VERSION=latest \
-    NODE_ENV=production \
-    HOST_API_URL=http://host.docker.internal:4000
-
-# Set the working directory
+# Create app directory
 WORKDIR /app
 
-EXPOSE 3000
+# Copy built assets from previous stage
+COPY --from=dependency-base /app/.output /app/.output
+
+# Define environment variables
+ENV NUXT_HOST=0.0.0.0
+ENV NUXT_APP_VERSION=latest
+ENV NODE_ENV=production
+ENV PORT=7200
+ENV NUXT_ENV_HOST_API_URL=http://host.docker.internal:4008
+
+EXPOSE 7200
 
 # Start the app
 CMD ["node", "/app/.output/server/index.mjs"]

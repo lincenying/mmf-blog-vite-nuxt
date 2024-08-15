@@ -31,7 +31,7 @@ services:
             - .env
         build:
             context: .
-            dockerfile: ./Dockerfile
+            dockerfile: ./full.Dockerfile
         depends_on:
             - api
         ports:
