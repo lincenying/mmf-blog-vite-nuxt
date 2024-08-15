@@ -20,7 +20,7 @@ RUN pnpm install --frozen-lockfile
 # Build the application
 RUN pnpm run build
 
-# Stage 3: Production image
+# Stage 2: Production image
 FROM $NODE_VERSION AS production
 
 # Create app directory
