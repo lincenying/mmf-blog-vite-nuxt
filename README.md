@@ -70,7 +70,7 @@ $ pnpm lint
 # 构建镜像
 docker build -t images-mmf-blog-vite-nuxt -f ./Dockerfile .
 # 运行镜像
-docker run -d -p 7200:7200 --name container-mmf-blog-vite-nuxt images-mmf-blog-vite-nuxt
+docker run -d -p 7200:7200 --add-host=host.docker.internal:host-gateway --name container-mmf-blog-vite-nuxt images-mmf-blog-vite-nuxt
 # 进入镜像
 docker exec -it container-mmf-blog-vite-nuxt /bin/bash
 # 停止容器
