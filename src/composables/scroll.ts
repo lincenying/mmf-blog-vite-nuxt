@@ -7,7 +7,7 @@ export function useAutoScroll(key: string) {
         scrollTop.value = event.scrollTop
     }
 
-    onBeforeRouteLeave((to: RouteLocationNormalized, from: RouteLocationNormalized, next: NavigationGuardNext) => {
+    onBeforeRouteLeave((_to: RouteLocationNormalized, _from: RouteLocationNormalized, next: NavigationGuardNext) => {
         scrollTop.value = Math.max(window.scrollY, document.documentElement.scrollTop, document.body.scrollTop)
         next()
     })

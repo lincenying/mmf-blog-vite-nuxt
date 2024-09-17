@@ -1,6 +1,6 @@
-import { acceptHMRUpdate, defineStore } from 'pinia'
-
 import type { ApiConfig, Category, CategoryStore } from '@/types'
+
+import { acceptHMRUpdate, defineStore } from 'pinia'
 
 const usePiniaStore = defineStore('globalCategoryStore', () => {
     const state: CategoryStore = reactive({

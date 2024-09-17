@@ -1,5 +1,5 @@
-import { acceptHMRUpdate, defineStore } from 'pinia'
 import type { AdminStore, ApiConfig, User } from '~/types'
+import { acceptHMRUpdate, defineStore } from 'pinia'
 
 const usePiniaStore = defineStore('backendAdminStore', () => {
     const state: AdminStore = reactive({

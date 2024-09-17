@@ -1,6 +1,6 @@
-import { acceptHMRUpdate, defineStore } from 'pinia'
-
 import type { ApiConfig, Comment, CommentStore } from '@/types'
+
+import { acceptHMRUpdate, defineStore } from 'pinia'
 
 const usePiniaStore = defineStore('globalCommentStore', () => {
     const state: CommentStore = reactive({

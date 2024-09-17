@@ -41,10 +41,10 @@
 
 <script setup lang="ts">
 import type { AnyFn } from '@vueuse/core'
-import { MarkdownEditor } from '~/plugins/md-editor'
-
 import type { Article, Upload } from '@/types'
+
 import { uploadApi } from '~/config'
+import { MarkdownEditor } from '~/plugins/md-editor'
 
 defineOptions({
     name: 'BackendArticleModify',
@@ -133,7 +133,7 @@ async function handleModify() {
     }
 }
 
-async function handleUploadImage(event: EventTarget, insertImage: AnyFn, files: FileList) {
+async function handleUploadImage(_event: EventTarget, insertImage: AnyFn, files: FileList) {
     const loader = ctx.$loading.show()
 
     const formData = new FormData()

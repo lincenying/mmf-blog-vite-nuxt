@@ -31,9 +31,9 @@
 </template>
 
 <script setup lang="ts">
-import { ContentLoader } from 'vue-content-loader'
 import type { PageType } from '~/stores/use-frontend-article-store'
 import type { FArticleStore } from '~/types'
+import { ContentLoader } from 'vue-content-loader'
 
 defineOptions({
     name: 'FrontendTopicList',

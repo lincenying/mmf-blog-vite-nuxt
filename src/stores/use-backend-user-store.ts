@@ -1,6 +1,6 @@
-import { acceptHMRUpdate, defineStore } from 'pinia'
-
 import type { ApiConfig, User, UserStore } from '@/types'
+
+import { acceptHMRUpdate, defineStore } from 'pinia'
 
 const usePiniaStore = defineStore('backendUserStore', () => {
     const state: UserStore = reactive({

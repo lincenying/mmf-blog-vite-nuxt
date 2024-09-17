@@ -1,5 +1,5 @@
-import md5 from 'md5'
 import type { SearchParameters } from 'ofetch'
+import md5 from 'md5'
 
 type UrlType = string | Request | Ref<string | Request> | (() => string | Request)
 

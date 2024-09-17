@@ -21,8 +21,8 @@
 </template>
 
 <script setup lang="ts">
-import { isEmail } from '@lincy/utils'
 import type { User } from '@/types'
+import { isEmail } from '@lincy/utils'
 
 defineOptions({
     name: 'FrontendUserAccount',

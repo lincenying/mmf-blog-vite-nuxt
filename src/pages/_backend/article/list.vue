@@ -29,8 +29,8 @@
 </template>
 
 <script setup lang="ts">
-import { getDateDiff } from '@lincy/utils'
 import type { Article } from '@/types'
+import { getDateDiff } from '@lincy/utils'
 
 defineOptions({
     name: 'BackendArticleList',
