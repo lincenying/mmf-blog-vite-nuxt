@@ -3,7 +3,7 @@ import type { NavigationGuardNext, RouteLocationNormalized } from 'vue-router'
 export function useAutoScroll(key: string) {
     const scrollTop = useState<number>(key)
 
-    function onScroll(event: { scrollLeft: number; scrollTop: number }) {
+    function onScroll(event: { scrollLeft: number, scrollTop: number }) {
         scrollTop.value = event.scrollTop
     }
 

@@ -92,7 +92,7 @@ const usePiniaStore = defineStore('frontendArticleStore', () => {
      * @param payload.id ID
      * @param payload.status 状态
      */
-    const modifyLikeStatus = (payload: { id: string; status: boolean }) => {
+    const modifyLikeStatus = (payload: { id: string, status: boolean }) => {
         const { id, status } = payload
         if (state.item.data && state.item.data._id === id) {
             if (status) {
