@@ -34,9 +34,9 @@ EXPOSE 7200
 CMD ["node", "./.output/server/index.mjs"]
 
 # 构建镜像
-# docker build -t mmf-blog-vite-nuxt -f ./Dockerfile .
+# docker build -t lincenying/images-mmf-blog-vite-nuxt:1.25.0312 -f ./Dockerfile .
 # 运行镜像
-# docker run -d -p 7200:7200 --add-host=host.docker.internal:host-gateway --name container-nuxt mmf-blog-vite-nuxt
+# docker run -d -p 7200:7200 --add-host=host.docker.internal:host-gateway --name container-nuxt lincenying/images-mmf-blog-vite-nuxt:1.25.0312
 # 进入镜像
 # docker exec -it container-nuxt /bin/sh
 # 停止容器
