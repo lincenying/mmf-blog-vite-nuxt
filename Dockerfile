@@ -1,5 +1,5 @@
 # Use a smaller base image
-ARG NODE_VERSION=node:18-alpine
+ARG NODE_VERSION=node:22-alpine
 
 # Production image
 FROM $NODE_VERSION AS production
@@ -34,9 +34,9 @@ EXPOSE 7200
 CMD ["node", "./.output/server/index.mjs"]
 
 # 构建镜像
-# docker build -t lincenying/images-mmf-blog-vite-nuxt:1.25.0312 -f ./Dockerfile .
+# docker build -t lincenying/images-mmf-blog-vite-nuxt:1.25.0414 -f ./Dockerfile .
 # 运行镜像
-# docker run -d -p 7200:7200 --add-host=host.docker.internal:host-gateway --name container-nuxt lincenying/images-mmf-blog-vite-nuxt:1.25.0312
+# docker run -d -p 7200:7200 --add-host=host.docker.internal:host-gateway --name container-nuxt lincenying/images-mmf-blog-vite-nuxt:1.25.0414
 # 进入镜像
 # docker exec -it container-nuxt /bin/sh
 # 停止容器
