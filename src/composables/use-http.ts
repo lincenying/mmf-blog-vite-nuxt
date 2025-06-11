@@ -10,11 +10,11 @@ export interface RequestOptions {
     body?: RequestInit['body'] | Record<string, any>
 }
 
-async function _useFetch<T>(url: UrlType, params?: SearchParameters, options?: RequestOptions) {
+function _useFetch<T>(url: UrlType, params?: SearchParameters, options?: RequestOptions) {
     const headers = useRequestHeaders(['cookie'])
     const method = options?.method ?? 'GET'
     const body = options?.body
-    return await useFetch<T>(url as string, {
+    return useFetch<T>(url as string, {
         key: options?.key ?? md5(url as string),
         method,
         params: { ...params },
@@ -49,11 +49,11 @@ async function _useFetch<T>(url: UrlType, params?: SearchParameters, options?: R
     })
 }
 
-async function _fetch<T>(url: UrlType, params?: SearchParameters, options?: RequestOptions) {
+function _fetch<T>(url: UrlType, params?: SearchParameters, options?: RequestOptions) {
     const headers = useRequestHeaders(['cookie'])
     const method = options?.method ?? 'GET'
     const body = options?.body
-    return await $fetch<T>(url as string, {
+    return $fetch<T>(url as string, {
         method,
         params: { ...params },
         headers: {
