@@ -16,7 +16,7 @@ WORKDIR /app
 COPY . .
 
 # Install dependencies using pnpm
-RUN pnpm install --frozen-lockfile
+RUN pnpm install --frozen-lockfile --ignore-scripts
 
 RUN pnpm run build
 
@@ -33,6 +33,9 @@ EXPOSE 7200
 # Start the app
 CMD ["node", "./.output/server/index.mjs"]
 
+# 第一次执行时, 如果node镜像拉不下来, 可以执行以下命令:
+# docker pull swr.cn-north-4.myhuaweicloud.com/ddn-k8s/docker.io/node:22-alpine3.22
+# docker tag swr.cn-north-4.myhuaweicloud.com/ddn-k8s/docker.io/node:22-alpine3.22 node:22-alpine
 # 构建镜像
 # docker build -t lincenying/images-mmf-blog-vite-nuxt:1.25.0414 -f ./Dockerfile .
 # 运行镜像

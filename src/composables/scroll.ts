@@ -1,5 +1,10 @@
 import type { NavigationGuardNext, RouteLocationNormalized } from 'vue-router'
 
+/**
+ * 自动记录/恢复滚动条位置
+ * @param key - 用于存储滚动位置的键
+ * @returns 设置滚动条函数
+ */
 export function useAutoScroll(key: string) {
     const scrollTop = useState<number>(key)
 
