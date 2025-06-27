@@ -71,6 +71,14 @@ export default defineNuxtConfig({
         port: 7223,
     },
 
+    vite: {
+        server: {
+            hmr: {
+                port: 57223,
+            },
+        },
+    },
+
     // hooks: {
     //     'pages:extend': (pages) => {
     //         // 过滤出你要删除掉路由（根据自己的需求写这里的过滤逻辑，可以把不想要的路由都去掉）
