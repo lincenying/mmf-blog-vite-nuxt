@@ -34,14 +34,18 @@ const body = reactive({
     cate_order: '',
 })
 
-watch(item, (val) => {
-    if (val.data) {
-        body.cate_name = val.data.cate_name
-        body.cate_order = val.data.cate_order
-    }
-}, {
-    immediate: true,
-})
+watch(
+    item,
+    (val) => {
+        if (val.data) {
+            body.cate_name = val.data.cate_name
+            body.cate_order = val.data.cate_order
+        }
+    },
+    {
+        immediate: true,
+    },
+)
 
 async function handleInsert() {
     if (!body.cate_name || !body.cate_order) {

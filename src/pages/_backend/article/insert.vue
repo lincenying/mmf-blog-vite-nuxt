@@ -56,10 +56,14 @@ const router = useRouter()
 // pinia 状态管理 ===>
 const globalCategoryStore = useGlobalCategoryStore()
 
-await useAsyncData('frontend-insert', () => globalCategoryStore.getCategoryList({
-    limit: 99,
-    path: route.fullPath,
-}).then(() => true))
+await useAsyncData('frontend-insert', () =>
+    globalCategoryStore
+        .getCategoryList({
+            limit: 99,
+            path: route.fullPath,
+        })
+        .then(() => true),
+)
 
 const { lists } = $(storeToRefs(globalCategoryStore))
 

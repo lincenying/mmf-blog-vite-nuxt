@@ -43,12 +43,16 @@ const id = $(useRouteQuery('id'))
 // pinia 状态管理 ===>
 const globalCommentStore = useGlobalCommentStore()
 
-await useAsyncData('backend-article-comment', () => globalCommentStore.getCommentList({
-    page: 1,
-    path: route.fullPath,
-    all: 1,
-    id,
-}).then(() => true))
+await useAsyncData('backend-article-comment', () =>
+    globalCommentStore
+        .getCommentList({
+            page: 1,
+            path: route.fullPath,
+            all: 1,
+            id,
+        })
+        .then(() => true),
+)
 
 const { lists } = $(storeToRefs(globalCommentStore))
 

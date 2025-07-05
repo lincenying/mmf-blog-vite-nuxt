@@ -19,13 +19,19 @@ function getConfig(page = 1) {
     const path = route.path
     const id = $(useRouteParam('id'))
     return {
-        page, limit: 10, path, id,
+        page,
+        limit: 10,
+        path,
+        id,
     }
 }
 
-watch(() => route.path, () => {
-    frontendArticleStore.getArticleList(getConfig(), 'category')
-})
+watch(
+    () => route.path,
+    () => {
+        frontendArticleStore.getArticleList(getConfig(), 'category')
+    },
+)
 
 await useAsyncData('frontend-index-category', () => frontendArticleStore.getArticleList(getConfig(), 'category').then(() => true))
 

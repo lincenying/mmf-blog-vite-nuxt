@@ -4,22 +4,17 @@
 
 .vuepress-markdown-body code[class*='v-md-prism-'],
 .vuepress-markdown-body pre[class*='v-md-prism-'] {
-    font-family:
-        Consolas,
-        Monaco,
-        'Andale Mono',
-        'Ubuntu Mono',
-        monospace;
+    font-family: Consolas, Monaco, 'Andale Mono', 'Ubuntu Mono', monospace;
     font-size: 1em;
+    hyphens: none;
     line-height: 1.5;
-    word-spacing: normal;
     color: #ccc;
     text-align: left;
     word-break: normal;
     word-wrap: normal;
     white-space: pre;
     background: none;
-    hyphens: none;
+    word-spacing: normal;
 }
 
 .vuepress-markdown-body pre[class*='v-md-prism-'] {
@@ -119,7 +114,7 @@
     margin: 0;
     font-size: 0.85em;
     color: #476582;
-    background-color: rgba(27, 31, 35, 0.05);
+    background-color: rgb(27, 31, 35, 0.05);
     border-radius: 3px;
 }
 
@@ -168,7 +163,7 @@
     right: 1em;
     z-index: 3;
     font-size: 0.75rem;
-    color: hsla(0deg, 0%, 100%, 0.4);
+    color: hsl(0deg, 0%, 100%, 0.4);
 }
 
 .vuepress-markdown-body div[class*='v-md-pre-wrapper-']:not(.line-numbers-mode) .line-numbers-wrapper {
@@ -186,7 +181,7 @@
     width: 3.5rem;
     padding: 1.25rem 0;
     line-height: 1.4;
-    color: hsla(0deg, 0%, 100%, 0.3);
+    color: hsl(0deg, 0%, 100%, 0.3);
     text-align: center;
 }
 
@@ -208,10 +203,10 @@
     z-index: 2;
     width: 3.5rem;
     height: 100%;
-    background-color: #282c34;
-    border-right: 1px solid rgba(0, 0, 0, 0.66);
-    border-radius: 6px 0 0 6px;
     content: '';
+    background-color: #282c34;
+    border-right: 1px solid rgb(0, 0, 0, 0.66);
+    border-radius: 6px 0 0 6px;
 }
 
 .vuepress-markdown-body div[class~='v-md-pre-wrapper-js']::before {
@@ -365,18 +360,7 @@
 }
 
 .vuepress-markdown-body {
-    font-family:
-        -apple-system,
-        BlinkMacSystemFont,
-        'Segoe UI',
-        Roboto,
-        Oxygen,
-        Ubuntu,
-        Cantarell,
-        'Fira Sans',
-        'Droid Sans',
-        'Helvetica Neue',
-        sans-serif;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
     font-size: 16px;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
@@ -518,13 +502,7 @@
 .vuepress-markdown-body .line-number,
 .vuepress-markdown-body code,
 .vuepress-markdown-body kbd {
-    font-family:
-        source-code-pro,
-        Menlo,
-        Monaco,
-        Consolas,
-        'Courier New',
-        monospace;
+    font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
 }
 
 .vuepress-markdown-body ol,
@@ -593,8 +571,8 @@
 .v-md-plugin-tip.warning {
     padding: 0.1rem 1.5rem;
     margin: 1rem 0;
-    border-left-width: 0.5rem;
     border-left-style: solid;
+    border-left-width: 0.5rem;
 }
 
 .v-md-plugin-tip.tip {
@@ -604,7 +582,7 @@
 
 .v-md-plugin-tip.warning {
     color: #6b5900;
-    background-color: rgba(255, 229, 100, 0.3);
+    background-color: rgb(255, 229, 100, 0.3);
     border-color: #e7c000;
 }
 

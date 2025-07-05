@@ -36,11 +36,15 @@ const id = $(useRouteQuery('id'))
 
 // pinia 状态管理 ===>
 const backendUserStore = useBackendUserStore()
-await useAsyncData('backend-user-modify', () => backendUserStore.getUserItem({
-    id,
-    path: route.fullPath,
-    from: 'backend',
-}).then(() => true))
+await useAsyncData('backend-user-modify', () =>
+    backendUserStore
+        .getUserItem({
+            id,
+            path: route.fullPath,
+            from: 'backend',
+        })
+        .then(() => true),
+)
 const { item } = $(storeToRefs(backendUserStore))
 
 const [loading, toggleLoading] = useToggle(false)
@@ -52,15 +56,19 @@ const body = reactive({
     password: '',
 })
 
-watch(item, (val) => {
-    if (val.data) {
-        body.username = val.data.username
-        body.email = val.data.email
-    }
-}, {
-    immediate: true,
-    deep: true,
-})
+watch(
+    item,
+    (val) => {
+        if (val.data) {
+            body.username = val.data.username
+            body.email = val.data.email
+        }
+    },
+    {
+        immediate: true,
+        deep: true,
+    },
+)
 
 async function handleModify() {
     if (!body.username || !body.email) {

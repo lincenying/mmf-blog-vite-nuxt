@@ -18,7 +18,10 @@ function getConfig(page = 1) {
     const path = route.path
     const by = $(useRouteParam('by'))
     return {
-        page, limit: 10, path, by,
+        page,
+        limit: 10,
+        path,
+        by,
     }
 }
 

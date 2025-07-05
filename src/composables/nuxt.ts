@@ -8,5 +8,5 @@ export function useRouteParam<T = string>(name: string, init?: T): ComputedRef<T
 
 export function useRouteQuery<T = string>(name: string, init?: T): ComputedRef<T> {
     const route = useRoute()
-    return computed(() => route.query[name] as any ?? init)
+    return computed(() => (route.query[name] as any) ?? init)
 }

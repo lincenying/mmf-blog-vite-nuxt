@@ -19,7 +19,9 @@ const { lists: topics } = $(storeToRefs(frontendArticleStore))
 function getConfig(page = 1) {
     const path = route.path
     return {
-        page, limit: 10, path,
+        page,
+        limit: 10,
+        path,
     }
 }
 

@@ -49,9 +49,9 @@
 }
 
 .markdown-body img {
+    box-sizing: border-box;
     max-width: 100%;
     border: 0;
-    box-sizing: border-box;
 }
 
 .markdown-body hr {
@@ -68,7 +68,12 @@
     margin-top: 0;
     margin-bottom: 0;
     overflow: auto;
-    font: 12px Consolas, 'Liberation Mono', Menlo, Courier, monospace;
+    font:
+        12px Consolas,
+        'Liberation Mono',
+        Menlo,
+        Courier,
+        monospace;
     word-wrap: normal;
 }
 
@@ -82,7 +87,14 @@
 .markdown-body input {
     margin: 0;
     font: inherit;
-    font: 13px/1.4 Helvetica, arial, freesans, clean, sans-serif, 'Segoe UI Emoji', 'Segoe UI Symbol';
+    font:
+        13px/1.4 Helvetica,
+        arial,
+        freesans,
+        clean,
+        sans-serif,
+        'Segoe UI Emoji',
+        'Segoe UI Symbol';
     line-height: normal;
     color: inherit;
 }
@@ -97,13 +109,13 @@
 }
 
 .markdown-body table {
-    border-collapse: collapse;
-    border-spacing: 0;
     display: block;
     width: 100%;
     overflow: auto;
     word-break: normal;
     word-break: keep-all;
+    border-spacing: 0;
+    border-collapse: collapse;
 }
 
 .markdown-body td,
@@ -210,13 +222,15 @@
     font-family: Consolas, 'Liberation Mono', Menlo, Courier, monospace;
     font-size: 12px;
     font-size: 85%;
-    background-color: rgba(0, 0, 0, 0.04);
+    background-color: rgb(0, 0, 0, 0.04);
     border-radius: 3px;
 }
 
 .markdown-body .octicon {
     display: inline-block;
-    font: normal normal 16px octicons-anchor, sans-serif;
+    font:
+        normal normal 16px octicons-anchor,
+        sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     line-height: 1;
@@ -436,15 +450,20 @@
 .markdown-body kbd {
     display: inline-block;
     padding: 3px 5px;
-    font: 11px Consolas, 'Liberation Mono', Menlo, Courier, monospace;
+    font:
+        11px Consolas,
+        'Liberation Mono',
+        Menlo,
+        Courier,
+        monospace;
     font-size: 11px;
     line-height: 10px;
     color: #555;
     vertical-align: middle;
     background-color: #fcfcfc;
     border: solid 1px #ccc;
-    border-radius: 3px;
     border-bottom-color: #bbb;
+    border-radius: 3px;
     box-shadow: inset 0 -1px 0 #bbb;
 }
 

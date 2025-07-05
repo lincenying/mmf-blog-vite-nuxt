@@ -17,7 +17,9 @@ export default defineNuxtConfig({
         '@vue-macros/nuxt',
     ],
 
-    elementPlus: { /** Options */ },
+    elementPlus: {
+        /** Options */
+    },
 
     experimental: {
         // when using generate, payload js assets included in sw precache manifest
