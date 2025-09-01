@@ -62,7 +62,7 @@ defineOptions({
 // pinia 状态管理 ===>
 const frontendArticleStore = useFrontendArticleStore()
 
-await useAsyncData('frontend-article-trending', () => frontendArticleStore.getTrending().then(() => true))
+await callOnce('frontend-article-trending', () => frontendArticleStore.getTrending().then(() => true))
 
 const { trending } = $(storeToRefs(frontendArticleStore))
 

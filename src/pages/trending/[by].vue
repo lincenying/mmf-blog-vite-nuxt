@@ -25,7 +25,7 @@ function getConfig(page = 1) {
     }
 }
 
-await useAsyncData('frontend-index-visit', () => frontendArticleStore.getArticleList(getConfig(), 'visit').then(() => true))
+await callOnce('frontend-index-visit', () => frontendArticleStore.getArticleList(getConfig(), 'visit').then(() => true))
 
 useAutoScroll('frontend-index-visit')
 

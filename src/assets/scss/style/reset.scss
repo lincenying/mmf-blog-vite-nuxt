@@ -40,7 +40,7 @@ td {
     font-family: Play;
     font-style: normal;
     font-weight: 400;
-    src: url('../fonts/Play.woff2') format('woff2');
+    src: url('@/assets/fonts/Play.woff2') format('woff2');
     font-display: fallback;
     unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2212, U+2215;
 }
@@ -48,7 +48,7 @@ td {
     font-family: consola;
     font-style: normal;
     font-weight: 400;
-    src: url('../fonts/consola.ttf') format('ttf');
+    src: url('@/assets/fonts/consola.ttf') format('ttf');
     font-display: fallback;
     unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2212, U+2215;
 }

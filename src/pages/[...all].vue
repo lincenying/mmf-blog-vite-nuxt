@@ -20,7 +20,7 @@ defineOptions({
 
 const frontendArticleStore = useFrontendArticleStore()
 
-await useAsyncData('404', () => frontendArticleStore.getTrending().then(() => true))
+await callOnce('404', () => frontendArticleStore.getTrending().then(() => true))
 
 const { trending } = $(storeToRefs(frontendArticleStore))
 

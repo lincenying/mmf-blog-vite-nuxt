@@ -36,7 +36,7 @@ const id = $(useRouteQuery('id'))
 
 // pinia 状态管理 ===>
 const backendUserStore = useBackendUserStore()
-await useAsyncData('backend-user-modify', () =>
+await callOnce('backend-user-modify', () =>
     backendUserStore
         .getUserItem({
             id,
@@ -79,7 +79,7 @@ async function handleModify() {
         return
     }
     toggleLoading(true)
-    const { code, data, message } = await useHttp().$post<ResData<User>>('/api/backend/user/modify', {}, { body })
+    const { code, data, message } = await useHttp.$post<ResData<User>>('/api/backend/user/modify', {}, { body })
     toggleLoading(false)
     if (code === 200) {
         showMsg({ type: 'success', content: message })

@@ -76,7 +76,7 @@ const handleRegister = useLockFn(async () => {
         return showMsg('两次输入的密码不一致!')
     }
 
-    const { code, message } = await useHttp().$post<ResData<any>>('/api/frontend/user/insert', {}, { body })
+    const { code, message } = await useHttp.$post<ResData<any>>('/api/frontend/user/insert', {}, { body })
     if (code === 200) {
         showMsg({ type: 'success', content: message })
         handleLogin()

@@ -58,11 +58,11 @@ const id = $(useRouteQuery('id'))
 
 // pinia 状态管理 ===>
 const globalCategoryStore = useGlobalCategoryStore()
-await useAsyncData('backend-category-list', () => globalCategoryStore.getCategoryItem({ path: route.fullPath, id }).then(() => true))
+await callOnce('backend-category-list', () => globalCategoryStore.getCategoryItem({ path: route.fullPath, id }).then(() => true))
 const { lists } = $(storeToRefs(globalCategoryStore))
 
 const backendArticleStore = useBackendArticleStore()
-await useAsyncData('backend-article-modify', () => backendArticleStore.getArticleItem({ id }).then(() => true))
+await callOnce('backend-article-modify', () => backendArticleStore.getArticleItem({ id }).then(() => true))
 const { item } = $(storeToRefs(backendArticleStore))
 
 const body = reactive({
@@ -119,7 +119,7 @@ async function handleModify() {
         const html = MarkdownEditor.vMdParser.themeConfig.markdownParser.render(body.content)
         body.html = html
     }
-    const { code, message, data } = await useHttp().$post<ResData<Article>>('/api/backend/article/modify', {}, { body })
+    const { code, message, data } = await useHttp.$post<ResData<Article>>('/api/backend/article/modify', {}, { body })
     toggleLoading(false)
     if (code === 200) {
         showMsg({ type: 'success', content: message })
@@ -137,8 +137,8 @@ async function handleUploadImage(_event: EventTarget, insertImage: AnyFn, files:
     const loader = ctx.$loading.show()
 
     const formData = new FormData()
-    formData.append('file', files[0])
-    const { data } = await useHttp().$post<ResData<Upload>>(`${uploadApi}/api/fetch/upload`, {}, { body: formData })
+    formData.append('file', files[0]!)
+    const { data } = await useHttp.$post<ResData<Upload>>(`${uploadApi}/api/fetch/upload`, {}, { body: formData })
     if (data && data.filepath) {
         insertImage({
             url: `${uploadApi}/${data.filepath}`,

@@ -56,7 +56,7 @@ const router = useRouter()
 // pinia 状态管理 ===>
 const globalCategoryStore = useGlobalCategoryStore()
 
-await useAsyncData('frontend-insert', () =>
+await callOnce('frontend-insert', () =>
     globalCategoryStore
         .getCategoryList({
             limit: 99,
@@ -99,7 +99,7 @@ async function handleInsert() {
         const html = MarkdownEditor.vMdParser.themeConfig.markdownParser.render(body.content)
         body.html = html
     }
-    const { code, data, message } = await useHttp().$post<ResData<Article>>('/api/backend/article/insert', {}, { body })
+    const { code, data, message } = await useHttp.$post<ResData<Article>>('/api/backend/article/insert', {}, { body })
     toggleLoading(false)
     if (code === 200) {
         showMsg({ type: 'success', content: message })
@@ -112,9 +112,9 @@ async function handleUploadImage(_event: EventTarget, insertImage: AnyFn, files:
     const loader = $loading.show()
 
     const formData = new FormData()
-    formData.append('file', files[0])
+    formData.append('file', files[0]!)
     try {
-        const { data } = await useHttp().$post<ResData<Upload>>(`${uploadApi}/api/fetch/upload`, {}, { body: formData })
+        const { data } = await useHttp.$post<ResData<Upload>>(`${uploadApi}/api/fetch/upload`, {}, { body: formData })
         if (data && data.filepath) {
             insertImage({
                 url: `${uploadApi}/${data.filepath}`,

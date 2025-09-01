@@ -52,7 +52,7 @@ const handleSubmit = useLockFn(async () => {
         return showMsg('两次密码输入不一致!')
     }
 
-    const { code, message } = await useHttp().$post<ResData<'success' | 'error'>>('/api/frontend/user/password', {}, { body })
+    const { code, message } = await useHttp.$post<ResData<'success' | 'error'>>('/api/frontend/user/password', {}, { body })
     if (code === 200) {
         showMsg({ type: 'success', content: message })
         body.old_password = ''

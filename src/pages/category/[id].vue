@@ -33,7 +33,7 @@ watch(
     },
 )
 
-await useAsyncData('frontend-index-category', () => frontendArticleStore.getArticleList(getConfig(), 'category').then(() => true))
+await callOnce('frontend-index-category', () => frontendArticleStore.getArticleList(getConfig(), 'category').then(() => true))
 
 useAutoScroll('frontend-index-category')
 

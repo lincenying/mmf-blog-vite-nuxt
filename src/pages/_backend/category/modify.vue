@@ -30,7 +30,7 @@ const id = $(useRouteQuery('id'))
 
 // pinia 状态管理 ===>
 const globalCategoryStore = useGlobalCategoryStore()
-await useAsyncData('backend-category-list', () => globalCategoryStore.getCategoryItem({ path: route.fullPath, id }).then(() => true))
+await callOnce('backend-category-list', () => globalCategoryStore.getCategoryItem({ path: route.fullPath, id }).then(() => true))
 const { item } = $(storeToRefs(globalCategoryStore))
 
 const [loading, toggleLoading] = useToggle(false)
@@ -64,7 +64,7 @@ async function handleModify() {
         return
     }
     toggleLoading(true)
-    const { code, data, message } = await useHttp().$post<ResData<Category>>('/api/backend/category/modify', {}, { body })
+    const { code, data, message } = await useHttp.$post<ResData<Category>>('/api/backend/category/modify', {}, { body })
     toggleLoading(false)
     if (code === 200) {
         showMsg({ type: 'success', content: message })

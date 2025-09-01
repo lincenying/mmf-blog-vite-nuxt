@@ -55,14 +55,14 @@ const globalCategoryStore = useGlobalCategoryStore()
 const frontendArticleStore = useFrontendArticleStore()
 const globalCommentStore = useGlobalCommentStore()
 
-await useAsyncData(`frontend-article-detail-${id}`, () =>
+await callOnce(`frontend-article-detail-${id}`, () =>
     Promise.all([
         globalCommentStore.getCommentList({ id, path, page: 1, limit: 10 }),
         frontendArticleStore.getArticleItem({ id, path }),
     ]).then(() => true),
 )
-await useAsyncData('frontend-article-category', () => globalCategoryStore.getCategoryList({}).then(() => true))
-await useAsyncData('frontend-article-trending', () => frontendArticleStore.getTrending().then(() => true))
+await callOnce('frontend-article-category', () => globalCategoryStore.getCategoryList({}).then(() => true))
+await callOnce('frontend-article-trending', () => frontendArticleStore.getTrending().then(() => true))
 
 const { lists: category } = $(storeToRefs(globalCategoryStore))
 const { item, trending } = $(storeToRefs(frontendArticleStore))

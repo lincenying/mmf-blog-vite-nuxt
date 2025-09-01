@@ -35,7 +35,7 @@ const handleLogin = useLockFn(async () => {
     }
 
     const loader = $loading.show()
-    const { code, data } = await useHttp().$post<ResData<Nullable<string>>>('/api/backend/admin/login', {}, { body })
+    const { code, data } = await useHttp.$post<ResData<Nullable<string>>>('/api/backend/admin/login', {}, { body })
     loader.hide()
     if (code === 200 && data) {
         router.push('/_backend/article/list')

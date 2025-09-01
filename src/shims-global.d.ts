@@ -13,11 +13,7 @@ declare type Arrayable<T> = T | T[]
 /**
  * 键为字符串, 值为 Any 的对象
  */
-declare type Obj = Record<string, any>
-/**
- * 键为字符串, 值为 T 的对象
- */
-declare type ObjT<T> = Record<string, T>
+declare type Objable<T = any> = Record<string, T>
 /**
  * Function
  */
@@ -49,6 +45,8 @@ declare interface ResDataLists<T> {
     hasPrev: number | boolean
     total: number
     page: number
+    perPage: number
+    totalPage: number
     list: T[]
 }
 
@@ -57,15 +55,6 @@ declare interface ResDataLists<T> {
  */
 declare interface ResDataList<T> {
     list: T[]
-}
-
-/**
- * Api 浏览器端封装类型
- */
-declare interface ApiClientReturn {
-    get: <T>(url: string, params?: Obj, headers?: Obj) => Promise<ResData<T>>
-    post: <T>(url: string, data?: Obj, headers?: Obj) => Promise<ResData<T>>
-    file: <T>(url: string, data?: Obj, headers?: Obj) => Promise<ResData<T>>
 }
 
 declare interface Window {

@@ -80,7 +80,7 @@ const handlePostComment = useLockFn(async () => {
         showMsg('请输入评论内容!')
     }
     else {
-        const { code, data } = await useHttp().$post<ResData<Comment>>('/api/frontend/comment/insert', {}, { body })
+        const { code, data } = await useHttp.$post<ResData<Comment>>('/api/frontend/comment/insert', {}, { body })
         if (code === 200) {
             body.content = ''
             showMsg({ type: 'success', content: '评论发布成功!' })

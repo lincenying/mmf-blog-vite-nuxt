@@ -21,7 +21,7 @@ const usePiniaStore = defineStore('globalCommentStore', () => {
         if (config.path === state.lists.path && config.page === 1) {
             return
         }
-        const { code, data } = await useHttp().$get<ResData<ResDataLists<Comment>>>('/api/frontend/comment/list', { ...config, path: undefined, cache: true })
+        const { code, data } = await useHttp.$get<ResData<ResDataLists<Comment>>>('/api/frontend/comment/list', { ...config, path: undefined, cache: true })
         if (code === 200 && data) {
             const {
                 list = [],
@@ -57,10 +57,13 @@ const usePiniaStore = defineStore('globalCommentStore', () => {
     const deleteComment = (id: string) => {
         const index = state.lists.data.findIndex(ii => ii._id === id)
         if (index > -1) {
-            state.lists.data.splice(index, 1, {
-                ...state.lists.data[index],
-                is_delete: 1,
-            })
+            const row = state.lists.data[index]
+            if (row) {
+                state.lists.data.splice(index, 1, {
+                    ...row,
+                    is_delete: 1,
+                })
+            }
         }
     }
 
@@ -71,10 +74,13 @@ const usePiniaStore = defineStore('globalCommentStore', () => {
     const recoverComment = (id: string) => {
         const index = state.lists.data.findIndex(ii => ii._id === id)
         if (index > -1) {
-            state.lists.data.splice(index, 1, {
-                ...state.lists.data[index],
-                is_delete: 0,
-            })
+            const row = state.lists.data[index]
+            if (row) {
+                state.lists.data.splice(index, 1, {
+                    ...row,
+                    is_delete: 0,
+                })
+            }
         }
     }
 

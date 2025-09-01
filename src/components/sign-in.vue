@@ -54,7 +54,7 @@ const handleLogin = useLockFn(async () => {
         return showMsg('请将表单填写完整!')
     }
 
-    const { code, message } = await useHttp().$post<ResData<UserCookies>>('/api/frontend/user/login', {}, { body })
+    const { code, message } = await useHttp.$post<ResData<UserCookies>>('/api/frontend/user/login', {}, { body })
     if (code === 200) {
         showMsg({ type: 'success', content: message })
         window.location.reload()

@@ -34,7 +34,7 @@ const router = useRouter()
 const id = $(useRouteQuery('id'))
 
 const backendAdminStore = useBackendAdminStore()
-await useAsyncData('backend-article-modify', () => backendAdminStore.getAdminItem({ id }).then(() => true))
+await callOnce('backend-article-modify', () => backendAdminStore.getAdminItem({ id }).then(() => true))
 const { item } = $(storeToRefs(backendAdminStore))
 
 const body = reactive({
@@ -69,7 +69,7 @@ async function handleModify() {
         return
     }
     toggleLoading(true)
-    const { code, message, data } = await useHttp().$post<ResData<User>>('/api/backend/admin/modify', {}, { body })
+    const { code, message, data } = await useHttp.$post<ResData<User>>('/api/backend/admin/modify', {}, { body })
     toggleLoading(false)
     if (code === 200) {
         showMsg({ type: 'success', content: message })

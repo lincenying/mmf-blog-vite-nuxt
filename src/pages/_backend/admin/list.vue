@@ -36,7 +36,7 @@ const route = useRoute()
 
 // pinia 状态管理 ===>
 const backendAdminStore = useBackendAdminStore()
-await useAsyncData('backend-admin-list', () => backendAdminStore.getAdminList({ page: 1, path: route.fullPath }).then(() => true))
+await callOnce('backend-admin-list', () => backendAdminStore.getAdminList({ page: 1, path: route.fullPath }).then(() => true))
 const { lists } = $(storeToRefs(backendAdminStore))
 
 useAutoScroll('backend-admin-list')
@@ -52,7 +52,7 @@ async function loadMore(page = lists.page) {
     toggleLoading(false)
 }
 async function handleRecover(id: string) {
-    const { code, message } = await useHttp().$get<ResData<'success' | 'error'>>('/api/backend/admin/recover', {
+    const { code, message } = await useHttp.$get<ResData<'success' | 'error'>>('/api/backend/admin/recover', {
         id,
     })
     if (code === 200) {
@@ -61,7 +61,7 @@ async function handleRecover(id: string) {
     }
 }
 async function handleDelete(id: string) {
-    const { code, message } = await useHttp().$get<ResData<'success' | 'error'>>('/api/backend/admin/delete', {
+    const { code, message } = await useHttp.$get<ResData<'success' | 'error'>>('/api/backend/admin/delete', {
         id,
     })
     if (code === 200) {

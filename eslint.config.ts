@@ -5,7 +5,7 @@ export default lincy(
         unocss: true,
         formatters: true,
         ignores: [
-            'src/public',
+            'public',
             'src/polyfill',
             '.output/**',
         ],

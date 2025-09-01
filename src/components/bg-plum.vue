@@ -63,20 +63,22 @@ onMounted(async () => {
     const step = (x: number, y: number, rad: number) => {
         const length = random() * len.value
         const [nx, ny] = polar2cart(x, y, length, rad)
-        ctx.beginPath()
-        ctx.moveTo(x, y)
-        ctx.lineTo(nx, ny)
-        ctx.stroke()
-        const rad1 = rad + random() * r15
-        const rad2 = rad - random() * r15
-        if (nx < -100 || nx > size.width + 100 || ny < -100 || ny > size.height + 100) {
-            return
-        }
-        if (iterations <= init.value || random() > 0.5) {
-            steps.push(() => step(nx, ny, rad1))
-        }
-        if (iterations <= init.value || random() > 0.5) {
-            steps.push(() => step(nx, ny, rad2))
+        if (nx && ny) {
+            ctx.beginPath()
+            ctx.moveTo(x, y)
+            ctx.lineTo(nx, ny)
+            ctx.stroke()
+            const rad1 = rad + random() * r15
+            const rad2 = rad - random() * r15
+            if (nx < -100 || nx > size.width + 100 || ny < -100 || ny > size.height + 100) {
+                return
+            }
+            if (iterations <= init.value || random() > 0.5) {
+                steps.push(() => step(nx, ny, rad1))
+            }
+            if (iterations <= init.value || random() > 0.5) {
+                steps.push(() => step(nx, ny, rad2))
+            }
         }
     }
     let lastTime = performance.now()

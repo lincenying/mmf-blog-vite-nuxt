@@ -43,7 +43,7 @@ defineOptions({
 const route = useRoute()
 
 const backendArticleStore = useBackendArticleStore()
-await useAsyncData('backend-article-list', () => backendArticleStore.getArticleList({ page: 1, path: route.fullPath }).then(() => true))
+await callOnce('backend-article-list', () => backendArticleStore.getArticleList({ page: 1, path: route.fullPath }).then(() => true))
 const { lists } = $(storeToRefs(backendArticleStore))
 
 useAutoScroll('backend-article-list')
@@ -60,7 +60,7 @@ async function loadMore(page = lists.page) {
 }
 
 async function handleRecover(id: string) {
-    const { code, message } = await useHttp().$get<ResData<Nullable<Article>>>('/api/backend/article/recover', {
+    const { code, message } = await useHttp.$get<ResData<Nullable<Article>>>('/api/backend/article/recover', {
         id,
     })
     if (code === 200) {
@@ -69,7 +69,7 @@ async function handleRecover(id: string) {
     }
 }
 async function handleDelete(id: string) {
-    const { code, message } = await useHttp().$get<ResData<Nullable<Article>>>('/api/backend/article/delete', {
+    const { code, message } = await useHttp.$get<ResData<Nullable<Article>>>('/api/backend/article/delete', {
         id,
     })
     if (code === 200) {

@@ -56,7 +56,7 @@ async function handleInsert() {
         return
     }
     toggleLoading(true)
-    const { code, data, message } = await useHttp().$post<ResData<Category>>('/api/backend/category/insert', {}, { body })
+    const { code, data, message } = await useHttp.$post<ResData<Category>>('/api/backend/category/insert', {}, { body })
     toggleLoading(false)
     if (code === 200) {
         showMsg({ type: 'success', content: message })

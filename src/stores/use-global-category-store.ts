@@ -18,7 +18,7 @@ const usePiniaStore = defineStore('globalCategoryStore', () => {
         if (state.lists.length) {
             return
         }
-        const { code, data } = await useHttp().$get<ResData<ResDataList<Category>>>('/api/backend/category/list', { ...config, path: undefined, cache: true })
+        const { code, data } = await useHttp.$get<ResData<ResDataList<Category>>>('/api/backend/category/list', { ...config, path: undefined, cache: true })
         if (code === 200 && data) {
             state.lists = data.list
         }
@@ -28,7 +28,7 @@ const usePiniaStore = defineStore('globalCategoryStore', () => {
      * @param config 请求参数
      */
     const getCategoryItem = async (config: ApiConfig) => {
-        const { code, data } = await useHttp().$get<ResData<Nullable<Category>>>('/api/backend/category/item', { ...config, path: undefined })
+        const { code, data } = await useHttp.$get<ResData<Nullable<Category>>>('/api/backend/category/item', { ...config, path: undefined })
         if (code === 200 && data) {
             state.item = {
                 data,
@@ -61,10 +61,13 @@ const usePiniaStore = defineStore('globalCategoryStore', () => {
     const deleteCategory = (id: string) => {
         const index = state.lists.findIndex(ii => ii._id === id)
         if (index > -1) {
-            state.lists.splice(index, 1, {
-                ...state.lists[index],
-                is_delete: 1,
-            })
+            const row = state.lists[index]
+            if (row) {
+                state.lists.splice(index, 1, {
+                    ...row,
+                    is_delete: 1,
+                })
+            }
         }
     }
     /**
@@ -74,10 +77,13 @@ const usePiniaStore = defineStore('globalCategoryStore', () => {
     const recoverCategory = (id: string) => {
         const index = state.lists.findIndex(ii => ii._id === id)
         if (index > -1) {
-            state.lists.splice(index, 1, {
-                ...state.lists[index],
-                is_delete: 0,
-            })
+            const row = state.lists[index]
+            if (row) {
+                state.lists.splice(index, 1, {
+                    ...row,
+                    is_delete: 0,
+                })
+            }
         }
     }
 
