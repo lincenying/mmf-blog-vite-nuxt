@@ -30,7 +30,7 @@ services:
       - .env
     build:
       context: .
-      dockerfile: ./full.Dockerfile
+      dockerfile: ./Dockerfile
     depends_on:
       - api
     extra_hosts:
