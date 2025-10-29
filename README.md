@@ -71,9 +71,9 @@ $ pnpm lint
 docker pull swr.cn-north-4.myhuaweicloud.com/ddn-k8s/docker.io/node:22-alpine3.22
 docker tag swr.cn-north-4.myhuaweicloud.com/ddn-k8s/docker.io/node:22-alpine3.22 node:22-alpine
 # 构建镜像
-docker build -t lincenying/images-mmf-blog-vite-nuxt:1.25.0414 -f ./full.Dockerfile .
+docker build -t lincenying/images-mmf-blog-vite-nuxt:1.25.1029 -f ./full.Dockerfile .
 # 运行镜像
-docker run -d -p 7200:7200 --add-host=host.docker.internal:host-gateway --name container-mmf-blog-vite-nuxt lincenying/images-mmf-blog-vite-nuxt:1.25.0414
+docker run -d -p 7200:7200 --add-host=host.docker.internal:host-gateway --name container-mmf-blog-vite-nuxt lincenying/images-mmf-blog-vite-nuxt:1.25.1029
 # 进入镜像
 docker exec -it container-mmf-blog-vite-nuxt /bin/bash
 # 停止容器
