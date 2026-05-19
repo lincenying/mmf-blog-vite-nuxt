@@ -79,8 +79,9 @@ async function _useFetch<T>(url: UrlType, params?: SearchParameters, options?: R
                     appendResponseHeader(H3Event, 'set-cookie', normalizeCookiePath(cookie))
                 }
             }
-            if (response._data.code !== 200) {
-                ElMessage.error(response._data.message)
+            const data = response._data as ResData<unknown> | undefined
+            if (data && data.code !== 200) {
+                ElMessage.error(data.message)
             }
             return response._data
         },
@@ -128,9 +129,10 @@ async function _fetch<T>(url: UrlType, params?: SearchParameters, options?: Requ
                 }
             }
             // Process the response data
-            if (response._data.code !== 200) {
+            const data = response._data as ResData<unknown> | undefined
+            if (data && data.code !== 200) {
                 if (import.meta.client)
-                    ElMessage.error(response._data.message)
+                    ElMessage.error(data.message)
             }
             return response._data
         },
