@@ -3,7 +3,7 @@
   "type": "module",
   "version": "1.25.1029",
   "private": true,
-  "packageManager": "pnpm@10.20.0",
+  "packageManager": "pnpm@11.2.2",
   "scripts": {
     "build": "nuxi build",
     "dev:pwa": "VITE_PLUGIN_PWA=true nuxi dev",
@@ -15,63 +15,43 @@
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
     "lint:ts": "vue-tsc --noEmit",
-    "lint:css": "stylelint '**/*.{css,scss}' --fix",
-    "prepare[-del]": "npx simple-git-hooks"
+    "lint:css": "stylelint '**/*.{css,scss}' --fix"
   },
   "devDependencies": {
-    "@element-plus/nuxt": "^1.1.4",
-    "@iconify-json/carbon": "^1.2.14",
-    "@iconify-json/twemoji": "^1.2.4",
+    "@element-plus/nuxt": "^1.1.5",
+    "@iconify-json/carbon": "^1.2.22",
+    "@iconify-json/twemoji": "^1.2.5",
     "@kangc/v-md-editor": "^2.3.18",
-    "@lincy/eslint-config": "^6.0.0",
-    "@lincy/stylelint-config": "^2.2.0",
-    "@lincy/unocss-base-config": "^2.3.0",
-    "@lincy/utils": "^0.7.0",
-    "@nuxtjs/color-mode": "^3.5.2",
-    "@pinia/nuxt": "^0.11.2",
+    "@lincy/eslint-config": "^6.5.2",
+    "@lincy/stylelint-config": "^2.2.3",
+    "@lincy/unocss-base-config": "^2.7.2",
+    "@lincy/utils": "^0.7.3",
+    "@nuxtjs/color-mode": "^4.0.0",
+    "@pinia/nuxt": "^0.11.3",
     "@types/md5": "^2.3.6",
-    "@types/prismjs": "^1.26.5",
-    "@unocss/eslint-config": "^66.5.4",
-    "@unocss/nuxt": "^66.5.4",
-    "@vite-pwa/nuxt": "^1.0.7",
+    "@types/prismjs": "^1.26.6",
+    "@unocss/eslint-config": "^66.7.0",
+    "@unocss/nuxt": "^66.7.0",
+    "@vite-pwa/nuxt": "^1.1.1",
     "@vue-macros/nuxt": "3.0.0-beta.22",
-    "@vueuse/nuxt": "^14.0.0",
+    "@vueuse/nuxt": "^14.3.0",
     "consola": "^3.4.2",
     "cross-env": "^10.1.0",
-    "element-plus": "^2.11.5",
-    "eslint": "^9.38.0",
-    "eslint-plugin-format": "^1.0.2",
+    "element-plus": "^2.14.0",
+    "eslint": "^9.39.4",
+    "eslint-plugin-format": "^1.5.0",
     "h3-proxy": "^1.13.0",
     "highlight.js": "^11.11.1",
     "md5": "^2.3.0",
-    "nuxt": "^4.2.0",
-    "pinia": "^3.0.3",
+    "nuxt": "^4.4.6",
+    "pinia": "^3.0.4",
     "prismjs": "^1.30.0",
-    "sass": "^1.93.2",
-    "simple-git-hooks": "^2.13.1",
+    "sass": "^1.100.0",
     "store2": "^2.14.4",
-    "stylelint": "^16.25.0",
+    "stylelint": "^16.26.1",
     "typescript": "^5.9.3",
     "vue-content-loader": "^2.0.1",
     "vue-loading-overlay": "^6.0.6",
-    "vue-tsc": "^3.1.2"
-  },
-  "pnpm": {
-    "peerDependencyRules": {
-      "ignoreMissing": [
-        "rollup"
-      ]
-    },
-    "onlyBuiltDependencies": [
-      "esbuild",
-      "vue-demi"
-    ]
-  },
-  "simple-git-hooks[-del]": {
-    "pre-commit": "npx lint-staged"
-  },
-  "lint-staged[-del]": {
-    "*.{[jt]s?(x),vue,md}": "eslint --fix",
-    "*.{css,scss}": "stylelint --fix --allow-empty-input"
+    "vue-tsc": "^3.3.1"
   }
 }
