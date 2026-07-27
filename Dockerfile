@@ -45,9 +45,9 @@ CMD ["node", "/app/.output/server/index.mjs"]
 # docker pull swr.cn-north-4.myhuaweicloud.com/ddn-k8s/docker.io/node:22-alpine3.22
 # docker tag swr.cn-north-4.myhuaweicloud.com/ddn-k8s/docker.io/node:22-alpine3.22 node:22-alpine
 # 构建镜像
-# docker build -t lincenying/images-mmf-blog-vite-nuxt:1.25.1029 -f ./Dockerfile .
+# docker build -t lincenying/app-nuxt:1.26.0727 -f ./Dockerfile .
 # 运行镜像
-# docker run -d -p 7222:3000 --name container-nuxt lincenying/images-mmf-blog-vite-nuxt:1.25.1029
+# docker run -d -p 7222:3000 --name container-nuxt lincenying/app-nuxt:1.26.0727
 # 进入镜像
 # docker exec -it container-nuxt bash
 # 停止容器
@@ -55,4 +55,4 @@ CMD ["node", "/app/.output/server/index.mjs"]
 # 删除容器
 # docker rm container-nuxt
 # 删除镜像
-# docker rmi lincenying/images-mmf-blog-vite-nuxt:1.25.1029
+# docker rmi lincenying/app-nuxt:1.26.0727

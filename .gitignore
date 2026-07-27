@@ -4,3 +4,5 @@ dist
 .output
 .nuxt
 .idea/
+.cursor/rules/global*.mdc
+.qoder/rules/global*.mdc

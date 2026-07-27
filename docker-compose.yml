@@ -1,17 +1,17 @@
 services:
   mongo:
-    container_name: nuxt-mongo-server
-    image: mongo:3.6
+    container_name: db-mongo-nuxt
+    image: mongo:4.0
     volumes:
-      - /Users/lincenying/web/mongodb/data:/data/db
+      - ${MONGO_DIR:-./data/mongodb}:/data/db
     ports:
       - 27017:27017
     networks:
       - webnet
 
   api:
-    container_name: nuxt-api-server
-    image: lincenying/api-server:${APITAG}
+    container_name: api-express-nuxt
+    image: lincenying/api-express:${API_TAG}
     environment:
       DATABASE_URL: mongodb://mongo:27017
     ports:
@@ -22,8 +22,8 @@ services:
       - webnet
 
   nuxt:
-    container_name: nuxt-app-server
-    image: lincenying/images-mmf-blog-vite-nuxt:${TAG}
+    container_name: app-nuxt
+    image: lincenying/app-nuxt:${TAG}
     environment:
       NUXT_ENV_API_URL: http://api:4000
     env_file:
