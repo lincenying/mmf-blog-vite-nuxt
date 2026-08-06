@@ -2,7 +2,7 @@
     <div class="card">
         <div class="comments">
             <div class="comment-back">
-                <router-link to="/_backend/article/list" class="btn btn-blue">返回</router-link>
+                <NuxtLink to="/_backend/article/list" class="btn btn-blue">返回</NuxtLink>
             </div>
             <div class="comment-items-wrap">
                 <div v-for="item in lists.data" :key="item._id" class="comment-item">

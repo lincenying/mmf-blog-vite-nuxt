@@ -34,7 +34,8 @@
 </template>
 
 <script setup lang="ts">
-import type { Comment, CommentStoreList } from '@/types'
+import type { CommentStoreList } from '@/types'
+import { insertFrontendComment } from '@/api/frontend-comment'
 
 defineOptions({
     name: 'FrontendComment',
@@ -89,11 +90,9 @@ const handlePostComment = useLockFn(async () => {
         showMsg('文章 ID 无效!')
     }
     else {
-        const { code, data } = await useHttp.$post<ResData<Comment>>('/api/frontend/comment/insert', {}, {
-            body: {
-                id: articleId.value,
-                content: body.content,
-            },
+        const { code, data } = await insertFrontendComment({
+            id: articleId.value,
+            content: body.content,
         })
         if (code === 200) {
             body.content = ''

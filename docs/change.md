@@ -1,5 +1,34 @@
 # 变更记录
 
+## 2026-08-06 17:08:38
+
+### 改动内容
+
+- 修复 `useRouteParam`：在 `typedPages` 下将 `route.params` 按 `Record` 读取，消除动态 `string` 索引报错
+
+### Commit Message
+
+```
+fix: 修复 useRouteParam 在 typedPages 下的 params 索引类型错误
+```
+
+## 2026-08-06 17:04:17
+
+### 改动内容
+
+- 全站 `router-link` 替换为 `NuxtLink`，启用预取与统一导航能力
+- 新增 `src/api/*` 请求封装，Pinia stores / 评论发表改为调用 API 层
+- 收紧核心类型：去掉过时 `asyncData` 类型与索引 `any`，`User.password` 改为可选，评论用户结构化
+- `use-http` / `useRouteParam` / `useRouteQuery` 去掉 `any`
+- 文章详情 `v-html` 经 `isomorphic-dompurify` 消毒
+- 新增 GitHub Actions CI（install + nuxi prepare + build）
+
+### Commit Message
+
+```
+refactor: 抽取 API 层并统一 NuxtLink，收紧类型与 HTML 消毒
+```
+
 ## 2026-08-06 16:58:11
 
 ### 改动内容

@@ -1,4 +1,5 @@
 import type { ApiConfig, Category, CategoryStore } from '@/types'
+import { fetchCategoryItem, fetchCategoryList } from '@/api/category'
 
 import { acceptHMRUpdate, defineStore } from 'pinia'
 
@@ -18,7 +19,7 @@ const usePiniaStore = defineStore('globalCategoryStore', () => {
         if (state.lists.length) {
             return
         }
-        const { code, data } = await useHttp.$get<ResData<ResDataList<Category>>>('/api/backend/category/list', { ...config, path: undefined, cache: true })
+        const { code, data } = await fetchCategoryList({ ...config })
         if (code === 200 && data) {
             state.lists = data.list
         }
@@ -28,7 +29,7 @@ const usePiniaStore = defineStore('globalCategoryStore', () => {
      * @param config 请求参数
      */
     const getCategoryItem = async (config: ApiConfig) => {
-        const { code, data } = await useHttp.$get<ResData<Nullable<Category>>>('/api/backend/category/item', { ...config, path: undefined })
+        const { code, data } = await fetchCategoryItem({ ...config })
         if (code === 200 && data) {
             state.item = {
                 data,

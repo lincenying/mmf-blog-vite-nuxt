@@ -1,24 +1,3 @@
-import type { Pinia } from 'pinia'
-import type { RouteComponent, RouteLocationNormalized } from 'vue-router'
-
-export type CusRouteComponent = RouteComponent & { asyncData: (payload: AsyncDataConfig) => Promise<any> }
-
-/**
- * 服务端回传参数
- * ```
- * {
- *    store: Pinia
- *    route: RouteLocationNormalized
- *    api: ApiServer
- * }
- * ```
- */
-export interface AsyncDataConfig {
-    store: Pinia
-    route: RouteLocationNormalized
-    req?: any
-}
-
 /**
  * 请求参数合集
  * ```
@@ -116,6 +95,15 @@ export interface Category {
 }
 
 /**
+ * 评论所属用户
+ */
+export interface CommentUser {
+    _id?: string
+    username?: string
+    email?: string
+}
+
+/**
  * 评论详情
  */
 export interface Comment {
@@ -123,7 +111,7 @@ export interface Comment {
     /** * 评论所属文章ID */
     article_id: string
     /** * 发布评论的用户 */
-    userid: Objable
+    userid: CommentUser
     /** * 评论内容 */
     content: string
     /** * 创建时间 */
@@ -139,7 +127,7 @@ export interface Comment {
 }
 
 /**
- * 用户详情
+ * 用户详情（列表/详情响应；密码仅编辑表单可选）
  */
 export interface User {
     _id: string
@@ -147,8 +135,8 @@ export interface User {
     username: string
     /** * 邮箱 */
     email: string
-    /** * 密码 */
-    password: string
+    /** * 密码（仅提交修改时使用） */
+    password?: string
     /** * 创建时间 */
     creat_date: string
     /** * 编辑时间 */
@@ -159,13 +147,21 @@ export interface User {
     timestamp: number
     wx_avatar?: string
     wx_signature?: string
-    userid?: Objable
+    userid?: string
+}
+
+/**
+ * 登录请求体
+ */
+export interface UserLoginPayload {
+    username: string
+    password: string
 }
 
 export interface ArticleItemConfig {
     data: Article
     path?: string
-    [propName: string]: any
+    isLoad?: boolean
 }
 
 /**
@@ -176,7 +172,6 @@ export interface ListConfig {
     hasPrev?: number | boolean
     path?: string
     page: number
-    [propName: string]: any
 }
 export interface ListStore<T> {
     hasNext?: number | boolean
@@ -184,7 +179,6 @@ export interface ListStore<T> {
     path?: string
     page: number
     data: T
-    [propName: string]: any
 }
 
 /**
@@ -202,7 +196,7 @@ export interface AdminStore {
     item: {
         data: Nullable<User>
         path?: string
-        [propName: string]: any
+        id?: string | string[]
     }
 }
 
@@ -221,7 +215,7 @@ export interface ArticleStore {
     item: {
         data: Nullable<Article>
         path?: string
-        [propName: string]: any
+        id?: string | string[]
     }
 }
 
@@ -237,7 +231,7 @@ export interface FArticleStore {
         data: Nullable<Article>
         path?: string
         isLoad?: boolean
-        [propName: string]: any
+        id?: string | string[]
     }
     trending: Article[]
 }
@@ -257,7 +251,7 @@ export interface UserStore {
     item: {
         data: Nullable<User>
         path?: string
-        [propName: string]: any
+        id?: string | string[]
     }
 }
 
@@ -268,6 +262,8 @@ export interface CategoryStore {
     lists: Category[]
     item: {
         data: Nullable<Category>
+        path?: string
+        id?: string | string[]
     }
 }
 
@@ -293,7 +289,6 @@ export interface UserCookies {
     userid?: string
     username?: string
     useremail?: string
-    [propName: string]: any
 }
 
 /**

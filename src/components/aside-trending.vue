@@ -4,7 +4,7 @@
         <div class="card-content">
             <div v-for="(item, index) in trending" :key="item._id" class="trending-item">
                 <span class="trending-rank-num">{{ index + 1 }}</span>
-                <router-link :to="`/article/${item._id}`" class="trending-title">{{ item.title }}</router-link>
+                <NuxtLink :to="`/article/${item._id}`" class="trending-title">{{ item.title }}</NuxtLink>
                 <div class="trending-meta">
                     <div class="trending-meta-item"><i class="icon icon-action-voteup" />{{ item.like }}</div>
                     <div class="trending-meta-item"><i class="icon icon-action-comment" />{{ item.comment_count }}</div>

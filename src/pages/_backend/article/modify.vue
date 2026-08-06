@@ -35,7 +35,7 @@
                 <span ml-5px>使用前端生成Html?</span>
             </label>
             <a href="javascript:;" class="btn btn-yellow" @click="handleModify">编辑文章</a>
-            <router-link to="/_backend/article/list" class="btn btn-blue">返回</router-link>
+            <NuxtLink to="/_backend/article/list" class="btn btn-blue">返回</NuxtLink>
         </div>
     </div>
 </template>

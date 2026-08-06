@@ -10,7 +10,7 @@ export interface RequestOptions {
     /** 唯一键，保证跨请求去重 */
     key?: string
     /** 请求方法 */
-    method?: any
+    method?: 'GET' | 'POST' | 'PUT' | 'DELETE' | 'PATCH' | 'HEAD' | 'OPTIONS'
     /** 向 URL 添加查询参数 */
     query?: SearchParameters
     /** 请求体 - 如果传入对象，会自动序列化 */
@@ -28,11 +28,11 @@ export interface RequestOptions {
     /** 是否立即执行请求, 如果为 true，则立即执行请求，否则在组件挂载后执行, 如果为 false，则在组件挂载后执行, 默认为 true） */
     immediate?: boolean
     /** 工厂函数，用于在异步函数返回前设置 data 的默认值，适用于 lazy: true 或 immediate: false */
-    default?: () => any
+    default?: () => unknown
     /** 用于在解析后修改 handler 函数结果的函数 */
-    transform?: (input: any) => any | Promise<any>
+    transform?: <TInput>(input: TInput) => TInput | Promise<TInput>
     /** 观察响应式源数组，在变化时自动刷新 fetch 结果。默认观察 fetch 选项和 URL。可以使用 watch: false 完全忽略响应式源。和 immediate: false 配合可以实现完全手动触发 useFetch。 */
-    watch?: any[] | false
+    watch?: false | Array<string | number | boolean | object | null | undefined>
     /** 返回深度响应式的 ref（默认 true）。可设为 false 以返回浅层响应式的 ref，在数据无需深度响应时提升性能。 */
     deep?: boolean
 }

@@ -1,4 +1,5 @@
 import type { ApiConfig, Comment, CommentStore } from '@/types'
+import { fetchFrontendCommentList } from '@/api/frontend-comment'
 
 import { acceptHMRUpdate, defineStore } from 'pinia'
 
@@ -21,7 +22,7 @@ const usePiniaStore = defineStore('globalCommentStore', () => {
         if (config.path === state.lists.path && config.page === 1) {
             return
         }
-        const { code, data } = await useHttp.$get<ResData<ResDataLists<Comment>>>('/api/frontend/comment/list', { ...config, path: undefined, cache: true })
+        const { code, data } = await fetchFrontendCommentList({ ...config })
         if (code === 200 && data) {
             const {
                 list = [],

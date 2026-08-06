@@ -1,4 +1,4 @@
-import type { GlobalStore } from '@/types'
+import type { GlobalStore, UserCookies } from '@/types'
 import { acceptHMRUpdate, defineStore } from 'pinia'
 
 const usePiniaStore = defineStore('globalStore', () => {
@@ -30,7 +30,7 @@ const usePiniaStore = defineStore('globalStore', () => {
      * 设置Cookies
      * @param cookies
      */
-    const setCookies = (cookies: Record<string, string | number | boolean>) => {
+    const setCookies = (cookies: UserCookies) => {
         state.cookies = cookies
     }
 

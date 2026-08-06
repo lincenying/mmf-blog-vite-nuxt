@@ -10,7 +10,7 @@
                 <div class="list-title" :class="item.is_delete ? 'text-red-500 line-through' : ''">{{ item.cate_name }}</div>
                 <div class="list-date">{{ item.cate_order }}</div>
                 <div class="list-action">
-                    <router-link :to="`/_backend/category/modify?id=${item._id}`" class="badge badge-success">编辑</router-link>
+                    <NuxtLink :to="`/_backend/category/modify?id=${item._id}`" class="badge badge-success">编辑</NuxtLink>
                     <template v-if="!item.cate_num">
                         <a v-if="item.is_delete" href="javascript:;" @click="handleRecover(item._id)">恢复</a>
                         <a v-else href="javascript:;" @click="handleDelete(item._id)">删除</a>

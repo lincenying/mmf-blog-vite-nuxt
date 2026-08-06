@@ -18,7 +18,7 @@
         </div>
         <div class="settings-footer">
             <a href="javascript:;" class="btn btn-yellow" @click="handleModify">编辑管理员</a>
-            <router-link to="/_backend/admin/list" class="btn btn-blue">返回</router-link>
+            <NuxtLink to="/_backend/admin/list" class="btn btn-blue">返回</NuxtLink>
         </div>
     </div>
 </template>

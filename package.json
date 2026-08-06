@@ -31,6 +31,7 @@
     "cross-env": "^10.1.0",
     "element-plus": "^2.14.3",
     "h3-proxy": "^1.13.0",
+    "isomorphic-dompurify": "^3.21.0",
     "md5": "^2.3.0",
     "nuxt": "^4.5.2",
     "pinia": "^4.0.2",

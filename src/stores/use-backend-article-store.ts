@@ -1,4 +1,5 @@
 import type { ApiConfig, Article, ArticleStore } from '@/types'
+import { fetchBackendArticleItem, fetchBackendArticleList } from '@/api/backend-article'
 
 import { acceptHMRUpdate, defineStore } from 'pinia'
 
@@ -25,7 +26,7 @@ const usePiniaStore = defineStore('backendArticleStore', () => {
         if (state.lists.data.length > 0 && config.path === state.lists.path && config.page === 1) {
             return
         }
-        const { code, data } = await useHttp.$get<ResData<ResDataLists<Article>>>('/api/backend/article/list', { ...config, path: undefined, cache: true })
+        const { code, data } = await fetchBackendArticleList({ ...config })
         if (code === 200 && data) {
             const {
                 list = [],
@@ -53,7 +54,7 @@ const usePiniaStore = defineStore('backendArticleStore', () => {
      * @param config 请求参数
      */
     const getArticleItem = async (config: ApiConfig) => {
-        const { code, data } = await useHttp.$get<ResData<Article>>('/api/backend/article/item', { ...config, path: undefined })
+        const { code, data } = await fetchBackendArticleItem({ ...config })
         if (code === 200 && data) {
             state.item = {
                 data,

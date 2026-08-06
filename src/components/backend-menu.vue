@@ -1,32 +1,32 @@
 <template>
     <div class="main-right">
         <div class="card card-me">
-            <router-link to="/_backend/admin/list" active-class="active" class="side-entry">
+            <NuxtLink to="/_backend/admin/list" active-class="active" class="side-entry">
                 <i class="icon icon-arrow-right" />
                 <i class="icon icon-menu-articles" />管理帐号
-            </router-link>
-            <router-link to="/_backend/user/list" active-class="active" class="side-entry">
+            </NuxtLink>
+            <NuxtLink to="/_backend/user/list" active-class="active" class="side-entry">
                 <i class="icon icon-arrow-right" />
                 <i class="icon icon-menu-articles" />用户列表
-            </router-link>
+            </NuxtLink>
         </div>
         <div class="card card-me">
-            <router-link to="/_backend/category/insert" active-class="active" class="side-entry">
+            <NuxtLink to="/_backend/category/insert" active-class="active" class="side-entry">
                 <i class="icon icon-arrow-right" />
                 <i class="icon icon-menu-articles" />添加分类
-            </router-link>
-            <router-link to="/_backend/category/list" active-class="active" class="side-entry">
+            </NuxtLink>
+            <NuxtLink to="/_backend/category/list" active-class="active" class="side-entry">
                 <i class="icon icon-arrow-right" />
                 <i class="icon icon-menu-articles" />管理分类
-            </router-link>
-            <router-link to="/_backend/article/insert" active-class="active" class="side-entry">
+            </NuxtLink>
+            <NuxtLink to="/_backend/article/insert" active-class="active" class="side-entry">
                 <i class="icon icon-arrow-right" />
                 <i class="icon icon-menu-articles" />发布文章
-            </router-link>
-            <router-link to="/_backend/article/list" active-class="active" class="side-entry">
+            </NuxtLink>
+            <NuxtLink to="/_backend/article/list" active-class="active" class="side-entry">
                 <i class="icon icon-arrow-right" />
                 <i class="icon icon-menu-articles" />管理文章
-            </router-link>
+            </NuxtLink>
         </div>
     </div>
 </template>

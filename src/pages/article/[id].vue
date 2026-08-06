@@ -12,16 +12,16 @@
             <template v-else-if="articleData">
                 <div class="card card-question-head">
                     <div class="question-content">
-                        <router-link :to="`/category/${articleData.category}`" class="topic-link-item">{{ articleData.category_name }}</router-link>
+                        <NuxtLink :to="`/category/${articleData.category}`" class="topic-link-item">{{ articleData.category_name }}</NuxtLink>
                         <h2 class="question-title">
-                            <router-link :to="`/article/${articleData._id}`" class="question-title-link">{{ articleData.title }}</router-link>
+                            <NuxtLink :to="`/article/${articleData._id}`" class="question-title-link">{{ articleData.title }}</NuxtLink>
                         </h2>
                     </div>
                 </div>
                 <div class="card card-answer">
                     <div class="answer-content">
-                        <!-- eslint-disable-next-line vue/no-v-html -->
-                        <div class="markdown-body vuepress-markdown-body github-markdown-body article-content" v-html="addTarget(articleData.html)" />
+                        <!-- eslint-disable-next-line vue/no-v-html -- 内容来自后台 CMS，经 DOMPurify 消毒 -->
+                        <div class="markdown-body vuepress-markdown-body github-markdown-body article-content" v-html="safeHtml" />
                     </div>
                     <item-actions :item="articleData" />
                 </div>
@@ -41,6 +41,7 @@
 
 <script setup lang="ts">
 import { ContentLoader } from 'vue-content-loader'
+import { sanitizeHtml } from '~/utils/sanitize-html'
 
 defineOptions({
     name: 'FrontendArticle',
@@ -73,12 +74,17 @@ const articleData = $computed(() => item.data)
 
 useAutoScroll(`frontend-article-detail-${id}`)
 
-function addTarget(content: string) {
+/**
+ * 外链加 target=_blank 并消毒 HTML
+ */
+const safeHtml = $computed(() => {
+    const content = articleData?.html || ''
     if (!content) {
         return ''
     }
-    return content.replace(/<a(.*?)href="http/g, '<a$1target="_blank" href="http')
-}
+    const withTarget = content.replace(/<a(.*?)href="http/g, '<a$1target="_blank" href="http')
+    return sanitizeHtml(withTarget)
+})
 
 const headTitle = computed(() => {
     return articleData?.title ? `${articleData.title} - M.M.F 小屋` : 'M.M.F 小屋'
