@@ -3,7 +3,7 @@
   "type": "module",
   "version": "1.26.0727",
   "private": true,
-  "packageManager": "pnpm@11.17.0",
+  "packageManager": "pnpm@11.20.0",
   "scripts": {
     "build": "nuxi build",
     "dev:pwa": "VITE_PLUGIN_PWA=true nuxi dev",
@@ -19,7 +19,7 @@
   },
   "devDependencies": {
     "@element-plus/nuxt": "^1.1.5",
-    "@iconify-json/carbon": "^1.2.24",
+    "@iconify-json/carbon": "^1.2.25",
     "@iconify-json/twemoji": "^1.2.5",
     "@kangc/v-md-editor": "^2.3.18",
     "@lincy/eslint-config": "^7.2.0",
@@ -34,7 +34,7 @@
     "@unocss/nuxt": "^66.7.5",
     "@vite-pwa/nuxt": "^1.1.1",
     "@vue-macros/nuxt": "3.0.0-beta.22",
-    "@vueuse/nuxt": "^14.3.0",
+    "@vueuse/nuxt": "^14.4.0",
     "consola": "^3.4.2",
     "cross-env": "^10.1.0",
     "element-plus": "^2.14.3",
@@ -43,7 +43,7 @@
     "h3-proxy": "^1.13.0",
     "highlight.js": "^11.11.1",
     "md5": "^2.3.0",
-    "nuxt": "^4.5.0",
+    "nuxt": "^4.5.2",
     "pinia": "^4.0.2",
     "prismjs": "^1.30.0",
     "sass": "^1.102.0",
@@ -52,6 +52,6 @@
     "typescript": "^7.0.2",
     "vue-content-loader": "^2.0.1",
     "vue-loading-overlay": "^6.0.6",
-    "vue-tsc": "^3.3.8"
+    "vue-tsc": "^3.3.9"
   }
 }

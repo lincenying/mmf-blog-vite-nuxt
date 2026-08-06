@@ -1,5 +1,18 @@
 # 变更记录
 
+## 2026-08-06 14:06:29
+
+### 改动内容
+
+- 将 `process.client` / `process.server` 替换为 `import.meta.client` / `import.meta.server`
+- 涉及 `src/middleware/backend-auth.ts`、`src/middleware/frontend-auth.ts`，并移除相关 eslint-disable
+
+### Commit Message
+
+```
+fix: 替换已弃用的 process.client/server 为 import.meta
+```
+
 ## 2026-07-27 13:55:25
 
 ### 改动内容
