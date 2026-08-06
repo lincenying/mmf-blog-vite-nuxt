@@ -82,14 +82,21 @@ const headTitle = computed(() => {
     return title
 })
 
-useHead({
-    // Can be static or computed
+const headDescription = computed(() => {
+    if (pageType === 'category') {
+        return `${headTitle.value}：分类文章列表`
+    }
+    if (pageType === 'search') {
+        return `搜索「${searchKey || ''}」的相关文章 - M.M.F 小屋`
+    }
+    if (pageType === 'visit') {
+        return '热门文章列表 - M.M.F 小屋'
+    }
+    return 'M.M.F 小屋 - 前端技术博客，分享 Vue、Nuxt、JavaScript 等实践'
+})
+
+usePageSeo({
     title: headTitle,
-    meta: [
-        {
-            name: 'description',
-            content: headTitle,
-        },
-    ],
+    description: headDescription,
 })
 </script>

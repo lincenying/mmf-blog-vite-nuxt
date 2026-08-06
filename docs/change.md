@@ -1,5 +1,23 @@
 # 变更记录
 
+## 2026-08-06 16:58:11
+
+### 改动内容
+
+- Markdown 编辑器改为后台页按需动态加载，移除全局插件与根样式引入，减小前台包体积
+- 新增 `usePageSeo` / `createSeoDescription`，列表、文章详情、关于页补齐 description 与 OG/Twitter
+- 上传地址改为 `runtimeConfig.public.uploadApi`（`useUploadApi`）
+- 前后台鉴权中间件增加账户/管理员接口会话校验，并在登录/退出时重置校验状态
+- 拆分 `dependencies` / `devDependencies`，移除未使用的 `highlight.js`、`store2`、`consola`
+- 删除过时的 SPA 风格 `netlify.toml`；生产环境关闭 Nuxt DevTools；清理滚动相关 `console.log`
+- README 环境变量说明对齐 `NUXT_API_URL`
+
+### Commit Message
+
+```
+perf: 拆分 MD 编辑器与依赖，并增强 SEO 与鉴权校验
+```
+
 ## 2026-08-06 16:54:08
 
 ### 改动内容

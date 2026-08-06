@@ -81,18 +81,24 @@ function addTarget(content: string) {
 }
 
 const headTitle = computed(() => {
-    let title = 'M.M.F 小屋'
-    title = articleData?.title ? `${articleData.title} - M.M.F 小屋` : 'M.M.F 小屋'
-    return title
+    return articleData?.title ? `${articleData.title} - M.M.F 小屋` : 'M.M.F 小屋'
 })
-useHead({
-    // Can be static or computed
+
+const headDescription = computed(() => {
+    return createSeoDescription(articleData?.content || articleData?.html) || headTitle.value
+})
+
+const requestURL = useRequestURL()
+const ogUrl = computed(() => {
+    if (!articleData?._id) {
+        return undefined
+    }
+    return `${requestURL.origin}/article/${articleData._id}`
+})
+
+usePageSeo({
     title: headTitle,
-    meta: [
-        {
-            name: 'description',
-            content: headTitle,
-        },
-    ],
+    description: headDescription,
+    url: ogUrl,
 })
 </script>

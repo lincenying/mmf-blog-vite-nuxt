@@ -38,6 +38,8 @@ const handleLogin = useLockFn(async () => {
     const { code, data } = await useHttp.$post<ResData<Nullable<string>>>('/api/backend/admin/login', {}, { body })
     loader.hide()
     if (code === 200 && data) {
+        useState('backend-auth-checked', () => false).value = false
+        useState('backend-auth-valid', () => false).value = false
         router.push('/_backend/article/list')
     }
 })

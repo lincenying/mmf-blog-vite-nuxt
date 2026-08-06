@@ -66,16 +66,9 @@ await callOnce('frontend-article-trending', () => frontendArticleStore.getTrendi
 
 const { trending } = $(storeToRefs(frontendArticleStore))
 
-const headTitle = ref('关于 - M.M.F 小屋')
-useHead({
-    // Can be static or computed
-    title: headTitle,
-    meta: [
-        {
-            name: 'description',
-            content: headTitle,
-        },
-    ],
+usePageSeo({
+    title: '关于 - M.M.F 小屋',
+    description: '关于 M.M.F 小屋：个人前端技术博客与项目介绍',
 })
 
 definePageMeta({

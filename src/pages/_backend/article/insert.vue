@@ -17,7 +17,7 @@
                 <div id="post-content" class="settings-item-content">
                     <client-only>
                         <v-md-editor
-                            v-if="isClient"
+                            v-if="editorReady"
                             v-model="body.content"
                             :disabled-menus="[]"
                             mode="edit"
@@ -42,8 +42,6 @@
 <script setup lang="ts">
 import type { AnyFn } from '@vueuse/core'
 import type { Article, Upload } from '@/types'
-import { uploadApi } from '~/config'
-import { MarkdownEditor } from '~/plugins/md-editor'
 
 defineOptions({
     name: 'BackendArticleInsert',
@@ -52,6 +50,8 @@ defineOptions({
 const $loading = useLoading()
 const route = useRoute()
 const router = useRouter()
+const nuxtApp = useNuxtApp()
+const uploadApi = useUploadApi()
 
 // pinia 状态管理 ===>
 const globalCategoryStore = useGlobalCategoryStore()
@@ -69,9 +69,8 @@ const { lists } = $(storeToRefs(globalCategoryStore))
 
 const { data: posts } = useNuxtData<ResData<ResDataLists<Article>>>('backend-article-list')
 
-let isClient = $ref(false)
+const editorReady = ref(false)
 const frontHtml = ref(true)
-
 const [loading, toggleLoading] = useToggle(false)
 
 const body = reactive({
@@ -82,9 +81,13 @@ const body = reactive({
 })
 
 onMounted(async () => {
-    isClient = true
+    await ensureMarkdownEditor(nuxtApp.vueApp)
+    editorReady.value = true
 })
 
+/**
+ * 发布文章
+ */
 async function handleInsert() {
     if (!body.title || !body.category || !body.content) {
         showMsg('请将表单填写完整!')
@@ -94,10 +97,9 @@ async function handleInsert() {
         return
     }
     toggleLoading(true)
-    // body.html = this.$refs.md.d_render
     if (frontHtml.value) {
-        const html = MarkdownEditor.vMdParser.themeConfig.markdownParser.render(body.content)
-        body.html = html
+        const MarkdownEditor = await ensureMarkdownEditor(nuxtApp.vueApp)
+        body.html = MarkdownEditor.vMdParser.themeConfig.markdownParser.render(body.content)
     }
     const { code, data, message } = await useHttp.$post<ResData<Article>>('/api/backend/article/insert', {}, { body })
     toggleLoading(false)
@@ -108,39 +110,33 @@ async function handleInsert() {
     }
 }
 
+/**
+ * 上传图片并插入编辑器
+ */
 async function handleUploadImage(_event: EventTarget, insertImage: AnyFn, files: FileList) {
     const loader = $loading.show()
 
     const formData = new FormData()
     formData.append('file', files[0]!)
     try {
-        const { data } = await useHttp.$post<ResData<Upload>>(`${uploadApi}/api/fetch/upload`, {}, { body: formData })
+        const { data } = await useHttp.$post<ResData<Upload>>(`${uploadApi.value}/api/fetch/upload`, {}, { body: formData })
         if (data && data.filepath) {
             insertImage({
-                url: `${uploadApi}/${data.filepath}`,
+                url: `${uploadApi.value}/${data.filepath}`,
                 desc: '',
-                // width: 'auto',
-                // height: 'auto',
             })
         }
     }
-    catch (error) {
-        console.log(error)
+    catch {
+        showMsg('图片上传失败')
     }
 
     loader.hide()
 }
 
-const headTitle = ref('发布文章 - M.M.F 小屋')
-useHead({
-    // Can be static or computed
-    title: headTitle,
-    meta: [
-        {
-            name: 'description',
-            content: headTitle,
-        },
-    ],
+useSeoMeta({
+    title: '发布文章 - M.M.F 小屋',
+    description: '后台发布文章',
 })
 
 definePageMeta({

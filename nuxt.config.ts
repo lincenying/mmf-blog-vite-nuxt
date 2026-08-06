@@ -79,7 +79,7 @@ export default defineNuxtConfig({
     pwa,
 
     devtools: {
-        enabled: true,
+        enabled: process.env.NODE_ENV !== 'production',
     },
 
     devServer: {

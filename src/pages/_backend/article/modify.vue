@@ -17,6 +17,7 @@
                 <div id="modify-content" class="settings-item-content">
                     <client-only>
                         <v-md-editor
+                            v-if="editorReady"
                             v-model="body.content"
                             :disabled-menus="[]"
                             mode="edit"
@@ -43,9 +44,6 @@
 import type { AnyFn } from '@vueuse/core'
 import type { Article, Upload } from '@/types'
 
-import { uploadApi } from '~/config'
-import { MarkdownEditor } from '~/plugins/md-editor'
-
 defineOptions({
     name: 'BackendArticleModify',
 })
@@ -53,6 +51,8 @@ defineOptions({
 const { ctx } = useGlobal()
 const route = useRoute()
 const router = useRouter()
+const nuxtApp = useNuxtApp()
+const uploadApi = useUploadApi()
 
 const id = $(useRouteQuery('id'))
 
@@ -67,6 +67,7 @@ const backendArticleStore = useBackendArticleStore()
 await callOnce(`backend-article-modify-${id}`, () => backendArticleStore.getArticleItem({ id }).then(() => true))
 const { item } = $(storeToRefs(backendArticleStore))
 
+const editorReady = ref(false)
 const body = reactive({
     id,
     title: '',
@@ -108,6 +109,14 @@ const frontHtml = ref(true)
 
 const { data: posts } = useNuxtData<ResData<ResDataLists<Article>>>('backend-article-list')
 
+onMounted(async () => {
+    await ensureMarkdownEditor(nuxtApp.vueApp)
+    editorReady.value = true
+})
+
+/**
+ * 编辑文章
+ */
 async function handleModify() {
     if (!body.title || !body.category || !body.content) {
         showMsg('请将表单填写完整!')
@@ -118,8 +127,8 @@ async function handleModify() {
     }
     toggleLoading(true)
     if (frontHtml.value) {
-        const html = MarkdownEditor.vMdParser.themeConfig.markdownParser.render(body.content)
-        body.html = html
+        const MarkdownEditor = await ensureMarkdownEditor(nuxtApp.vueApp)
+        body.html = MarkdownEditor.vMdParser.themeConfig.markdownParser.render(body.content)
     }
     const { code, message, data } = await useHttp.$post<ResData<Article>>('/api/backend/article/modify', {}, { body })
     toggleLoading(false)
@@ -135,34 +144,33 @@ async function handleModify() {
     }
 }
 
+/**
+ * 上传图片并插入编辑器
+ */
 async function handleUploadImage(_event: EventTarget, insertImage: AnyFn, files: FileList) {
     const loader = ctx.$loading.show()
 
     const formData = new FormData()
     formData.append('file', files[0]!)
-    const { data } = await useHttp.$post<ResData<Upload>>(`${uploadApi}/api/fetch/upload`, {}, { body: formData })
-    if (data && data.filepath) {
-        insertImage({
-            url: `${uploadApi}/${data.filepath}`,
-            desc: '',
-            // width: 'auto',
-            // height: 'auto',
-        })
+    try {
+        const { data } = await useHttp.$post<ResData<Upload>>(`${uploadApi.value}/api/fetch/upload`, {}, { body: formData })
+        if (data && data.filepath) {
+            insertImage({
+                url: `${uploadApi.value}/${data.filepath}`,
+                desc: '',
+            })
+        }
+    }
+    catch {
+        showMsg('图片上传失败')
     }
 
     loader.hide()
 }
 
-const headTitle = ref('编辑文章 - M.M.F 小屋')
-useHead({
-    // Can be static or computed
-    title: headTitle,
-    meta: [
-        {
-            name: 'description',
-            content: headTitle,
-        },
-    ],
+useSeoMeta({
+    title: '编辑文章 - M.M.F 小屋',
+    description: '后台编辑文章',
 })
 
 definePageMeta({

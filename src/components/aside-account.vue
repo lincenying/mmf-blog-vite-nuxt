@@ -19,6 +19,13 @@ defineOptions({
 
 async function handleLogout() {
     await useHttp.$post('/api/frontend/user/logout')
-    window.location.href = '/'
+    useCookie('user').value = null
+    useCookie('userid').value = null
+    useCookie('username').value = null
+    useCookie('useremail').value = null
+    useState('frontend-auth-checked', () => false).value = false
+    useState('frontend-auth-valid', () => false).value = false
+    useGlobalStore().setCookies({})
+    await navigateTo('/')
 }
 </script>

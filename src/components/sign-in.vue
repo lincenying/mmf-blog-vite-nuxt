@@ -88,6 +88,8 @@ const handleLogin = useLockFn(async () => {
         }
 
         globalStore.setCookies(nextCookies)
+        useState('frontend-auth-checked', () => false).value = false
+        useState('frontend-auth-valid', () => false).value = false
         globalStore.setLoginModal(false)
         body.username = ''
         body.password = ''

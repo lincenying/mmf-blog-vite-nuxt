@@ -18,7 +18,6 @@ export function useAutoScroll(key: string) {
     })
 
     onMounted(() => {
-        console.log('onMounted', scrollTop.value)
         if (scrollTop.value) {
             setTimeout(() => {
                 window.scrollTo(0, scrollTop.value)
@@ -26,7 +25,6 @@ export function useAutoScroll(key: string) {
         }
     })
     onActivated(() => {
-        console.log('onActivated', scrollTop.value)
         if (scrollTop.value) {
             setTimeout(() => {
                 window.scrollTo(0, scrollTop.value)

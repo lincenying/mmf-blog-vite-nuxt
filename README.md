@@ -52,14 +52,18 @@ TAG=1.26.0727
 # Web 端口（Docker 容器内）
 PORT=7200
 
-# API 地址：本地开发可指向线上或本机 API
-NUXT_ENV_API_URL=https://api.mmxiaowu.com
+# API 地址：推荐 NUXT_API_URL（兼容旧变量 NUXT_ENV_API_URL）
+NUXT_API_URL=https://api.mmxiaowu.com
+# NUXT_ENV_API_URL=https://api.mmxiaowu.com
+
+# 可选：上传接口
+# NUXT_PUBLIC_UPLOAD_API=https://php.mmxiaowu.com
 
 # MongoDB 数据目录（仅 docker compose 使用，可按本机路径修改）
 MONGO_DIR=./data/mongodb
 ```
 
-> `/api/**` 请求由 Nitro 中间件代理到 `NUXT_ENV_API_URL`（或容器内的 `NUXT_ENV_HOST_API_URL`）。
+> `/api/**` 请求由 Nitro 中间件代理到 `NUXT_API_URL` / `NUXT_ENV_API_URL`（或容器内的 `NUXT_ENV_HOST_API_URL`）。可参考根目录 `.env.example`。
 
 ### 3. 安装依赖并开发
 
@@ -142,7 +146,7 @@ api:
   image: your-registry/api-express:1.26.0727
 ```
 
-3. **容器内 API 地址**：Compose 中 Nuxt 已配置 `NUXT_ENV_API_URL=http://api:4000`，无需再指向宿主机。
+3. **容器内 API 地址**：Compose 中 Nuxt 已配置 `NUXT_API_URL` / `NUXT_ENV_API_URL=http://api:4000`，无需再指向宿主机。
 
 ### 启动
 
