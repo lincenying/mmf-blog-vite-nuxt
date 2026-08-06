@@ -33,7 +33,7 @@ async function loadMore(page: number) {
         return
     }
     toggleLoading(true)
-    await frontendArticleStore.getArticleList(getConfig(page))
+    await frontendArticleStore.getArticleList(getConfig(page), 'lists')
     toggleLoading(false)
 }
 

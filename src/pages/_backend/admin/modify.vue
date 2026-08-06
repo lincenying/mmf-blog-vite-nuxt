@@ -34,7 +34,7 @@ const router = useRouter()
 const id = $(useRouteQuery('id'))
 
 const backendAdminStore = useBackendAdminStore()
-await callOnce('backend-article-modify', () => backendAdminStore.getAdminItem({ id }).then(() => true))
+await callOnce(`backend-admin-modify-${id}`, () => backendAdminStore.getAdminItem({ id }).then(() => true))
 const { item } = $(storeToRefs(backendAdminStore))
 
 const body = reactive({

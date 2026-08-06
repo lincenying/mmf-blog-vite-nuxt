@@ -49,15 +49,48 @@ function handleRegister() {
     globalStore.setLoginModal(false)
     globalStore.setRegisterModal(true)
 }
+/**
+ * 登录成功后同步 Cookie 到 Pinia，并关闭弹窗
+ */
 const handleLogin = useLockFn(async () => {
     if (!body.username || !body.password) {
         return showMsg('请将表单填写完整!')
     }
 
-    const { code, message } = await useHttp.$post<ResData<UserCookies>>('/api/frontend/user/login', {}, { body })
+    const { code, message, data } = await useHttp.$post<ResData<UserCookies>>('/api/frontend/user/login', {}, { body })
     if (code === 200) {
         showMsg({ type: 'success', content: message })
-        window.location.reload()
+
+        const parsed = import.meta.client ? utilsParseCookies(document.cookie) : {}
+        const nextCookies: UserCookies = {
+            user: data?.user || parsed.user,
+            userid: data?.userid || parsed.userid,
+            username: data?.username || parsed.username,
+            useremail: data?.useremail || parsed.useremail,
+        }
+
+        const userCookie = useCookie<string | null>('user')
+        const useridCookie = useCookie<string | null>('userid')
+        const usernameCookie = useCookie<string | null>('username')
+        const useremailCookie = useCookie<string | null>('useremail')
+
+        if (nextCookies.user) {
+            userCookie.value = String(nextCookies.user)
+        }
+        if (nextCookies.userid) {
+            useridCookie.value = String(nextCookies.userid)
+        }
+        if (nextCookies.username) {
+            usernameCookie.value = String(nextCookies.username)
+        }
+        if (nextCookies.useremail) {
+            useremailCookie.value = String(nextCookies.useremail)
+        }
+
+        globalStore.setCookies(nextCookies)
+        globalStore.setLoginModal(false)
+        body.username = ''
+        body.password = ''
     }
 })
 </script>

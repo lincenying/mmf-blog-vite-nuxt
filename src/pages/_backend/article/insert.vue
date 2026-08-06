@@ -56,7 +56,7 @@ const router = useRouter()
 // pinia 状态管理 ===>
 const globalCategoryStore = useGlobalCategoryStore()
 
-await callOnce('frontend-insert', () =>
+await callOnce('backend-article-insert-categories', () =>
     globalCategoryStore
         .getCategoryList({
             limit: 99,

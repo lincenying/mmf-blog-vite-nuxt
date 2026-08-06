@@ -30,7 +30,7 @@ const id = $(useRouteQuery('id'))
 
 // pinia 状态管理 ===>
 const globalCategoryStore = useGlobalCategoryStore()
-await callOnce('backend-category-list', () => globalCategoryStore.getCategoryItem({ path: route.fullPath, id }).then(() => true))
+await callOnce(`backend-category-modify-${id}`, () => globalCategoryStore.getCategoryItem({ path: route.fullPath, id }).then(() => true))
 const { item } = $(storeToRefs(globalCategoryStore))
 
 const [loading, toggleLoading] = useToggle(false)

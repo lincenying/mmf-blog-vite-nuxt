@@ -15,6 +15,9 @@ const frontendArticleStore = useFrontendArticleStore()
 
 const { category: topics } = $(storeToRefs(frontendArticleStore))
 
+/**
+ * 组装分类列表请求参数
+ */
 function getConfig(page = 1) {
     const path = route.path
     const id = $(useRouteParam('id'))
@@ -33,17 +36,20 @@ watch(
     },
 )
 
-await callOnce('frontend-index-category', () => frontendArticleStore.getArticleList(getConfig(), 'category').then(() => true))
+await callOnce(`frontend-index-category-${id}`, () => frontendArticleStore.getArticleList(getConfig(), 'category').then(() => true))
 
-useAutoScroll('frontend-index-category')
+useAutoScroll(`frontend-index-category-${id}`)
 
 const [loading, toggleLoading] = useToggle(false)
+/**
+ * 加载更多分类文章
+ */
 async function loadMore(page = topics.page) {
     if (loading.value) {
         return
     }
     toggleLoading(true)
-    await frontendArticleStore.getArticleList(getConfig(page))
+    await frontendArticleStore.getArticleList(getConfig(page), 'category')
     toggleLoading(false)
 }
 

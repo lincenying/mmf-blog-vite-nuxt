@@ -15,6 +15,9 @@ const frontendArticleStore = useFrontendArticleStore()
 
 const { search: topics } = $(storeToRefs(frontendArticleStore))
 
+/**
+ * 组装搜索列表请求参数
+ */
 function getConfig(page = 1) {
     const path = route.path
     const key = $(useRouteParam('key'))
@@ -26,17 +29,27 @@ function getConfig(page = 1) {
     }
 }
 
-await callOnce('frontend-index-search', () => frontendArticleStore.getArticleList(getConfig(), 'search').then(() => true))
+watch(
+    () => route.path,
+    () => {
+        frontendArticleStore.getArticleList(getConfig(), 'search')
+    },
+)
 
-useAutoScroll('frontend-index-search')
+await callOnce(`frontend-index-search-${key}`, () => frontendArticleStore.getArticleList(getConfig(), 'search').then(() => true))
+
+useAutoScroll(`frontend-index-search-${key}`)
 
 const [loading, toggleLoading] = useToggle(false)
+/**
+ * 加载更多搜索结果
+ */
 async function loadMore(page = topics.page) {
     if (loading.value) {
         return
     }
     toggleLoading(true)
-    await frontendArticleStore.getArticleList(getConfig(page))
+    await frontendArticleStore.getArticleList(getConfig(page), 'search')
     toggleLoading(false)
 }
 

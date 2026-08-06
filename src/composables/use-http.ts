@@ -37,13 +37,35 @@ export interface RequestOptions {
     deep?: boolean
 }
 
+/**
+ * 生成包含 URL 与查询参数的稳定请求 key，避免不同参数撞缓存
+ */
+function buildFetchKey(url: UrlType, params?: SearchParameters, query?: SearchParameters, key?: string) {
+    if (key) {
+        return key
+    }
+    const urlStr = typeof url === 'string' ? url : String(url)
+    const payload = JSON.stringify({ params: params || {}, query: query || {} })
+    return md5(`${urlStr}?${payload}`)
+}
+
+/**
+ * 仅在客户端展示 Element Plus 消息（避免 SSR 触碰 DOM）
+ */
+function showClientError(message: string) {
+    if (import.meta.client) {
+        ElMessage.closeAll()
+        ElMessage.error(message)
+    }
+}
+
 async function _useFetch<T>(url: UrlType, params?: SearchParameters, options?: RequestOptions) {
     const H3Event = useRequestEvent()
     const headers = useRequestHeaders(['cookie'])
     const method = options?.method ?? 'GET'
     const body = options?.body || {}
     return useFetch<T>(url as string, {
-        key: options?.key ?? md5(url as string),
+        key: buildFetchKey(url, params, options?.query, options?.key),
         method,
         params,
         query: options?.query,
@@ -68,9 +90,9 @@ async function _useFetch<T>(url: UrlType, params?: SearchParameters, options?: R
             // options.headers = options.headers || {};
         },
         onRequestError({ error }) {
-            ElMessage.closeAll()
-            error && ElMessage.error('Sorry, The Data Request Failed')
-            // Handle the request errors
+            if (error) {
+                showClientError('Sorry, The Data Request Failed')
+            }
         },
         onResponse({ response }) {
             const cookies = response.headers.getSetCookie()
@@ -81,12 +103,11 @@ async function _useFetch<T>(url: UrlType, params?: SearchParameters, options?: R
             }
             const data = response._data as ResData<unknown> | undefined
             if (data && data.code !== 200) {
-                ElMessage.error(data.message)
+                showClientError(data.message)
             }
             return response._data
         },
-        onResponseError({ request }) {
-            console.log('🚀 ~ onResponseError ~ request:', request)
+        onResponseError() {
             // Handle the response errors
         },
     })
@@ -115,11 +136,9 @@ async function _fetch<T>(url: UrlType, params?: SearchParameters, options?: Requ
             // options.headers = options.headers || {};
         },
         onRequestError({ error }) {
-            if (import.meta.client) {
-                ElMessage.closeAll()
-                error && ElMessage.error('Sorry, The Data Request Failed')
+            if (error) {
+                showClientError('Sorry, The Data Request Failed')
             }
-            // Handle the request errors
         },
         onResponse({ response }) {
             const cookies = response.headers.getSetCookie()
@@ -131,13 +150,11 @@ async function _fetch<T>(url: UrlType, params?: SearchParameters, options?: Requ
             // Process the response data
             const data = response._data as ResData<unknown> | undefined
             if (data && data.code !== 200) {
-                if (import.meta.client)
-                    ElMessage.error(data.message)
+                showClientError(data.message)
             }
             return response._data
         },
-        onResponseError({ request }) {
-            console.log('🚀 ~ onResponseError ~ request:', request)
+        onResponseError() {
             // Handle the response errors
         },
     })

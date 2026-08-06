@@ -34,7 +34,8 @@ const usePiniaStore = defineStore('frontendArticleStore', () => {
      * @param config 请求参数
      */
     const getArticleList = async (config: ApiConfig, pageType: PageType = 'lists') => {
-        if (state.lists.data.length > 0 && config.path === state.lists.path && config.page === 1) {
+        const current = state[pageType]
+        if (current.data.length > 0 && config.path === current.path && config.page === 1) {
             return
         }
         const { code, data } = await useHttp.$get<ResData<ResDataLists<Article>>>('/api/frontend/article/list', { ...config, path: undefined, cache: true })
@@ -52,7 +53,7 @@ const usePiniaStore = defineStore('frontendArticleStore', () => {
             }
 
             state[pageType] = {
-                data: page === 1 ? list : state.lists.data.concat(list),
+                data: page === 1 ? list : current.data.concat(list),
                 hasNext,
                 hasPrev,
                 page: (page || 1) + 1,
@@ -106,7 +107,7 @@ const usePiniaStore = defineStore('frontendArticleStore', () => {
         pageTypeArr.forEach((page) => {
             const index = state[page].data.findIndex((item: Article) => item._id === id)
             if (index > -1) {
-                const obj: Article = Object.assign({}, state.lists.data[index])
+                const obj: Article = Object.assign({}, state[page].data[index])
                 if (status) {
                     obj.like++
                 }

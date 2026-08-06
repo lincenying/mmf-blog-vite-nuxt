@@ -1,3 +1,4 @@
+import process from 'node:process'
 import { pwa } from './src/config/pwa'
 import { appDescription } from './src/constants/index'
 
@@ -38,6 +39,18 @@ export default defineNuxtConfig({
 
     colorMode: {
         classSuffix: '',
+    },
+
+    runtimeConfig: {
+        // 服务端 API 代理目标，可用 NUXT_API_URL 覆盖；兼容 NUXT_ENV_API_URL
+        apiUrl: process.env.NUXT_API_URL || process.env.NUXT_ENV_API_URL || process.env.NUXT_ENV_HOST_API_URL || '',
+        public: {
+            uploadApi: process.env.NUXT_PUBLIC_UPLOAD_API || 'https://php.mmxiaowu.com',
+        },
+    },
+
+    routeRules: {
+        '/_backend/**': { ssr: false },
     },
 
     nitro: {

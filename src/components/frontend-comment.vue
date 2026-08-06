@@ -54,23 +54,29 @@ const globalCommentStore = useGlobalCommentStore()
 const [loading, toggleLoading] = useToggle(false)
 
 const route = useRoute()
+const articleId = computed(() => String(route.params.id || ''))
 const body = reactive({
-    id: route.query.id,
     content: '',
 })
 
 const user = $computed(() => cookies.user)
 const userEmail = $computed(() => cookies.useremail)
 
+/**
+ * 加载更多评论
+ */
 async function handleLoadComment() {
     toggleLoading(true)
     await globalCommentStore.getCommentList({
-        id: route.query.id as string,
+        id: articleId.value,
         page: comments.page + 1,
         limit: 10,
     })
     toggleLoading(false)
 }
+/**
+ * 发表评论
+ */
 const handlePostComment = useLockFn(async () => {
     if (!user) {
         showMsg('请先登录!')
@@ -79,8 +85,16 @@ const handlePostComment = useLockFn(async () => {
     else if (body.content === '') {
         showMsg('请输入评论内容!')
     }
+    else if (!articleId.value) {
+        showMsg('文章 ID 无效!')
+    }
     else {
-        const { code, data } = await useHttp.$post<ResData<Comment>>('/api/frontend/comment/insert', {}, { body })
+        const { code, data } = await useHttp.$post<ResData<Comment>>('/api/frontend/comment/insert', {}, {
+            body: {
+                id: articleId.value,
+                content: body.content,
+            },
+        })
         if (code === 200) {
             body.content = ''
             showMsg({ type: 'success', content: '评论发布成功!' })
