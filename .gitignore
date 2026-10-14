@@ -6,6 +6,6 @@ dist
 .idea/
 .cursor/rules/global*.mdc
 .qoder/rules/global*.mdc
-.env
-.env.*
-!.env.example
+.env.local
+.env.*.local
+.dsh/rules/global*.mdc

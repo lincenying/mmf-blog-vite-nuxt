@@ -32,7 +32,7 @@ export function createSeoDescription(raw: string | undefined | null, maxLen = 16
     }
     const text = raw
         .replace(/<[^>]+>/g, ' ')
-        .replace(/[#>*`~\-\[\]\(\)!]/g, ' ')
+        .replace(/[#>*`~\-[\]()!]/g, ' ')
         .replace(/\s+/g, ' ')
         .trim()
     if (text.length <= maxLen) {

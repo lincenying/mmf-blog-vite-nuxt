@@ -1,5 +1,33 @@
 # 变更记录
 
+## 2026-10-14 10:41:30
+
+### 改动内容
+
+- README 按 git 中的 Compose 改动，从 MongoDB + Express 改为 PostgreSQL 18 + `api-bun-postgre`
+- 补充 `API_POSTGRES_TAG`、Postgres 环境变量，API 宿主机端口改为 `4000`
+- 单独 `docker run` 仍说明镜像默认访问 `host.docker.internal:4008`，并注明对接新 API 时需覆盖 `NUXT_API_URL`
+
+### Commit Message
+
+```
+docs: README 对齐 PostgreSQL 与 Bun API 的 Compose 配置
+```
+
+## 2026-10-14 10:36:52
+
+### 改动内容
+
+- 按当前仓库更新 README：容器名 `db-mongo-nuxt` / `api-express-nuxt`、Mongo 仅绑定 `127.0.0.1:27017`
+- 环境变量示例与 `.env.example` 对齐（`API_TAG=1.26.0804`、`TAG=1.26.1014`、`NUXT_API_URL`）
+- 补充 `typecheck`、后台关闭 SSR、CI 与 `src/api` 目录说明
+
+### Commit Message
+
+```
+docs: 按当前 Compose 与环境变量更新 README
+```
+
 ## 2026-08-06 17:08:38
 
 ### 改动内容
@@ -84,7 +112,7 @@ fix: 替换已弃用的 process.client/server 为 import.meta
 
 ### 改动内容
 
-- 重写 `README.md`，对齐当前项目实际状态（Nuxt 4、版本 `1.26.0727`）
+- 重写 `README.md`，对齐当前项目实际状态（Nuxt 4、版本 `1.26.1014`）
 - 补充技术栈、环境变量、端口说明与项目结构
 - 修正 Docker / Compose 文档：镜像名 `app-nuxt` / `api-express`、`MONGO_DIR`、去掉不存在的 `docker-compose.prod.yml`
 - 统一本地开发 / 生产预览 / Docker 访问地址说明

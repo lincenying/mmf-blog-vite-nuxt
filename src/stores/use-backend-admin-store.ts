@@ -1,6 +1,6 @@
 import type { AdminStore, ApiConfig, User } from '~/types'
-import { fetchBackendAdminItem, fetchBackendAdminList } from '@/api/backend-admin'
 import { acceptHMRUpdate, defineStore } from 'pinia'
+import { fetchBackendAdminItem, fetchBackendAdminList } from '@/api/backend-admin'
 
 const usePiniaStore = defineStore('backendAdminStore', () => {
     const state: AdminStore = reactive({

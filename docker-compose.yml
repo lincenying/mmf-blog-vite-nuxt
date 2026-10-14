@@ -1,25 +1,59 @@
 services:
-  mongo:
-    container_name: db-mongo-nuxt
-    image: mongo:4.0
+  postgres:
+    container_name: db-postgres
+    image: postgres:18-alpine
+    environment:
+      POSTGRES_HOST: 0.0.0.0
+      POSTGRES_PORT: ${POSTGRES_PORT:-5432}
+      POSTGRES_USER: ${POSTGRES_USER:-postgres}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-POSTGRES_password}
+      POSTGRES_DB: ${POSTGRES_DB:-database_name}
+    extra_hosts:
+      - 'host.docker.internal:host-gateway'
     volumes:
-      - ${MONGO_DIR:-./data/mongodb}:/data/db
+      - ${POSTGRES_DIR:-/var/lib/postgresql}:/var/lib/postgresql
+      - ./web/sql:/app/postgresql
+    healthcheck:
+      test:
+        - CMD-SHELL
+        - pg_isready -U ${POSTGRES_USER:-postgres} -d ${POSTGRES_DB:-database_name}
+      interval: 3s
+      timeout: 5s
+      retries: 20
+      start_period: 10s
     ports:
-      - 127.0.0.1:27017:27017
+      - "${POSTGRES_PORT:-5432}:5432"
     networks:
       - webnet
+    restart: unless-stopped
 
   api:
-    container_name: api-express-nuxt
-    image: lincenying/api-express:${API_TAG}
+    container_name: api-bun-postgre
+    image: lincenying/api-bun-postgre:${API_POSTGRES_TAG}
+    env_file:
+      - .env
     environment:
-      DATABASE_URL: mongodb://mongo:27017
+      NODE_ENV: production
+      POSTGRES_HOST: ${POSTGRES_HOST:-postgres}
+      POSTGRES_PORT: ${POSTGRES_PORT:-5432}
+      POSTGRES_USER: ${POSTGRES_USER:-postgres}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-POSTGRES_password}
+      POSTGRES_DB: ${POSTGRES_DB:-database_name}
+      PORT: 4000
+    extra_hosts:
+      - 'host.docker.internal:host-gateway'
     ports:
-      - 4008:4000
+      - 4000:4000
     depends_on:
-      - mongo
+      postgres:
+        condition: service_healthy
+    volumes:
+      - ./uploads:/app/uploads
+      - ./.data:/app/.data
+      # - ./config/api-bun-postgre.production.yaml:/app/config/production.yaml:ro
     networks:
       - webnet
+    restart: unless-stopped
 
   nuxt:
     container_name: app-nuxt

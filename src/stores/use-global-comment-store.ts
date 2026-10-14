@@ -1,7 +1,7 @@
 import type { ApiConfig, Comment, CommentStore } from '@/types'
-import { fetchFrontendCommentList } from '@/api/frontend-comment'
-
 import { acceptHMRUpdate, defineStore } from 'pinia'
+
+import { fetchFrontendCommentList } from '@/api/frontend-comment'
 
 const usePiniaStore = defineStore('globalCommentStore', () => {
     const state: CommentStore = reactive({
