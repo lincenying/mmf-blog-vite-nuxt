@@ -164,8 +164,8 @@ api:
 
 ```bash
 # 构建并后台启动
-docker compose -f docker-compose.yml build
-docker compose -f docker-compose.yml up -d
+docker compose --env-file .env --env-file .env.local -f docker-compose.yml build
+docker compose --env-file .env --env-file .env.local -f docker-compose.yml up -d
 
 # 查看状态 / 日志
 docker compose ps
