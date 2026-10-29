@@ -120,8 +120,9 @@ pnpm lint:css    # Stylelint
 
 ```bash
 # 若拉取官方 node 镜像较慢，可先使用华为云镜像源：
-docker pull swr.cn-north-4.myhuaweicloud.com/ddn-k8s/docker.io/node:22-alpine3.22
-docker tag swr.cn-north-4.myhuaweicloud.com/ddn-k8s/docker.io/node:22-alpine3.22 node:22-alpine
+docker pull swr.cn-north-4.myhuaweicloud.com/ddn-k8s/docker.io/node:24.22.2-alpine3.24
+docker tag swr.cn-north-4.myhuaweicloud.com/ddn-k8s/docker.io/node:24.22.2-alpine3.24 node:24-alpine
+docker rmi swr.cn-north-4.myhuaweicloud.com/ddn-k8s/docker.io/node:24.22.2-alpine3.24
 
 # 构建（标签与 package.json version / TAG 一致）
 docker build -t lincenying/app-nuxt:1.26.1014 -f ./Dockerfile .

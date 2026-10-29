@@ -1,5 +1,5 @@
 # Use a smaller base image
-ARG NODE_VERSION=node:22-alpine
+ARG NODE_VERSION=node:24-alpine
 
 # Stage 1: Build dependencies
 FROM $NODE_VERSION AS dependency-base
@@ -42,8 +42,9 @@ EXPOSE 7200
 CMD ["node", "/app/.output/server/index.mjs"]
 
 # 第一次执行时, 如果node镜像拉不下来, 可以执行以下命令:
-# docker pull swr.cn-north-4.myhuaweicloud.com/ddn-k8s/docker.io/node:22-alpine3.22
-# docker tag swr.cn-north-4.myhuaweicloud.com/ddn-k8s/docker.io/node:22-alpine3.22 node:22-alpine
+# docker pull swr.cn-north-4.myhuaweicloud.com/ddn-k8s/docker.io/node:24.22.2-alpine3.24
+# docker tag swr.cn-north-4.myhuaweicloud.com/ddn-k8s/docker.io/node:24.22.2-alpine3.24 node:24-alpine
+# docker rmi swr.cn-north-4.myhuaweicloud.com/ddn-k8s/docker.io/node:24.22.2-alpine3.24
 # 构建镜像
 # docker build -t lincenying/app-nuxt:1.26.1014 -f ./Dockerfile .
 # 运行镜像
