@@ -1,7 +1,7 @@
 {
   "name": "mmf-blog-vite-nuxt",
   "type": "module",
-  "version": "1.26.1014",
+  "version": "1.26.1117",
   "private": true,
   "packageManager": "pnpm@12.21.0",
   "scripts": {

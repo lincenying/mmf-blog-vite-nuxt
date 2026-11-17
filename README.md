@@ -3,7 +3,7 @@
 个人博客前台 + 后台管理系统，基于 **Nuxt 4** SSR。Docker Compose 配套 **Bun API** 与 **PostgreSQL**。
 
 - Demo：[http://nuxt.mmxiaowu.com](http://nuxt.mmxiaowu.com)
-- 版本：`1.26.1014`（`package.json`）
+- 版本：`1.26.1117`（`package.json`）
 - License：MIT
 
 ## 技术栈
@@ -50,10 +50,10 @@
 
 ```bash
 # Web 镜像标签（与 package.json version 一致）
-TAG=1.26.1014
+TAG=1.26.1117
 
 # Compose 中 Bun API 镜像标签（当前 compose 读的是 API_POSTGRES_TAG，不是 .env.example 里的 API_TAG）
-API_POSTGRES_TAG=1.26.1014
+API_POSTGRES_TAG=1.26.1117
 
 # Web 端口（Docker 容器内）
 PORT=7200
@@ -125,7 +125,7 @@ docker tag swr.cn-north-4.myhuaweicloud.com/ddn-k8s/docker.io/node:24.22.2-alpin
 docker rmi swr.cn-north-4.myhuaweicloud.com/ddn-k8s/docker.io/node:24.22.2-alpine3.24
 
 # 构建（标签与 package.json version / TAG 一致）
-docker build -t lincenying/app-nuxt:1.26.1014 -f ./Dockerfile .
+docker build -t lincenying/app-nuxt:1.26.1117 -f ./Dockerfile .
 
 # 运行。镜像内默认 NUXT_ENV_HOST_API_URL=http://host.docker.internal:4008
 # 若对接本仓库 Compose 的 API（宿主机 4000），额外传入：
@@ -134,13 +134,13 @@ docker run -d \
   -p 7200:7200 \
   --add-host=host.docker.internal:host-gateway \
   --name container-mmf-blog-vite-nuxt \
-  lincenying/app-nuxt:1.26.1014
+  lincenying/app-nuxt:1.26.1117
 
 # 常用运维
 docker exec -it container-mmf-blog-vite-nuxt /bin/sh
 docker stop container-mmf-blog-vite-nuxt
 docker rm container-mmf-blog-vite-nuxt
-docker rmi lincenying/app-nuxt:1.26.1014
+docker rmi lincenying/app-nuxt:1.26.1117
 ```
 
 ## Docker Compose（PostgreSQL + API + Nuxt）

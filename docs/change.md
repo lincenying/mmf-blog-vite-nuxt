@@ -166,7 +166,7 @@ docs: README 对齐 PostgreSQL 与 Bun API 的 Compose 配置
 ### 改动内容
 
 - 按当前仓库更新 README：容器名 `db-mongo-nuxt` / `api-express-nuxt`、Mongo 仅绑定 `127.0.0.1:27017`
-- 环境变量示例与 `.env.example` 对齐（`API_TAG=1.26.0804`、`TAG=1.26.1014`、`NUXT_API_URL`）
+- 环境变量示例与 `.env.example` 对齐（`API_TAG=1.26.0804`、`TAG=1.26.1117`、`NUXT_API_URL`）
 - 补充 `typecheck`、后台关闭 SSR、CI 与 `src/api` 目录说明
 
 ### Commit Message
@@ -259,7 +259,7 @@ fix: 替换已弃用的 process.client/server 为 import.meta
 
 ### 改动内容
 
-- 重写 `README.md`，对齐当前项目实际状态（Nuxt 4、版本 `1.26.1014`）
+- 重写 `README.md`，对齐当前项目实际状态（Nuxt 4、版本 `1.26.1117`）
 - 补充技术栈、环境变量、端口说明与项目结构
 - 修正 Docker / Compose 文档：镜像名 `app-nuxt` / `api-express`、`MONGO_DIR`、去掉不存在的 `docker-compose.prod.yml`
 - 统一本地开发 / 生产预览 / Docker 访问地址说明
