@@ -15,7 +15,7 @@
                     <NuxtLink to="/about" active-class="current" class="nav-link">
                         <i class="icon icon-nav-features" /><span class="text">关于</span>
                     </NuxtLink>
-                    <a href="https://handle.mmxiaowu.com/" target="_blank" class="nav-link">
+                    <a href="https://handle.mmxiaowu.com/" target="_blank" rel="noopener noreferrer" class="nav-link">
                         <i class="icon icon-nav-game" /><span class="text">汉兜</span>
                     </a>
                 </div>
@@ -61,12 +61,15 @@ function handleLogin() {
 }
 
 const router = useRouter()
-function onSearch(e: Event) {
-    const qs = (e.target as HTMLInputElement).value
-    if (qs === '') {
-        return false
+function onSearch(event: KeyboardEvent) {
+    const target = event.target
+    if (!(target instanceof HTMLInputElement)) {
+        return
     }
-
-    router.replace(`/search/${qs}`)
+    const qs = target.value.trim()
+    if (!qs) {
+        return
+    }
+    router.replace(`/search/${encodeURIComponent(qs)}`)
 }
 </script>

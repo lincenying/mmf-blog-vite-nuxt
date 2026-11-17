@@ -32,21 +32,19 @@ const globalStore = useGlobalStore()
 
 // pinia 状态管理 ===>
 const { cookies } = $(toRefs(globalStore))
+const useremailCookie = useCookie<string | null>('useremail')
 
 let username = $ref('')
 let email = $ref('')
 
-async function getUser() {
-    const { code, data } = await useHttp.$get<ResData<User>>('/api/frontend/user/account')
-    if (code === 200) {
-        username = data.username
-        email = data.email
-    }
-}
+const { data: accountRes } = await useAsyncData('frontend-user-account', () =>
+    useHttp.$get<ResData<User>>('/api/frontend/user/account'),
+)
 
-onMounted(() => {
-    getUser()
-})
+if (accountRes.value?.code === 200 && accountRes.value.data) {
+    username = accountRes.value.data.username
+    email = accountRes.value.data.email
+}
 
 const handleSubmit = useLockFn(async () => {
     if (!email) {
@@ -58,21 +56,28 @@ const handleSubmit = useLockFn(async () => {
         return
     }
 
-    const body = reactive({
+    const payload = {
         email,
         username,
         id: cookies.userid,
-    })
-    const { code, message } = await useHttp.$post<ResData<any>>('/api/frontend/user/account', {}, { body })
+    }
+    const { code, message } = await useHttp.$post<ResData<unknown>>('/api/frontend/user/account', {}, { body: payload })
     if (code === 200) {
+        useremailCookie.value = email
+        if (accountRes.value?.code === 200 && accountRes.value.data) {
+            accountRes.value = {
+                ...accountRes.value,
+                data: {
+                    ...accountRes.value.data,
+                    email,
+                },
+            }
+        }
         globalStore.setCookies({
             ...cookies,
             useremail: email,
         })
         showMsg({ type: 'success', content: message })
-    }
-    else {
-        showMsg(message)
     }
 })
 

@@ -1,8 +1,10 @@
 import type { AdminStore, ApiConfig, User } from '~/types'
 import { acceptHMRUpdate, defineStore } from 'pinia'
 import { fetchBackendAdminItem, fetchBackendAdminList } from '@/api/backend-admin'
+import { createLatestGuard, toSingleId } from '@/utils/index'
 
 const usePiniaStore = defineStore('backendAdminStore', () => {
+    const itemGuard = createLatestGuard()
     const state: AdminStore = reactive({
         lists: {
             hasNext: 0,
@@ -53,12 +55,23 @@ const usePiniaStore = defineStore('backendAdminStore', () => {
      * @param config 请求参数
      */
     const getAdminItem = async (config: Pick<ApiConfig, 'id' | 'path'>) => {
-        const { code, data } = await fetchBackendAdminItem({ ...config })
-        if (code === 200 && data) {
-            state.item = {
-                data,
-                ...config,
+        const requestedId = toSingleId(config.id)
+        const token = itemGuard.next()
+        try {
+            const { code, data } = await fetchBackendAdminItem({ ...config, id: requestedId })
+            if (!itemGuard.isLatest(token)) {
+                return
             }
+            if (code === 200 && data) {
+                state.item = {
+                    data,
+                    ...config,
+                    id: requestedId,
+                }
+            }
+        }
+        catch {
+            // 过期或失败的详情请求不覆盖当前表单
         }
     }
     /**

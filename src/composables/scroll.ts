@@ -1,5 +1,3 @@
-import type { NavigationGuardNext, RouteLocationNormalized } from 'vue-router'
-
 /**
  * 自动记录/恢复滚动条位置
  * @param key - 用于存储滚动位置的键
@@ -12,9 +10,8 @@ export function useAutoScroll(key: string) {
         scrollTop.value = event.scrollTop
     }
 
-    onBeforeRouteLeave((_to: RouteLocationNormalized, _from: RouteLocationNormalized, next: NavigationGuardNext) => {
+    onBeforeRouteLeave(() => {
         scrollTop.value = Math.max(window.scrollY, document.documentElement.scrollTop, document.body.scrollTop)
-        next()
     })
 
     onMounted(() => {

@@ -19,19 +19,20 @@ const { visit: topics } = $(storeToRefs(frontendArticleStore))
  * 组装热门/访问量列表请求参数
  */
 function getConfig(page = 1) {
-    const path = route.path
-    const by = $(useRouteParam('by'))
     return {
         page,
         limit: 10,
-        path,
+        path: route.path,
         by,
     }
 }
 
 watch(
     () => route.path,
-    () => {
+    (path) => {
+        if (!path.startsWith('/trending/')) {
+            return
+        }
         frontendArticleStore.getArticleList(getConfig(), 'visit')
     },
 )

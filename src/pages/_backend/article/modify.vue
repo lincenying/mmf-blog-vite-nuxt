@@ -64,7 +64,6 @@ await callOnce('backend-article-modify-categories', () =>
 const { lists } = $(storeToRefs(globalCategoryStore))
 
 const backendArticleStore = useBackendArticleStore()
-await callOnce(`backend-article-modify-${id}`, () => backendArticleStore.getArticleItem({ id }).then(() => true))
 const { item } = $(storeToRefs(backendArticleStore))
 
 const editorReady = ref(false)
@@ -89,19 +88,43 @@ watch(
 )
 
 watch(
-    () => item,
-    (val) => {
-        if (val.data) {
-            body.title = val.data.title
-            body.category_old = val.data.category
-            body.category = val.data.category
-            body.content = val.data.content
+    () => item.data,
+    (data) => {
+        if (!data || data._id !== id) {
+            return
         }
+        body.id = data._id
+        body.title = data.title
+        body.category_old = data.category
+        body.category = data.category
+        body.content = data.content
     },
     {
         immediate: true,
-        deep: true,
     },
+)
+
+/**
+ * 按当前文章 ID 拉取详情，避免路由复用时沿用上一条
+ */
+async function loadArticleForm() {
+    if (item.data?._id !== id) {
+        body.id = id
+        body.title = ''
+        body.category = ''
+        body.category_name = ''
+        body.category_old = ''
+        body.content = ''
+        body.html = ''
+    }
+    await backendArticleStore.getArticleItem({ id, path: route.fullPath })
+}
+
+await useRouteData(
+    `backend-article-modify-${id}`,
+    () => item.data?._id === id,
+    loadArticleForm,
+    () => route.path.startsWith('/_backend/article/modify'),
 )
 
 const [loading, toggleLoading] = useToggle(false)

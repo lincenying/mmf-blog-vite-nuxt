@@ -5,6 +5,7 @@ export function usePageSeo(options: {
     title: MaybeRefOrGetter<string>
     description?: MaybeRefOrGetter<string>
     url?: MaybeRefOrGetter<string | undefined>
+    ogType?: 'website' | 'article'
 }) {
     const title = computed(() => toValue(options.title))
     const description = computed(() => toValue(options.description) || title.value)
@@ -15,7 +16,7 @@ export function usePageSeo(options: {
         description: () => description.value,
         ogTitle: () => title.value,
         ogDescription: () => description.value,
-        ogType: 'website',
+        ogType: options.ogType ?? 'website',
         ogUrl: () => url.value,
         twitterCard: 'summary',
         twitterTitle: () => title.value,

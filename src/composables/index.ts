@@ -1,5 +1,3 @@
-import type { AnyFn } from '@vueuse/core'
-import type { NavigationGuardNext, RouteLocationNormalized } from 'vue-router'
 import md5 from 'md5'
 
 export function useGlobal() {
@@ -25,22 +23,26 @@ export function useGlobal() {
  * autoUnlock === 'auto' 当 fn 返回 false 时, 不自动解锁, 返回其他值时, 自动解锁
  * ```
  */
-export function useLockFn(fn: AnyFn, autoUnlock: boolean | string = 'auto') {
+export function useLockFn<TArgs extends unknown[], TResult>(
+    fn: (...args: TArgs) => Promise<TResult> | TResult,
+    autoUnlock: boolean | 'auto' = 'auto',
+) {
     const [lock, toggleLock] = useToggle(false)
-    return async (...args: any[]) => {
+    return async (...args: TArgs) => {
         if (lock.value) {
             return
         }
         toggleLock(true)
         try {
-            const $return: any = await fn(...args)
-            if (autoUnlock === true || (autoUnlock === 'auto' && $return !== false)) {
+            const result = await fn(...args)
+            if (autoUnlock === true || (autoUnlock === 'auto' && result !== false)) {
                 toggleLock(false)
             }
+            return result
         }
-        catch (e) {
+        catch (error) {
             toggleLock(false)
-            throw e
+            throw error
         }
     }
 }
@@ -62,7 +64,7 @@ export function useSaveScroll() {
         }, 350)
     })
 
-    onBeforeRouteLeave((_to: RouteLocationNormalized, from: RouteLocationNormalized, next: NavigationGuardNext) => {
+    onBeforeRouteLeave((_to, from) => {
         const scrollTop = Math.max(window.scrollY, document.documentElement.scrollTop, document.body.scrollTop)
         if (scrollTop !== 0) {
             appShellStore.saveScrollTop({
@@ -70,7 +72,6 @@ export function useSaveScroll() {
                 scrollTop,
             })
         }
-        next()
     })
 }
 

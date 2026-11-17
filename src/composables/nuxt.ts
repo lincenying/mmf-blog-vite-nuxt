@@ -30,3 +30,33 @@ export function useRouteQuery<T = string>(name: string, init?: T): ComputedRef<T
         return (value ?? init) as T
     })
 }
+
+/**
+ * 路由组件复用时补拉数据。
+ * callOnce 只覆盖首次进入；路径变化，或缓存与当前页不一致时再请求。
+ * @param key callOnce 缓存键
+ * @param isFresh 当前 store 是否已经对应该路由
+ * @param load 拉取函数
+ * @param isActive 当前路由是否仍属于本页，离开时不请求
+ */
+export async function useRouteData(
+    key: string,
+    isFresh: () => boolean,
+    load: () => Promise<unknown>,
+    isActive?: () => boolean,
+) {
+    const route = useRoute()
+    watch(() => route.fullPath, (next, prev) => {
+        if (!prev || next === prev) {
+            return
+        }
+        if (isActive && !isActive()) {
+            return
+        }
+        void load()
+    })
+    await callOnce(key, () => load().then(() => true))
+    if (!isFresh()) {
+        await load()
+    }
+}

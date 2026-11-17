@@ -34,6 +34,8 @@
 </template>
 
 <script setup lang="ts">
+import { strLen } from '@lincy/utils'
+
 defineOptions({
     name: 'FrontendUserPassword',
 })
@@ -47,6 +49,9 @@ const body = reactive({
 const handleSubmit = useLockFn(async () => {
     if (!body.password || !body.old_password || !body.re_password) {
         return showMsg('请将表单填写完整!')
+    }
+    else if (strLen(body.password) < 8) {
+        return showMsg('密码长度至少 8 位!')
     }
     else if (body.password !== body.re_password) {
         return showMsg('两次密码输入不一致!')

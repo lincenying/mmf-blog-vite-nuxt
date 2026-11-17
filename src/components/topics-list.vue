@@ -19,7 +19,7 @@
                         </a>
                     </div>
                 </template>
-                <topics-item-none v-else>当前分类还没有文章...</topics-item-none>
+                <topics-item-none v-else>{{ emptyText }}</topics-item-none>
             </div>
         </div>
         <div class="main-right">
@@ -64,6 +64,19 @@ const { trending } = $(storeToRefs(frontendArticleStore))
 async function handleLoadMore(page = topics.page) {
     emits('loadMore', page)
 }
+
+const emptyText = computed(() => {
+    if (pageType === 'search') {
+        return '没有找到相关文章...'
+    }
+    if (pageType === 'visit') {
+        return '暂时没有热门文章...'
+    }
+    if (pageType === 'category') {
+        return '当前分类还没有文章...'
+    }
+    return '还没有文章...'
+})
 
 const headTitle = computed(() => {
     let title = 'M.M.F 小屋'

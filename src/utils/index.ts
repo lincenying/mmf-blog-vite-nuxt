@@ -1,3 +1,10 @@
+export type AppMessageType = 'success' | 'warning' | 'info' | 'error'
+
+export interface AppMessageConfig {
+    type?: AppMessageType
+    content?: string
+}
+
 /**
  * element-plus弹窗
  * @param config 弹窗数据
@@ -7,21 +14,56 @@
  * showMsg({ type: 'success' | 'warning' | 'info' | 'error', content: 'content'})
  * ```
  */
-export function showMsg(config: Objable | string) {
-    let content, type: 'success' | 'warning' | 'info' | 'error'
-    if (!config) {
-        content = '接口返回数据错误'
-        type = 'error'
-    }
-    else if (typeof config === 'string') {
+export function showMsg(config?: AppMessageConfig | string) {
+    let content = '接口返回数据错误'
+    let type: AppMessageType = 'error'
+    if (typeof config === 'string' && config) {
         content = config
-        type = 'error'
     }
-    else {
-        content = config.content
-        type = config.type
+    else if (config && typeof config === 'object') {
+        content = config.content || content
+        type = config.type || 'error'
+    }
+    if (!import.meta.client) {
+        return
     }
     ElMessage[type](content)
+}
+
+/**
+ * 只采纳最后一次异步请求的结果，丢弃过期响应
+ */
+export function createLatestGuard() {
+    let current = 0
+    return {
+        /**
+         * 开始一次新请求并返回序号
+         */
+        next() {
+            current += 1
+            return current
+        },
+        /**
+         * 判断序号是否仍是最新请求
+         */
+        isLatest(token: number) {
+            return token === current
+        },
+    }
+}
+
+/**
+ * 把路由参数规范成单个字符串
+ * @param id 路由 id，可能是字符串或数组
+ */
+export function toSingleId(id?: string | string[] | null) {
+    if (Array.isArray(id)) {
+        return id[0] ? String(id[0]) : ''
+    }
+    if (id == null) {
+        return ''
+    }
+    return String(id)
 }
 
 /** 将换行符替换为 \<br\> */
@@ -84,45 +126,34 @@ export function normalizeCookiePath(cookieStr: string): string {
 }
 
 /**
- * 滚动到导航元素的位置
- *
- * 该函数用于平滑滚动页面，使指定的导航元素滚动到可视区域的顶部，并可进行额外的位置调整。
- *
- * @param {Ref<HTMLElement | undefined>} navigation - 一个响应式引用，指向要滚动到的导航元素
- * @param {number} [adjust] - 可选参数，用于调整滚动位置的偏移量
- * @returns {void}
+ * 平滑滚动到指定元素
+ * @param target 目标元素
+ * @param adjust 额外偏移
  */
-export function scrollToNav(navigation: Ref<HTMLElement | undefined>, adjust: number = 0): void {
-    // 获取导航元素相对于视口的顶部位置
-    let top = navigation.value?.getBoundingClientRect().top
-    // 如果导航元素存在
+export function scrollToElement(target: Ref<HTMLElement | undefined>, adjust: number = 0): void {
+    let top = target.value?.getBoundingClientRect().top
     if (top !== undefined) {
-        // 计算最终的滚动位置，包括当前的垂直滚动位置和额外的调整值
         top += window.scrollY + adjust
     }
-    // 平滑滚动到计算出的位置
     window.scrollTo({ top: top || 0, behavior: 'smooth' })
 }
 
 /**
+ * 滚动到导航元素的位置
+ * @param navigation 导航元素
+ * @param adjust 额外偏移
+ */
+export function scrollToNav(navigation: Ref<HTMLElement | undefined>, adjust: number = 0): void {
+    scrollToElement(navigation, adjust)
+}
+
+/**
  * 滚动到评论的位置
- *
- * 该函数用于平滑滚动页面，使指定的导航元素滚动到可视区域的顶部，并可进行额外的位置调整。
- *
- * @param {Ref<HTMLElement | undefined>} commentBox - 一个响应式引用，指向要滚动到的导航元素
- * @param {number} [adjust] - 可选参数，用于调整滚动位置的偏移量
- * @returns {void}
+ * @param commentBox 评论元素
+ * @param adjust 额外偏移
  */
 export function scrollToComment(commentBox: Ref<HTMLElement | undefined>, adjust: number = 0): void {
-    // 获取导航元素相对于视口的顶部位置
-    let top = commentBox.value?.getBoundingClientRect().top
-    // 如果导航元素存在
-    if (top !== undefined) {
-        // 计算最终的滚动位置，包括当前的垂直滚动位置和额外的调整值
-        top += window.scrollY + adjust
-    }
-    // 平滑滚动到计算出的位置
-    window.scrollTo({ top: top || 0, behavior: 'smooth' })
+    scrollToElement(commentBox, adjust)
 }
 
 /**

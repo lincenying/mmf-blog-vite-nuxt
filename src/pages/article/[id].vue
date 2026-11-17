@@ -41,7 +41,7 @@
 
 <script setup lang="ts">
 import { ContentLoader } from 'vue-content-loader'
-import { sanitizeHtml } from '~/utils/sanitize-html'
+import { sanitizeArticleHtml } from '~/utils/sanitize-html'
 
 defineOptions({
     name: 'FrontendArticle',
@@ -49,42 +49,46 @@ defineOptions({
 
 const route = useRoute()
 const id = $(useRouteParam('id'))
-const path = route.fullPath
 
 // pinia 状态管理 ===>
 const globalCategoryStore = useGlobalCategoryStore()
 const frontendArticleStore = useFrontendArticleStore()
 const globalCommentStore = useGlobalCommentStore()
 
-await callOnce(`frontend-article-detail-${id}`, () =>
-    Promise.all([
-        globalCommentStore.getCommentList({ id, path, page: 1, limit: 10 }),
-        frontendArticleStore.getArticleItem({ id, path }),
-    ]).then(() => true),
-)
-await callOnce('frontend-article-category', () => globalCategoryStore.getCategoryList({}).then(() => true))
-await callOnce('frontend-article-trending', () => frontendArticleStore.getTrending().then(() => true))
-
 const { lists: category } = $(storeToRefs(globalCategoryStore))
 const { item, trending } = $(storeToRefs(frontendArticleStore))
 const { lists: comments } = $(storeToRefs(globalCommentStore))
 
-const isLoad = $computed(() => item.isLoad)
-const articleData = $computed(() => item.data)
+/**
+ * 按当前路由拉取文章详情和评论
+ */
+async function loadArticleDetail() {
+    const currentId = id
+    const currentPath = route.fullPath
+    await Promise.all([
+        globalCommentStore.getCommentList({ id: currentId, path: currentPath, page: 1, limit: 10 }),
+        frontendArticleStore.getArticleItem({ id: currentId, path: currentPath }),
+    ])
+}
+
+await useRouteData(
+    `frontend-article-detail-${id}`,
+    () => !!item.isLoad && item.data?._id === id && comments.path === route.fullPath,
+    loadArticleDetail,
+    () => route.path.startsWith('/article/'),
+)
+await callOnce('frontend-article-category', () => globalCategoryStore.getCategoryList({}).then(() => true))
+await callOnce('frontend-article-trending', () => frontendArticleStore.getTrending().then(() => true))
+
+const isLoad = $computed(() => !!item.isLoad)
+const articleData = $computed(() => (item.isLoad ? item.data : null))
 
 useAutoScroll(`frontend-article-detail-${id}`)
 
 /**
  * 外链加 target=_blank 并消毒 HTML
  */
-const safeHtml = $computed(() => {
-    const content = articleData?.html || ''
-    if (!content) {
-        return ''
-    }
-    const withTarget = content.replace(/<a(.*?)href="http/g, '<a$1target="_blank" href="http')
-    return sanitizeHtml(withTarget)
-})
+const safeHtml = $computed(() => sanitizeArticleHtml(articleData?.html || ''))
 
 const headTitle = computed(() => {
     return articleData?.title ? `${articleData.title} - M.M.F 小屋` : 'M.M.F 小屋'
@@ -106,5 +110,6 @@ usePageSeo({
     title: headTitle,
     description: headDescription,
     url: ogUrl,
+    ogType: 'article',
 })
 </script>

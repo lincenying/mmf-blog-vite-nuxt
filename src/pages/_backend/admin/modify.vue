@@ -30,11 +30,11 @@ defineOptions({
     name: 'BackendAdminModify',
 })
 
+const route = useRoute()
 const router = useRouter()
 const id = $(useRouteQuery('id'))
 
 const backendAdminStore = useBackendAdminStore()
-await callOnce(`backend-admin-modify-${id}`, () => backendAdminStore.getAdminItem({ id }).then(() => true))
 const { item } = $(storeToRefs(backendAdminStore))
 
 const body = reactive({
@@ -45,17 +45,38 @@ const body = reactive({
 })
 
 watch(
-    () => item,
-    (val) => {
-        if (val.data) {
-            body.username = val.data.username
-            body.email = val.data.email
+    () => item.data,
+    (data) => {
+        if (!data || data._id !== id) {
+            return
         }
+        body.id = data._id
+        body.username = data.username
+        body.email = data.email
     },
     {
-        deep: true,
         immediate: true,
     },
+)
+
+/**
+ * 按当前管理员 ID 拉取详情
+ */
+async function loadAdminForm() {
+    if (item.data?._id !== id) {
+        body.id = id
+        body.username = ''
+        body.email = ''
+        body.password = ''
+    }
+    await backendAdminStore.getAdminItem({ id, path: route.fullPath })
+}
+
+await useRouteData(
+    `backend-admin-modify-${id}`,
+    () => item.data?._id === id,
+    loadAdminForm,
+    () => route.path.startsWith('/_backend/admin/modify'),
 )
 
 const [loading, toggleLoading] = useToggle(false)

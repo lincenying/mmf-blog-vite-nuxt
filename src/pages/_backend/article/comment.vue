@@ -42,28 +42,43 @@ const id = $(useRouteQuery('id'))
 
 // pinia 状态管理 ===>
 const globalCommentStore = useGlobalCommentStore()
-
-await callOnce('backend-article-comment', () =>
-    globalCommentStore
-        .getCommentList({
-            page: 1,
-            path: route.fullPath,
-            all: 1,
-            id,
-        })
-        .then(() => true),
-)
-
 const { lists } = $(storeToRefs(globalCommentStore))
+
+/**
+ * 按当前文章拉取评论
+ */
+async function loadComments() {
+    await globalCommentStore.getCommentList({
+        page: 1,
+        path: route.fullPath,
+        all: 1,
+        id,
+    })
+}
+
+await useRouteData(
+    `backend-article-comment-${id}`,
+    () => lists.path === route.fullPath,
+    loadComments,
+    () => route.path.startsWith('/_backend/article/comment'),
+)
 
 const [loading, toggleLoading] = useToggle(false)
 
-async function loadMore(page = lists.page) {
+/**
+ * 加载更多评论
+ */
+async function loadMore() {
     if (loading.value) {
         return
     }
     toggleLoading(true)
-    await globalCommentStore.getCommentList({ page, path: route.fullPath, all: 1, id })
+    await globalCommentStore.getCommentList({
+        page: lists.page,
+        path: route.fullPath,
+        all: 1,
+        id,
+    })
     toggleLoading(false)
 }
 async function handleRecover(id: string) {
@@ -82,9 +97,6 @@ async function handleDelete(id: string) {
     if (code === 200) {
         showMsg({ type: 'success', content: message })
         globalCommentStore.deleteComment(id)
-    }
-    else {
-        showMsg(message)
     }
 }
 

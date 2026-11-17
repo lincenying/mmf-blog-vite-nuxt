@@ -30,7 +30,6 @@ const id = $(useRouteQuery('id'))
 
 // pinia 状态管理 ===>
 const globalCategoryStore = useGlobalCategoryStore()
-await callOnce(`backend-category-modify-${id}`, () => globalCategoryStore.getCategoryItem({ path: route.fullPath, id }).then(() => true))
 const { item } = $(storeToRefs(globalCategoryStore))
 
 const [loading, toggleLoading] = useToggle(false)
@@ -42,17 +41,37 @@ const body = reactive({
 })
 
 watch(
-    item,
-    (val) => {
-        if (val.data) {
-            body.cate_name = val.data.cate_name
-            body.cate_order = val.data.cate_order
+    () => item.data,
+    (data) => {
+        if (!data || data._id !== id) {
+            return
         }
+        body.id = data._id
+        body.cate_name = data.cate_name
+        body.cate_order = data.cate_order
     },
     {
         immediate: true,
-        deep: true,
     },
+)
+
+/**
+ * 按当前分类 ID 拉取详情
+ */
+async function loadCategoryForm() {
+    if (item.data?._id !== id) {
+        body.id = id
+        body.cate_name = ''
+        body.cate_order = ''
+    }
+    await globalCategoryStore.getCategoryItem({ path: route.fullPath, id })
+}
+
+await useRouteData(
+    `backend-category-modify-${id}`,
+    () => item.data?._id === id,
+    loadCategoryForm,
+    () => route.path.startsWith('/_backend/category/modify'),
 )
 
 async function handleModify() {

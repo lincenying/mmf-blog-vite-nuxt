@@ -2,8 +2,10 @@ import type { ApiConfig, Category, CategoryStore } from '@/types'
 import { acceptHMRUpdate, defineStore } from 'pinia'
 
 import { fetchCategoryItem, fetchCategoryList } from '@/api/category'
+import { createLatestGuard, toSingleId } from '@/utils/index'
 
 const usePiniaStore = defineStore('globalCategoryStore', () => {
+    const itemGuard = createLatestGuard()
     const state: CategoryStore = reactive({
         lists: [],
         item: {
@@ -29,12 +31,23 @@ const usePiniaStore = defineStore('globalCategoryStore', () => {
      * @param config 请求参数
      */
     const getCategoryItem = async (config: ApiConfig) => {
-        const { code, data } = await fetchCategoryItem({ ...config })
-        if (code === 200 && data) {
-            state.item = {
-                data,
-                ...config,
+        const requestedId = toSingleId(config.id)
+        const token = itemGuard.next()
+        try {
+            const { code, data } = await fetchCategoryItem({ ...config, id: requestedId })
+            if (!itemGuard.isLatest(token)) {
+                return
             }
+            if (code === 200 && data) {
+                state.item = {
+                    data,
+                    ...config,
+                    id: requestedId,
+                }
+            }
+        }
+        catch {
+            // 过期或失败的详情请求不覆盖当前表单
         }
     }
     /**

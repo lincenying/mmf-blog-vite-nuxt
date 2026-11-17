@@ -52,10 +52,10 @@ function buildFetchKey(url: UrlType, params?: SearchParameters, query?: SearchPa
 /**
  * 仅在客户端展示 Element Plus 消息（避免 SSR 触碰 DOM）
  */
-function showClientError(message: string) {
+function showClientError(message?: string) {
     if (import.meta.client) {
         ElMessage.closeAll()
-        ElMessage.error(message)
+        ElMessage.error(message || '数据请求失败')
     }
 }
 
@@ -91,7 +91,7 @@ async function _useFetch<T>(url: UrlType, params?: SearchParameters, options?: R
         },
         onRequestError({ error }) {
             if (error) {
-                showClientError('Sorry, The Data Request Failed')
+                showClientError('数据请求失败')
             }
         },
         onResponse({ response }) {
@@ -137,7 +137,7 @@ async function _fetch<T>(url: UrlType, params?: SearchParameters, options?: Requ
         },
         onRequestError({ error }) {
             if (error) {
-                showClientError('Sorry, The Data Request Failed')
+                showClientError('数据请求失败')
             }
         },
         onResponse({ response }) {

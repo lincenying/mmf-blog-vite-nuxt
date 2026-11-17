@@ -2,8 +2,10 @@ import type { ApiConfig, Article, ArticleStore } from '@/types'
 import { acceptHMRUpdate, defineStore } from 'pinia'
 
 import { fetchBackendArticleItem, fetchBackendArticleList } from '@/api/backend-article'
+import { createLatestGuard, toSingleId } from '@/utils/index'
 
 const usePiniaStore = defineStore('backendArticleStore', () => {
+    const itemGuard = createLatestGuard()
     const state: ArticleStore = reactive({
         lists: {
             data: [] as Article[],
@@ -54,12 +56,23 @@ const usePiniaStore = defineStore('backendArticleStore', () => {
      * @param config 请求参数
      */
     const getArticleItem = async (config: ApiConfig) => {
-        const { code, data } = await fetchBackendArticleItem({ ...config })
-        if (code === 200 && data) {
-            state.item = {
-                data,
-                ...config,
+        const requestedId = toSingleId(config.id)
+        const token = itemGuard.next()
+        try {
+            const { code, data } = await fetchBackendArticleItem({ ...config, id: requestedId })
+            if (!itemGuard.isLatest(token)) {
+                return
             }
+            if (code === 200 && data) {
+                state.item = {
+                    data,
+                    ...config,
+                    id: requestedId,
+                }
+            }
+        }
+        catch {
+            // 过期或失败的详情请求不覆盖当前表单
         }
     }
     /**

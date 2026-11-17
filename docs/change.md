@@ -1,5 +1,73 @@
 # 变更记录
 
+## 2026-11-17 16:32:00
+
+### 改动内容
+
+- 路由离开守卫不再调用已弃用的 `next()`，改为直接返回
+- 涉及 `src/composables/scroll.ts`、`src/composables/index.ts`
+
+### Commit Message
+
+```
+fix: 移除导航守卫中已弃用的 next 回调
+```
+
+## 2026-11-17 16:29:00
+
+### 改动内容
+
+- 修复导航头像与账户链接的水合不一致：客户端水合时不再用空 Cookie 覆盖 SSR 已写入的登录态
+
+### Commit Message
+
+```
+fix: 避免水合时清空 SSR 登录态导致导航头像不一致
+```
+
+## 2026-11-17 16:27:00
+
+### 改动内容
+
+- `app.vue` 中已移除的 `VitePwaManifest` 改为 `@vite-pwa/nuxt` 2 注册的 `NuxtPwaManifest`
+
+### Commit Message
+
+```
+fix: 替换已移除的 VitePwaManifest 组件
+```
+
+## 2026-11-17 16:24:38
+
+### 改动内容
+
+- 修复 `nuxi dev` 启动报错 `options.hostname.toLowerCase is not a function`
+- `devServer.host` 显式设为 `localhost`，避免 Nuxt 4.6 把它解析成空对象
+- 删除错误的 `node_modules/.cache/nuxt/dev-server.json`
+
+### Commit Message
+
+```
+fix: 修复 Nuxt 开发服务器 hostname 不是字符串导致启动失败
+```
+
+## 2026-11-17 15:34:18
+
+### 改动内容
+
+- 文章详情、后台编辑页和评论页在同一路由组件复用时会按当前 ID 重新请求，并丢弃过期响应
+- 评论列表页码与文章列表对齐，后台「加载更多」不再重复请求当前页
+- 分类、搜索、热门列表在快速切换时不再被旧请求覆盖；离开这些页面时不再误触发请求
+- 评论输入改为模板引用，空评论会被拦截，删除评论有明确文案，发表后同步评论数
+- 外链补齐 `rel`，搜索关键词编码，账号页改为首屏拉取并回写邮箱 Cookie
+- 点赞数不会减成负数，请求失败提示改为中文，`showMsg` / `useLockFn` 收紧类型
+
+### Commit Message
+
+```
+fix: 修复路由复用时的详情错乱与评论分页
+```
+
 ## 2026-10-14 10:41:30
 
 ### 改动内容

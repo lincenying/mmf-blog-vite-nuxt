@@ -2,8 +2,10 @@ import type { ApiConfig, Comment, CommentStore } from '@/types'
 import { acceptHMRUpdate, defineStore } from 'pinia'
 
 import { fetchFrontendCommentList } from '@/api/frontend-comment'
+import { createLatestGuard } from '@/utils/index'
 
 const usePiniaStore = defineStore('globalCommentStore', () => {
+    const commentGuard = createLatestGuard()
     const state: CommentStore = reactive({
         lists: {
             data: [],
@@ -19,28 +21,44 @@ const usePiniaStore = defineStore('globalCommentStore', () => {
      * @param config 请求参数
      */
     const getCommentList = async (config: ApiConfig) => {
-        if (config.path === state.lists.path && config.page === 1) {
+        const requestedPage = Number(config.page) || 1
+        const requestedPath = config.path || state.lists.path || ''
+        if (requestedPage === 1 && requestedPath && requestedPath === state.lists.path) {
             return
         }
-        const { code, data } = await fetchFrontendCommentList({ ...config })
-        if (code === 200 && data) {
-            const {
-                list = [],
-                path = '',
-                hasNext = 0,
-                hasPrev = 0,
-                page = 1,
-            } = {
-                ...config,
-                ...data,
-            }
-
+        const token = commentGuard.next()
+        if (requestedPage === 1) {
             state.lists = {
-                data: page === 1 ? list : state.lists.data.concat(list),
-                hasNext,
-                hasPrev,
-                page,
-                path,
+                data: [],
+                hasNext: 0,
+                hasPrev: 0,
+                page: 1,
+                path: '',
+            }
+        }
+        const { code, data } = await fetchFrontendCommentList({ ...config, page: requestedPage })
+        if (!commentGuard.isLatest(token)) {
+            return
+        }
+        if (code === 200 && data) {
+            const list = data.list ?? []
+            const prev = requestedPage === 1 ? [] : state.lists.data
+            state.lists = {
+                data: requestedPage === 1 ? list : prev.concat(list),
+                hasNext: data.hasNext ?? 0,
+                hasPrev: data.hasPrev ?? 0,
+                page: requestedPage + 1,
+                path: requestedPath,
+            }
+            return
+        }
+        if (requestedPage === 1) {
+            state.lists = {
+                data: [],
+                hasNext: 0,
+                hasPrev: 0,
+                page: 1,
+                path: requestedPath,
             }
         }
     }

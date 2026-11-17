@@ -83,6 +83,8 @@ export default defineNuxtConfig({
     },
 
     devServer: {
+        // Nuxt 4.6 在 host 未设置时会解析成 {}，CLI 启动时调用 toLowerCase 会抛错
+        host: 'localhost',
         port: 7223,
     },
 

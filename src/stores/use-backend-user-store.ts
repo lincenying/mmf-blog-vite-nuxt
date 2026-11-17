@@ -2,8 +2,10 @@ import type { ApiConfig, User, UserStore } from '@/types'
 import { acceptHMRUpdate, defineStore } from 'pinia'
 
 import { fetchBackendUserItem, fetchBackendUserList } from '@/api/backend-user'
+import { createLatestGuard, toSingleId } from '@/utils/index'
 
 const usePiniaStore = defineStore('backendUserStore', () => {
+    const itemGuard = createLatestGuard()
     const state: UserStore = reactive({
         lists: {
             hasNext: 0,
@@ -53,12 +55,23 @@ const usePiniaStore = defineStore('backendUserStore', () => {
      * @param config 请求参数
      */
     const getUserItem = async (config: ApiConfig) => {
-        const { code, data } = await fetchBackendUserItem({ ...config })
-        if (code === 200 && data) {
-            state.item = {
-                data,
-                ...config,
+        const requestedId = toSingleId(config.id)
+        const token = itemGuard.next()
+        try {
+            const { code, data } = await fetchBackendUserItem({ ...config, id: requestedId })
+            if (!itemGuard.isLatest(token)) {
+                return
             }
+            if (code === 200 && data) {
+                state.item = {
+                    data,
+                    ...config,
+                    id: requestedId,
+                }
+            }
+        }
+        catch {
+            // 过期或失败的详情请求不覆盖当前表单
         }
     }
     /**

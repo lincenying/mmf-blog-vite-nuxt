@@ -19,19 +19,20 @@ const { category: topics } = $(storeToRefs(frontendArticleStore))
  * 组装分类列表请求参数
  */
 function getConfig(page = 1) {
-    const path = route.path
-    const id = $(useRouteParam('id'))
     return {
         page,
         limit: 10,
-        path,
+        path: route.path,
         id,
     }
 }
 
 watch(
     () => route.path,
-    () => {
+    (path) => {
+        if (!path.startsWith('/category/')) {
+            return
+        }
         frontendArticleStore.getArticleList(getConfig(), 'category')
     },
 )
