@@ -4,27 +4,31 @@
 export default defineNuxtRouteMiddleware(async () => {
     const authChecked = useState('backend-auth-checked', () => false)
     const authValid = useState('backend-auth-valid', () => false)
+    const backendSession = useState('backend-b-user', () => false)
 
-    const clearBackendCookie = () => {
+    /**
+     * 会话失效时清除后台登录态
+     */
+    function clearBackendCookie() {
         useCookie('b_user').value = null
+        backendSession.value = false
         authChecked.value = true
         authValid.value = false
     }
 
-    if (import.meta.server) {
-        const headers = useRequestHeaders(['cookie'])
-        const cookies = utilsParseCookies(headers.cookie || '')
-        if (!cookies.b_user) {
-            clearBackendCookie()
-            return navigateTo('/_backend/login')
-        }
+    const requestCookies = import.meta.server
+        ? utilsParseCookies(useRequestHeaders(['cookie']).cookie || '')
+        : null
+    if (import.meta.server && requestCookies?.b_user) {
+        backendSession.value = true
     }
-    else {
-        const backendUser = useCookie<string>('b_user')
-        if (!backendUser.value) {
-            clearBackendCookie()
-            return navigateTo('/_backend/login')
-        }
+    // 客户端 useCookie 读不到 httpOnly Cookie，SSR 写入的会话标记仍然有效
+    const hasSession = import.meta.server
+        ? !!requestCookies?.b_user
+        : !!(useCookie<string | null>('b_user').value || backendSession.value)
+
+    if (!hasSession) {
+        return navigateTo('/_backend/login')
     }
 
     if (authChecked.value) {
@@ -49,7 +53,7 @@ export default defineNuxtRouteMiddleware(async () => {
         }
     }
     catch {
-        clearBackendCookie()
+        // 代理或网络失败不代表会话失效，避免进入后台时把登录态清掉
         return navigateTo('/_backend/login')
     }
 })

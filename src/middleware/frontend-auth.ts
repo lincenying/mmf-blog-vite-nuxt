@@ -4,31 +4,27 @@
 export default defineNuxtRouteMiddleware(async () => {
     const authChecked = useState('frontend-auth-checked', () => false)
     const authValid = useState('frontend-auth-valid', () => false)
+    const globalStore = useGlobalStore()
 
-    const clearFrontendCookies = () => {
+    /**
+     * 会话失效时清除前端登录态
+     */
+    function clearFrontendCookies() {
         useCookie('user').value = null
         useCookie('userid').value = null
         useCookie('username').value = null
         useCookie('useremail').value = null
-        useGlobalStore().setCookies({})
+        globalStore.setCookies({})
         authChecked.value = true
         authValid.value = false
     }
 
-    if (import.meta.server) {
-        const headers = useRequestHeaders(['cookie'])
-        const cookies = utilsParseCookies(headers.cookie || '')
-        if (!cookies.user) {
-            clearFrontendCookies()
-            return navigateTo('/')
-        }
-    }
-    else {
-        const frontendUser = useCookie<string>('user')
-        if (!frontendUser.value) {
-            clearFrontendCookies()
-            return navigateTo('/')
-        }
+    const requestCookies = import.meta.server ? utilsParseCookies(useRequestHeaders(['cookie']).cookie || '') : null
+    // 客户端 useCookie 读不到 httpOnly Cookie，SSR 已写入 store 的登录态仍然有效
+    const hasSession = import.meta.server ? !!requestCookies?.user : !!(useCookie<string | null>('user').value || globalStore.cookies.user)
+
+    if (!hasSession) {
+        return navigateTo('/')
     }
 
     if (authChecked.value) {
@@ -52,7 +48,7 @@ export default defineNuxtRouteMiddleware(async () => {
         }
     }
     catch {
-        clearFrontendCookies()
+        // 代理或网络失败不代表会话失效，避免一点头像就把登录态清掉
         return navigateTo('/')
     }
 })

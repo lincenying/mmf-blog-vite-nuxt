@@ -38,15 +38,23 @@ const handleLogin = useLockFn(async () => {
     const { code, data } = await useHttp.$post<ResData<Nullable<string>>>('/api/backend/admin/login', {}, { body })
     loader.hide()
     if (code === 200 && data) {
+        useState('backend-b-user', () => false).value = true
         useState('backend-auth-checked', () => false).value = false
         useState('backend-auth-valid', () => false).value = false
         router.push('/_backend/article/list')
     }
 })
 
+const backendSession = useState('backend-b-user', () => false)
+if (import.meta.server) {
+    const cookies = utilsParseCookies(useRequestHeaders(['cookie']).cookie || '')
+    if (cookies.b_user) {
+        backendSession.value = true
+    }
+}
+
 onMounted(() => {
-    const backendUser = useCookie<string>('b_user')
-    if (backendUser.value) {
+    if (useCookie<string | null>('b_user').value || backendSession.value) {
         router.push('/_backend/article/list')
     }
 })
