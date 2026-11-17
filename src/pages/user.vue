@@ -1,7 +1,7 @@
 <template>
     <div class="main wrap">
         <div class="main-left">
-            <NuxtChild></NuxtChild>
+            <NuxtPage />
         </div>
         <div class="main-right"><aside-account /></div>
     </div>

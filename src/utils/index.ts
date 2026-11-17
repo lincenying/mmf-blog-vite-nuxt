@@ -165,11 +165,20 @@ export function utilsParseCookies(cookies: string): { [key: string]: string } {
     const cookieArr = cookies.split(';')
     const cookieObj: { [key: string]: string } = {}
     cookieArr.forEach((cookie) => {
-        const [key, value] = cookie.split('=')
-        if (key && value) {
-            const cookieKey = key.trim()
-            const cookieValue = decodeURIComponent(value.trim())
-            cookieObj[cookieKey] = cookieValue
+        const separator = cookie.indexOf('=')
+        if (separator <= 0) {
+            return
+        }
+        const cookieKey = cookie.slice(0, separator).trim()
+        const rawValue = cookie.slice(separator + 1).trim()
+        if (!cookieKey || !rawValue) {
+            return
+        }
+        try {
+            cookieObj[cookieKey] = decodeURIComponent(rawValue)
+        }
+        catch {
+            cookieObj[cookieKey] = rawValue
         }
     })
 

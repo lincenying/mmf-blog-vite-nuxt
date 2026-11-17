@@ -13,14 +13,24 @@ export default defineNuxtPlugin(() => {
     const useremail = useCookie<string | null>('useremail')
 
     /**
-     * 从 Cookie 读取登录信息
+     * 从 Cookie 读取登录信息。刷新时 httpOnly Cookie 只有请求头里能读到
      */
     function readCookies(): UserCookies {
-        return {
+        const fromUseCookie: UserCookies = {
             user: user.value || undefined,
             userid: userid.value || undefined,
             username: username.value || undefined,
             useremail: useremail.value || undefined,
+        }
+        if (!import.meta.server) {
+            return fromUseCookie
+        }
+        const parsed = utilsParseCookies(useRequestHeader('cookie') || '')
+        return {
+            user: parsed.user || fromUseCookie.user,
+            userid: parsed.userid || fromUseCookie.userid,
+            username: parsed.username || fromUseCookie.username,
+            useremail: parsed.useremail || fromUseCookie.useremail,
         }
     }
 

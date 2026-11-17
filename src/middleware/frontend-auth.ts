@@ -35,9 +35,8 @@ export default defineNuxtRouteMiddleware(async () => {
     }
 
     try {
-        const headers = useRequestHeaders(['cookie'])
-        const res = await $fetch<ResData<unknown>>('/api/frontend/user/account', {
-            headers,
+        const requestFetch = useRequestFetch()
+        const res = await requestFetch<ResData<unknown>>('/api/frontend/user/account', {
             credentials: 'include',
         })
         authChecked.value = true

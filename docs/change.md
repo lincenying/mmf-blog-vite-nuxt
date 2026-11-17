@@ -1,5 +1,57 @@
 # 变更记录
 
+## 2026-11-17 17:03:30
+
+### 改动内容
+
+- `useFetch` / `$fetch` 不再把响应类型写进类型参数，避免 `method` 被收成无法赋值的条件类型
+- `watch` 改为 Vue 的 `MultiWatchSources`
+
+### Commit Message
+
+```
+fix: 修复请求封装的 method 类型不匹配
+```
+
+## 2026-11-17 16:53:47
+
+### 改动内容
+
+- 后台路由关闭了 SSR，刷新后客户端读不到 httpOnly 的 `b_user`，不再据此跳回登录页
+- 刷新后由浏览器请求管理员列表接口校验会话，只有接口明确未登录才清除 Cookie 并跳转
+
+### Commit Message
+
+```
+fix: 刷新后台页面时按接口校验登录态
+```
+
+## 2026-11-17 16:45:30
+
+### 改动内容
+
+- 刷新后用请求头里的 Cookie 恢复前台登录态，不再只依赖客户端读不到的 `useCookie`
+- 鉴权与 `$fetch` 改为 `useRequestFetch`，SSR 会带上当前请求的 Cookie
+- Cookie 解析按第一个 `=` 分割，避免值里的 `=` 被截断
+
+### Commit Message
+
+```
+fix: 刷新后根据请求 Cookie 恢复登录态
+```
+
+## 2026-11-17 16:41:30
+
+### 改动内容
+
+- `src/pages/user.vue` 的嵌套出口从已移除的 `NuxtChild` 改为 `NuxtPage`，账户页内容可以渲染
+
+### Commit Message
+
+```
+fix: 用户页嵌套路由改用 NuxtPage
+```
+
 ## 2026-11-17 16:39:30
 
 ### 改动内容

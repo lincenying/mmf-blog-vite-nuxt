@@ -1,4 +1,6 @@
 import type { SearchParameters } from 'ofetch'
+import type { MultiWatchSources } from 'vue'
+import type { AsyncData, NuxtError } from '#app'
 
 import { isFormData } from '@lincy/utils'
 import { appendResponseHeader } from 'h3'
@@ -30,9 +32,9 @@ export interface RequestOptions {
     /** 工厂函数，用于在异步函数返回前设置 data 的默认值，适用于 lazy: true 或 immediate: false */
     default?: () => unknown
     /** 用于在解析后修改 handler 函数结果的函数 */
-    transform?: <TInput>(input: TInput) => TInput | Promise<TInput>
+    transform?: (input: unknown) => unknown
     /** 观察响应式源数组，在变化时自动刷新 fetch 结果。默认观察 fetch 选项和 URL。可以使用 watch: false 完全忽略响应式源。和 immediate: false 配合可以实现完全手动触发 useFetch。 */
-    watch?: false | Array<string | number | boolean | object | null | undefined>
+    watch?: MultiWatchSources | false
     /** 返回深度响应式的 ref（默认 true）。可设为 false 以返回浅层响应式的 ref，在数据无需深度响应时提升性能。 */
     deep?: boolean
 }
@@ -59,19 +61,20 @@ function showClientError(message?: string) {
     }
 }
 
-async function _useFetch<T>(url: UrlType, params?: SearchParameters, options?: RequestOptions) {
+/**
+ * 走 useFetch。不把响应类型写进 useFetch 的类型参数，避免 method 被收成未展开的条件类型
+ */
+async function _useFetch<T>(url: UrlType, params?: SearchParameters, options?: RequestOptions): Promise<AsyncData<T, NuxtError<unknown> | undefined>> {
     const H3Event = useRequestEvent()
-    const headers = useRequestHeaders(['cookie'])
     const method = options?.method ?? 'GET'
     const body = options?.body || {}
-    return useFetch<T>(url as string, {
+    const result = await useFetch(url as string, {
         key: buildFetchKey(url, params, options?.query, options?.key),
         method,
         params,
         query: options?.query,
         body: method === 'POST' ? body : undefined,
         headers: {
-            ...headers,
             ...options?.headers,
             ...isFormData(body) ? { } : { 'Content-Type': 'application/json' },
         },
@@ -80,8 +83,8 @@ async function _useFetch<T>(url: UrlType, params?: SearchParameters, options?: R
         server: options?.server,
         lazy: options?.lazy,
         immediate: options?.immediate,
-        default: options?.default,
-        transform: options?.transform,
+        default: options?.default as (() => undefined) | undefined,
+        transform: options?.transform as ((input: unknown) => unknown) | undefined,
         credentials: 'include',
         watch: options?.watch,
         deep: options?.deep,
@@ -111,20 +114,23 @@ async function _useFetch<T>(url: UrlType, params?: SearchParameters, options?: R
             // Handle the response errors
         },
     })
+    return result as AsyncData<T, NuxtError<unknown> | undefined>
 }
 
+/**
+ * 走 $fetch。同样不把响应类型写进类型参数，避免 method 被收成条件类型
+ */
 async function _fetch<T>(url: UrlType, params?: SearchParameters, options?: RequestOptions) {
     const H3Event = useRequestEvent()
-    const headers = useRequestHeaders(['cookie'])
+    const requestFetch = useRequestFetch()
     const method = options?.method ?? 'GET'
     const body = options?.body || {}
-    return $fetch<T>(url as string, {
+    const result = await requestFetch(url as string, {
         method,
         params,
         query: options?.query,
         body: method === 'POST' ? body : undefined,
         headers: {
-            ...headers,
             ...options?.headers,
             ...isFormData(body) ? { } : { 'Content-Type': 'application/json' },
         },
@@ -158,6 +164,7 @@ async function _fetch<T>(url: UrlType, params?: SearchParameters, options?: Requ
             // Handle the response errors
         },
     })
+    return result as T
 }
 
 function createInstance(initOption?: RequestOptions) {
